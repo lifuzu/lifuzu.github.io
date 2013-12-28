@@ -4,7 +4,7 @@
   <title><![CDATA[My Blog]]></title>
   <link href="http://lifuzu.github.io/atom.xml" rel="self"/>
   <link href="http://lifuzu.github.io/"/>
-  <updated>2013-12-28T10:26:55-08:00</updated>
+  <updated>2013-12-28T10:33:37-08:00</updated>
   <id>http://lifuzu.github.io/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[不要有趣]]></title>
+    <link href="http://lifuzu.github.io/blog/2013/12/28/dont-be-interesting/"/>
+    <updated>2013-12-28T10:30:19-08:00</updated>
+    <id>http://lifuzu.github.io/blog/2013/12/28/dont-be-interesting</id>
+    <content type="html"><![CDATA[<p>原文地址：<a href="http://orderedlist.com/blog/dont-be-interesting/">http://orderedlist.com/blog/dont-be-interesting/</a></p>
+
+<p>我在上一次的文章［<a href="http://www.lifuzu.com/blog/2013/12/27/the-threat-of-creativity/">创造力的威胁</a>］中，解释了如何用规范的方法来设计，以创造更好的结果。但一个人如何去选择完美的功能组合，包括在设计中呢？</p>
+
+<!-- more -->
+
+
+<h3><strong>头脑风暴</strong></h3>
+
+<p>首先通过头脑风暴来收集你的想法。与你的团队交谈。把你所有的想法，大的小的，都放在一个地方。与大家交谈过，想想他们给你的感觉是怎样的。尝试用一些简短的形容词来描述功能，越短越好。</p>
+
+<h3><strong>缩减清单</strong></h3>
+
+<p>根据我的经验，当谈到功能的时候，有许多关键字我能听到。我想讨论其中一个特别要引起警觉的：<strong>有趣</strong>。</p>
+
+<p>这个 <em>有趣</em> 几乎总是清楚地表明，你正在讨论的事情并不重要。如果重要，为什么不能描述它呢？比如<em>很有用</em>，<em>省时省力</em>，<em>改变游戏规则</em>，<em>功能强大</em>，<em>精彩</em>，似乎有很多更好的词语来形容强大的功能。但是，当有人诉诸有趣，我听到的是：<strong>分心</strong>。</p>
+
+<h3><strong>更多</strong></h3>
+
+<p>你的设计应该比 <em>有趣</em> 多得多。兴趣可以变淡，毫无征兆。把你的设计聚焦在你的清单中让你最兴奋的那些形容词上。那些最能匹配这些形容词的功能，就是你应该开始的地方。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[创造力的威胁]]></title>
