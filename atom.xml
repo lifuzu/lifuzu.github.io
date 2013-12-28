@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[My Blog]]></title>
+  <link href="http://lifuzu.github.io/atom.xml" rel="self"/>
+  <link href="http://lifuzu.github.io/"/>
+  <updated>2013-12-28T00:16:38-08:00</updated>
+  <id>http://lifuzu.github.io/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[创造力的威胁]]></title>
+    <link href="http://lifuzu.github.io/blog/2013/12/27/the-threat-of-creativity/"/>
+    <updated>2013-12-27T23:02:42-08:00</updated>
+    <id>http://lifuzu.github.io/blog/2013/12/27/the-threat-of-creativity</id>
+    <content type="html"><![CDATA[<p>原文地址：<a href="http://orderedlist.com/blog/the-threat-of-creativity/">http://orderedlist.com/blog/the-threat-of-creativity/</a></p>
+
+<p>设计师往往赞美创造力的概念。那是以前从未存在的一个独特的，原创的想法。这需要想象力、技能、愿景、信心。</p>
+
+<p>但以我的经验，优秀的设计很少有关创建新的东西。所谓的 <em>闪现-灵光</em> 不是发明，而是思想的升华。这种感觉惊人地简单，你不会觉得是全新的。而是感觉就像它应该一直是这样。了解了这一点，我要说，最好的设计是来自<strong>纪律</strong>，而不是创造力。</p>
+
+<!-- more -->
+
+
+<h3><strong>创意与执行</strong></h3>
+
+<p>想法很廉价。有问题要解决吗？任何一群聪明的人都可以涌现出一堆可能的想法来解决问题。想出创意和解决方案<strong>绝不是</strong>设计的问题。几乎每一次，都会有<strong>太多的</strong>解决方案提出来。太多的好点子，事实上，多得如果你想将它们全部实现得话，你将面临一个可怕的结果。<em>实施创意的结果是千差万别的。</em></p>
+
+<p>创意从来都不是良好设计的障碍。事实上，依靠创造力来解决设计问题经常会导致错误的执行。许多的创意仅仅是许许多多设计路径中的第一步。</p>
+
+<p>对于创意真正有用的执行需要太多的东西，比这个想法本身多得多。它需要全面地理解这个问题，以及所有可能的解决方案。这需要研究、心想、反思、实验、提炼和<strong>纪律</strong>。</p>
+
+<p>拒绝不能完全解决问题的好点子是相当重要的。如果你形容一个想法是有趣的，它可能不值得推行。这是设计纪律的艺术。当很多好的想法展示自己，很容易让你变得心烦意乱。不要让好的创意取代伟大的执行力。</p>
+
+<h3><strong>聚焦</strong></h3>
+
+<p>因此，设计师的重点不应该放在创意。他们的重点应该放在<strong>真正理解这一问题</strong>，深入而透彻。只有到那时，真正辉煌的解决方案将自己展示出来，很多时候，都是那些最明显的、简单的方法。</p>
+]]></content>
+  </entry>
+  
+</feed>
