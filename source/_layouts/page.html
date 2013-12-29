@@ -33,6 +33,7 @@ layout: default
 </div>
 {% unless page.sidebar == false %}
 <aside class="sidebar">
+  {% include sociallink.html %}
   {% if site.page_asides.size %}
     {% include_array page_asides %}
   {% else %}

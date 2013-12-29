@@ -1,2 +1,58 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+.social{
+  text-align: center;
+  padding-top: 20px;
+
+  a{
+    text-align: left;
+    position: relative;
+    background-color: #F8F8F8;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#dedede));
+    background-image: -moz-linear-gradient(top,#fff,#dedede);
+    background-image: -o-linear-gradient(top,#fff,#dedede);
+    background-image: -ms-linear-gradient(top,#fff,#dedede);
+    background-image: linear-gradient(top,#fff,#dedede);
+    border: #CCC solid 1px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    color: #333;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    max-width: 98%;
+    overflow: hidden;
+    border-image: initial;
+    display: inline-block;
+    margin-bottom: 8px;
+    width: 170px;
+    line-height: 26px;
+    text-decoration: none;
+    padding: 4px 6px;
+  }
+
+  span{
+    height: 24px;
+    width: 32px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-right: 7px;
+    margin-bottom: -5px
+  }
+  #twitter span{
+    background-image: url('/images/twitter_newbird_blue.png');
+  }
+
+  #github span{
+    background-image: url('/images/github-icons.png');
+    background-position: 5px 1px;
+  }
+
+  #linkedin span{
+    background-image: url('/images/linkedin_icon_25px.png');
+    background-position: 5px 0px;
+  }
+}
