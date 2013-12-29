@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Blog]]></title>
-  <link href="http://lifuzu.github.io/atom.xml" rel="self"/>
-  <link href="http://lifuzu.github.io/"/>
-  <updated>2013-12-28T10:33:37-08:00</updated>
-  <id>http://lifuzu.github.io/</id>
+  <title><![CDATA[Build and Release]]></title>
+  <link href="http://lifuzu.com/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2013-12-28T19:20:16-08:00</updated>
+  <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[不要有趣]]></title>
-    <link href="http://lifuzu.github.io/blog/2013/12/28/dont-be-interesting/"/>
+    <link href="http://lifuzu.com/blog/2013/12/28/dont-be-interesting/"/>
     <updated>2013-12-28T10:30:19-08:00</updated>
-    <id>http://lifuzu.github.io/blog/2013/12/28/dont-be-interesting</id>
+    <id>http://lifuzu.com/blog/2013/12/28/dont-be-interesting</id>
     <content type="html"><![CDATA[<p>原文地址：<a href="http://orderedlist.com/blog/dont-be-interesting/">http://orderedlist.com/blog/dont-be-interesting/</a></p>
 
 <p>我在上一次的文章［<a href="http://www.lifuzu.com/blog/2013/12/27/the-threat-of-creativity/">创造力的威胁</a>］中，解释了如何用规范的方法来设计，以创造更好的结果。但一个人如何去选择完美的功能组合，包括在设计中呢？</p>
@@ -43,9 +43,9 @@
   
   <entry>
     <title type="html"><![CDATA[创造力的威胁]]></title>
-    <link href="http://lifuzu.github.io/blog/2013/12/27/the-threat-of-creativity/"/>
+    <link href="http://lifuzu.com/blog/2013/12/27/the-threat-of-creativity/"/>
     <updated>2013-12-27T23:02:42-08:00</updated>
-    <id>http://lifuzu.github.io/blog/2013/12/27/the-threat-of-creativity</id>
+    <id>http://lifuzu.com/blog/2013/12/27/the-threat-of-creativity</id>
     <content type="html"><![CDATA[<p>原文地址：<a href="http://orderedlist.com/blog/the-threat-of-creativity/">http://orderedlist.com/blog/the-threat-of-creativity/</a></p>
 
 <p>设计师往往赞美创造力的概念。那是以前从未存在的一个独特的，原创的想法。这需要想象力、技能、愿景、信心。</p>

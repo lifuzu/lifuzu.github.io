@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://lifuzu.github.io/sitemap.xml 
+Sitemap: http://lifuzu.com/sitemap.xml 
