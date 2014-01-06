@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Build and Release</title>
+  <title>Gevent, Eventlet和Node.js的性能分析 - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com">
+  <link rel="canonical" href="http://lifuzu.com/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -65,15 +65,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs/">Gevent, Eventlet和Node.js的性能分析</a></h1>
+      <h1 class="entry-title">Gevent, Eventlet和Node.js的性能分析</h1>
     
     
       <p class="meta">
@@ -96,81 +93,158 @@
   </header>
 
 
-  <div class="entry-content"><p>原文地址：<a href="http://myprogrammingjourney.blogspot.com/2011/03/meet-my-three-new-friends-eve-eventlet.html">http://myprogrammingjourney.blogspot.com/2011/03/meet-my-three-new-friends-eve-eventlet.html</a></p>
+<div class="entry-content"><p>原文地址：<a href="http://myprogrammingjourney.blogspot.com/2011/03/meet-my-three-new-friends-eve-eventlet.html">http://myprogrammingjourney.blogspot.com/2011/03/meet-my-three-new-friends-eve-eventlet.html</a></p>
 
 <p>碰到了我的三个朋友：Eve (<a href="eventlet.net">Eventlet</a>)和他的小弟Geve(<a href="gevent.org">Gevent</a>)，以及Node(nodejs.org)。全部三个都承诺对于响应多个Web客户端的请求的可扩展性。Eve是第一个轻巧的、非阻塞I/O 的python网络库。Eve的灵感来自于一个兽名Twisted，后者也提供了非阻塞I/O，但很重量级，不易tame。因此Eve为下一代轻量级的，可扩展的网络库铺平了道路。Geve虽然开始时是一个更年轻和更小的Eve版本，随着一些重大的修改，现在也已经发展成为最强大的Python网络库。它可以毫不费力地处理来自Web客户端的多个并发请求，很容易理解和实现。现在，这些Python脚本可以用来设计网页爬虫，网络机器人或Python/WSGI服务器，设计者真的很高兴能使用这些库来把他们的应用程序提升到一个新的水平。</p>
 
 <p>一个Python的Web应用程序都有两个方面：服务器编程（在Python中完成）和客户端编程（使用HTML，CSS和JavaScript来完成）。Node.js通过提供一个JavaScript的Web开发框架，内置了一个高效的连接服务器和客户端编程之间的的HTTP 服务器。这个服务器也是可扩展的，重量轻，提供异步，非阻塞I/O。Node.js服务器其实更优于它的对手Python。Node.js允许服务器和客户端脚本都使用JavaScript。现在，这点对许多JavaScript程序员来说是个好消息。他们曾经对不能控制服务器端编程有点困惑。Node.js提供的服务器是强大的，但框架非常简单，需要许多组件支持。但是，随着Node.js的日益普及，越来越多的人也没闲着，他们提供一些有效的框架来支持Node.js。<a href="http://expressjs.com/">Express</a>就是其中一种。在<a href="https://npmjs.org/">npm</a>资源库中人们可以找到一些真正有用的JavaScript模块，这些模块是其他人在面临同样问题时开发的。这些模块都是免费的有点像Python cheese shop（PyPi）。</p>
 
+<!--more-->
+
+
+<p>无论怎么样，我想使用Apache Benchmark测试这三个框架。就是利用这三个朋友创建三个简单的服务器，然后利用Apache Benchmark抛出多个并发请求，看他们如何响应。对于服务器而言，就是返回一个简单的 Hello World 字符串。看看我们的代码：</p>
+
+<p>先来Gevent：</p>
+
+<div><script src='https://gist.github.com/8278468.js?file=geve.py'></script>
+<noscript><pre><code>import gevent
+from gevent import wsgi,pool
+#the application to handle the response  
+def app(environ,start_response):
+  start_response(&quot;200 OK&quot;,[(&quot;Content-Type&quot;,&quot;text/plain&quot;)])
+  return &quot;Hello World\n&quot;
+if __name__==&quot;__main__&quot;:
+  print &quot;The sweet thing is running on http://localhost:8912/&quot;
+  pool=gevent.pool.Pool() #A pool of greenlets.Each greenlets runs the above defined function app for a client request  
+  server=wsgi.WSGIServer((&quot;localhost&quot;,8912),app,spawn=pool) #the server is created and runs multiple greenlets concurrently  
+  server.serve_forever() #the server is made to run in loop</code></pre></noscript></div>
+
+
+<p>保存上述脚本为geve.py，在终端执行“$python geve.py”，这将触发Gevent服务器，端口为8912。现在在另一个终端窗口运行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 1000 -c 100 http://localhost:8912/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述命令运行用ab发出1000个请求（-n），100个并发请求（-c）到服务器。你可以改变的数字，这个取决于你的操作系统能力。检查以下行：“Time taken for tests:”，我这里的数字是：<strong>0.360</strong>秒。如下：</p>
+
+<div><script src='https://gist.github.com/8278468.js?file=ab_gevent.log'></script>
+<noscript><pre><code>$ sudo pip install gevent
+$ ab -n 1000 -c 100 http://localhost:8912/
+This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+...
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8912
+
+Document Path:          /
+Document Length:        12 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.360 seconds</code></pre></noscript></div>
+
+
+<p>现在是Eventlet：</p>
+
+<div><script src='https://gist.github.com/8278468.js?file=eve.py'></script>
+<noscript><pre><code>import eventlet
+from eventlet import wsgi
+def app(environ,start_response):
+  start_response(&quot;200 OK&quot;,[(&quot;Content-Type&quot;,&quot;text/plain&quot;)])
+  return &quot;Hello World\n&quot;
+if __name__==&quot;__main__&quot;:
+  wsgi.server(eventlet.listen((&quot;localhost&quot;,6785)),app)</code></pre></noscript></div>
+
+
+<p>保存为eve.py，然后用ab运行:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 1000 -c 100 http://localhost:6785/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>结果是<strong>0.639</strong>秒。（注意区别）</p>
+
+<div><script src='https://gist.github.com/8278468.js?file=ab_eventlet.log'></script>
+<noscript><pre><code>$ ab -n 1000 -c 100 http://localhost:6785/
+This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+...
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            6785
+
+Document Path:          /
+Document Length:        12 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.639 seconds</code></pre></noscript></div>
+
+
+<p>最后但并非最不重要的Node.js：</p>
+
+<div><script src='https://gist.github.com/8278468.js?file=node.js'></script>
+<noscript><pre><code>var http=require(&quot;http&quot;);
+http.createServer(function(req,res){
+  res.writeHead(200,{&quot;Content-Type&quot;:&quot;text/plain&quot;});
+  res.end(&quot;Hello World\n&quot;);
+}).listen(9124,&quot;localhost&quot;);
+console.log(&quot;The sweet thing is running on http://localhost:9124&quot;);</code></pre></noscript></div>
+
+
+<p>其结果是<strong>0.186</strong>秒（好吧，这个是最好的结果）。</p>
+
+<div><script src='https://gist.github.com/8278468.js?file=ab_nodejs.log'></script>
+<noscript><pre><code>$ ab -n 1000 -c 100 http://localhost:9124/
+This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+...
+Finished 1000 requests
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            9124
+
+Document Path:          /
+Document Length:        12 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.186 seconds</code></pre></noscript></div>
+
+
+<p>该分析在Ubunut（12.04.3）上执行。这里是<a href="https://gist.github.com/lifuzu/8278468/raw/c92933b471c63ed2b607ad09551655ba3274392d/hardware.info">硬件</a>以及<a href="https://gist.github.com/lifuzu/8278468/raw/ddb00a3d17f951c61a5a3deda272dd337bd27859/software.info">软件</a>信息。欢迎留下评论和分享您的经验。</p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/05/entrepreneurs-not-government-will-save-europe-economy/">企业家，而不是政府，才能拯救欧洲经济！</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Richard Lee</span></span>
 
-<time datetime="2014-01-05T19:26:38-08:00" pubdate data-updated="true">Jan 5<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文地址：<a href="http://thenextweb.com/entrepreneur/2013/12/31/entrepreneurs-government-will-save-europes-economy/">http://thenextweb.com/entrepreneur/2013/12/31/entrepreneurs-government-will-save-europes-economy/</a></p>
-
-<p>如果史蒂夫·乔布斯被一个比利时家庭，而不是一个美国家庭领养，非常可能的情况是他应该已经结束了在银行的工作，而不是共同创办苹果公司。
-为什么呢？因为无论在哪里，公司的开办和运营都很难，但难度在欧洲更大，那里要受到地理位置，法规，语言和文化偏见的影响。</p>
-
-<p>虽然创业和初创企业在欧洲大幅蔓延，但是仍然有很多有抱负的青年企业家离开欧洲，来到美国。一个真正的企业家很少会停止脚步，直到达到他／她的目标。改变他们的整个生活，移居到大洋彼岸，可以提高他们成功的机会。从我与他们的交往来看，美国的吸引力只有越来越强。</p>
-
-<p>那么，欧洲应该做些什么呢？这里是我的三个建议。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/05/entrepreneurs-not-government-will-save-europe-economy/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/28/dont-be-interesting/">不要有趣</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -182,79 +256,42 @@
   
 
 
-<time datetime="2013-12-28T10:30:19-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文地址：<a href="http://orderedlist.com/blog/dont-be-interesting/">http://orderedlist.com/blog/dont-be-interesting/</a></p>
-
-<p>我在上一次的文章［<a href="http://www.lifuzu.com/blog/2013/12/27/the-threat-of-creativity/">创造力的威胁</a>］中，解释了如何用规范的方法来设计，以创造更好的结果。但一个人如何去选择完美的功能组合，包括在设计中呢？</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/28/dont-be-interesting/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2014-01-05T22:13:56-08:00" pubdate data-updated="true">Jan 5<span>th</span>, 2014</time>
       
-  <header>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2013/12/27/the-threat-of-creativity/">创造力的威胁</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
+      <div class="sharing">
   
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs/" data-via="" data-counturl="http://lifuzu.com/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
 
-
-<time datetime="2013-12-27T23:02:42-08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
-        
-      </p>
     
-  </header>
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/01/05/entrepreneurs-not-government-will-save-europe-economy/" title="Previous Post: 企业家，而不是政府，才能拯救欧洲经济！">&laquo; 企业家，而不是政府，才能拯救欧洲经济！</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-  <div class="entry-content"><p>原文地址：<a href="http://orderedlist.com/blog/the-threat-of-creativity/">http://orderedlist.com/blog/the-threat-of-creativity/</a></p>
-
-<p>设计师往往赞美创造力的概念。那是以前从未存在的一个独特的，原创的想法。这需要想象力、技能、愿景、信心。</p>
-
-<p>但以我的经验，优秀的设计很少有关创建新的东西。所谓的 <em>闪现-灵光</em> 不是发明，而是思想的升华。这种感觉惊人地简单，你不会觉得是全新的。而是感觉就像它应该一直是这样。了解了这一点，我要说，最好的设计是来自<strong>纪律</strong>，而不是创造力。</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/27/the-threat-of-creativity/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   <div class='social'>
   <a id="gmail" href="mailto:lifuzu@gmail.com"><span></span>Send an email</a>
@@ -289,7 +326,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/lifuzu">@lifuzu</a> on GitHub
@@ -322,6 +359,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -336,7 +374,10 @@
       var disqus_shortname = 'lifuzu';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lifuzu.com/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs/';
+        var disqus_url = 'http://lifuzu.com/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
