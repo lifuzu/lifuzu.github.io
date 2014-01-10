@@ -1,0 +1,125 @@
+---
+layout: post
+title: "2014年要火的开发技术（一）"
+date: 2014-01-09 23:19:52 -0800
+comments: true
+categories: 
+---
+原文地址：http://java.dzone.com/articles/dev-tech-will-be-hot-2014
+
+大量的开发工具和技术今年已经采用了，有的已经出现了一段时间，但现在要准备进行大规模应用了。本文列出了30+的开发工具和技术，我认为将在2014年变的壮大。我收集的这些预测，其中一部分预测来自各种生态系统（Python、PHP、JS、Java和NET仅举几例）有影响力的开发者，这些预测应该被归类为他们的。但是，大部分的预测是我的。好吧，我们开始吧！
+
+###Docker
+![Docker][1]
+
+只有把头躲在沙子里的开发者没有听说过Docker或发现其超级受欢迎。事实上，它是如此受欢迎，是开源了它的公司，dotCloud，把它更名为Docker，我不经常看到一个公司的主打产品拥抱开源技术那么困难。
+
+Docker是一个应用程序的可移植工具。该容器是轻量级的，与硬件无关，与平台无关。你可以在你的笔记本电脑建立一个，其部署到几乎任何生产环境。这真令人惊讶，这种想法虽然没有什么新意，但似乎Docker是执行便携功能比以前的任何工具，都好的工具。而现在，在它大肆宣传之下，它也有了背后支持的社区了。
+
+我认为，Docker要把自己嵌入到最佳实践的开发和部署方式中，就像几年前Vagrant一样。
+<!--more-->
+###AngularJS
+![AngularJS][2]
+
+这是另一种技术，全面超越了博客空间。它的[谷歌血统][3]也没有破坏。这可能是开发者是如此渴望尝试的关键原因之一。 Ember.js在很多方面可能更容易，但现在AngularJS的普及与Ember相比，如日中天。
+
+除非学习曲线变得太陡，我认为2014年将看到建立在Web开发社区的AngularJS的主导地位。了解为什么[AngularJS狂飙][4]。
+
+###Ghost
+![Ghost][5]
+
+反朴归真，被称为“Ghost”的Node.js支持的博客平台已经在今年得到了很多的关注，它甚至刷新了一个博客平台应该如何构造的概念。创办人是前WordPress的UI部门领导，而现在他的任务是要做出一个平台，这个平台聚焦于拥有超极简单界面的博客。任何额外的东西由社区的插件提供。
+我认为Ghost应该赶上目前的趋势，那就是：移动优先，简化网络设计，随着这波浪潮的到来，基于Node.js上的JavaScript的开发人员将会有宾至如归的感觉。
+
+###Zurb Foundation 5
+![Zurb Foundation 5][6]
+
+Twitter的Bootstrap可能就是站在老将Zurb Foundation肩膀之上的，又迅速提升到CSS框架图的之上（不是有广告牌图表的CSS框架，但应该有！），但现在[Foundation][7]正卷土重来。 当开始被所有其他的网站使用时，Twitter的Bootstrap渐渐失去了光泽。我都不能数清楚有多少我看到的“停止使用Twitter的Bootstrap这么多了”的文章。
+
+对于Zurb发布他们的框架而言，这是一个完美的机会，Zurb Foundation 5包括了很多Bootstrap不具备的性能相关的功能。我认为Twitter的Bootstrap可能仍然停留在那里，因为其知名度和易于使用（虽然Foundation也很常容易使用），但Foundation的增长肯定会在2014年超过Bootstrap。
+
+###Grunt/Bower
+![Grunt/Bower][8]
+
+我们还在说前端的东西，但不要担心，我们会谈到各种其他技术，马上。
+
+Addy Osmani的Yeoman软件系统，其中包括Grunt和Bower，正迅速成为任务自动化和包管理的标准，服务于JavaScript系统，现在也支持其他语言。像Grunt，似乎已经是无处不在，但我希望它能进一步扩展到除JavaScript和Ruby之外的其他Web开发社区。
+
+###Discourse
+![Discourse][9]
+
+Jeff Atwood的论坛得到重启，已经公开提供内容大约一年了，我希望他的团队在2014年真的能顺利运营。我已经看到了网上的ruby课程和Heroku采用的[Discourse平台][10]。一些功能是创新的，但也很直观。我喜欢那样，你可以看到有多少人点击你的主题、收到响应，实时更新和保存场景的功能都是首屈一指的。我希望很快建立和试驾我自己的Discourse论坛。
+
+另外，Discourse团队除了自身的发展，还努力加强整个的Ruby生态系统，真是太棒了。
+
+###Coinbase
+![Coinbase][11]
+
+我这个月终于买了一些比特币。虽然过程并不快，它确实让我感到安全并有一种直观的用户体验。我购买的网站是[Coinbase][12]，这个网站提供了比我的银行更多的安全措施！我从来没有见过那么重要的安全功能，高速的性能和出色的设计弥补了它的缺陷。总之，2014年，这个网站将成为是Bitcoin交易的中心。
+
+###Steam Machines
+![Steam Machines][13]
+
+不要关心什么Xbox One，不要在乎什么PS4。我在等待[这个][14]。Steam Machines上市可能不会如火如荼，要到2015年。但我认为，对于这一游戏机的新战略是要在2014年后期开始严重干扰游戏机市场。该开源操作系统将开创一系列新的定制，我们可以永远告别专有的游戏机了。另外，我有一堆从[Humble Indie Bundles][15]购买的游戏等待玩耍，想想试着连接他们到一个大电视上就让人高兴。
+
+###Screenhero
+![Screenhero][16]
+
+每个人都应该在自己的电脑上有一个屏幕共享应用程序。这是一个简单的方法来在很多方面进行合作，但最重要的是在写代码的时候。 [Screenhero][17]已经开始快速发展，一个月内发布出几个更新了。现在，它的Windows版本和Mac版本一样好，你可以在Mac和PC之间共享屏幕！所有您需要做的只是注意一下键盘上的差异。
+
+###StackEdit
+![StackEdit][18]
+
+[StackEdit][19]是，把手放下，我曾经使用过（也可能是我曾经使用过的最好的创作软件）的最好Markdown编辑器。令人惊奇的是，它是一个完全开放源码的Web应用程序，才出现仅仅一两个月。像Mou等的其他工具，在方便性和可用性上不能与StackEdit竞争。从现在开始，我将用它创作我所有的Markdown文档。
+
+###FitBit
+![FitBit][20]
+
+这个小小的[智能腕带][21]已经有一年多了，但我认为2014年可以看到它在世界各地真正腾飞。它使健身追踪变得容易得多，这就是那种聪明的小工具，当人们遇到了麻烦，能够保持激励。
+
+FitBit也说明了现在越来越难发现，这种需要制造实体产品的初创公司。我想了很多，这些硬件+软件创业公司往往比纯软件的初创公司要容易成功。
+
+###Arduino/Espruino
+![Arduino/Espruino][22]
+
+FitBit很好地引出来2014年另一个重要的技术 - Arduino。它是一个开源的，硬件编程平台，FitBit使用它开发了新产品原型，目前它在几个初创公司和大量的家庭自动化编程项目中使用。
+
+我希望看到大家日益重视硬件编程开发平台，这就是为什么我也觉得这个最近Kickstarter资助的、被称为Espruino的、基于JavaScript的一个Arduino类的平台，也将在2014年吸引更多的眼球的原因。
+
+###OpenShift
+![OpenShift][23]
+
+虽然人气在几个PaaS提供商中逐渐消退（我不会指名道姓，你可以自己做谷歌趋势搜索），[OpenShift][24]绝对是PaaS蓄势待发的开源社区。它主要吸引人的是简单以及作为开源的灵活性。
+
+此外，Redhat的OpenShift开发者是一个伟大的，互动的群体，因此，当一个热门的新东西，像Ghost被发布，他们就添加对它的支持，并写一本关于如何在他们的平台上部署的博客。我去试了试，很快就在OpenShift部署好了。
+
+<未完待续>
+
+
+> Written with [StackEdit](https://stackedit.io/).
+
+
+  [1]: http://java.dzone.com/sites/all/files/docker.png
+  [2]: http://java.dzone.com/sites/all/files/angular.png
+  [3]: http://angularjs.org/
+  [4]: http://angular-tips.com/blog/2013/08/why-does-angular-dot-js-rock
+  [5]: http://java.dzone.com/sites/all/files/ghost_01.jpg
+  [6]: http://java.dzone.com/sites/all/files/foundation.png
+  [7]: http://foundation.zurb.com/
+  [8]: http://java.dzone.com/sites/all/files/YEOMAN.png
+  [9]: http://java.dzone.com/sites/all/files/discourse.png
+  [10]: https://discussion.heroku.com/
+  [11]: http://java.dzone.com/sites/all/files/coinbase.png
+  [12]: http://coinbase.com/
+  [13]: http://java.dzone.com/sites/all/files/steam.png
+  [14]: http://store.steampowered.com/livingroom/SteamMachines
+  [15]: https://www.humblebundle.com/
+  [16]: http://java.dzone.com/sites/all/files/screenhero.png
+  [17]: http://screenhero.com/
+  [18]: http://java.dzone.com/sites/all/files/stackedit.png
+  [19]: https://stackedit.io
+  [20]: http://java.dzone.com/sites/all/files/fitbit.png
+  [21]: http://www.fitbit.com/
+  [22]: http://java.dzone.com/sites/all/files/espruino.png
+  [23]: http://java.dzone.com/sites/all/files/openshift.png
+  [24]: https://www.openshift.com/
