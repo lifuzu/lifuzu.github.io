@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2014-01-09T23:25:58-08:00</updated>
+  <updated>2014-01-10T21:38:06-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,108 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2014年要火的开发技术（二）]]></title>
+    <link href="http://lifuzu.com/blog/2014/01/10/dev-tech-hot-2004-2/"/>
+    <updated>2014-01-10T21:33:11-08:00</updated>
+    <id>http://lifuzu.com/blog/2014/01/10/dev-tech-hot-2004-2</id>
+    <content type="html"><![CDATA[<p>原文地址：<a href="http://java.dzone.com/articles/dev-tech-will-be-hot-2014">http://java.dzone.com/articles/dev-tech-will-be-hot-2014</a></p>
+
+<p>这是第二部分内容，第一部分见<a href="http://lifuzu.com/blog/2014/01/09/dev-tech-hot-2004/">这里</a></p>
+
+<h3>DigitalOcean</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/digital%20ocean.png" alt="DigitalOcean" /></p>
+
+<p>另一个兴风作浪的云平台是DigitalOcean，它在年初只拥有280台能上网的计算机，但现在却有了490K的网站，<a href="http://css.dzone.com/articles/digitalocean-growth-rate">增长速度比AWS更快</a>。</p>
+
+<p>DigitalOcean以其低廉的价格和高性能，纯SSD的基础设施，作为一个坚固的立足点，继续在IaaS领域攻城掠地。他们智能的，面向开发人员的营销策略将在2014年为他们很好的服务，实际上，在2013年已经证明是有效的。</p>
+
+<!--more-->
+
+
+<h3>FoundationDB</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/foundationdb.png" alt="FoundationDB" /></p>
+
+<p>你听说过最新的流行语：<a href="http://java.dzone.com/articles/sql-new-nonosql">NoNoSQL</a>吗？这不是一个玩笑。一些NoSQL的用户也开始意识到，他们不希望尝试重新解决RDBMS多年前已经解决了的问题。在过去一年中，已经出现了显著回迁到关系数据库的潮流，我认为在2014年，纳入一些NoSQL的优势，同时保持关系的范式和ACID事务的数据库将获得显著增长，。</p>
+
+<p>你不要错误地认为是Postgres，而是另外一个伟大的新型数据库应该在明年看到显著收获，这个数据库是FoundationDB。 FoundationDB是一个分布式数据库，它可以在都使用ACID事务的单一数据库中混合和匹配不同的模型。</p>
+
+<h3>Chrome DevTools</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/chromedevtools.png" alt="Chrome DevTools" /></p>
+
+<p>这一个在Web开发人员已经广泛使用，但在2014年你应该从DevTools期待更厉害的杀手锏。只要看看那些他们已经添加的<a href="http://www.html5rocks.com/en/tutorials/developertools/mobile">远程调试和移动仿真功能</a>就知道了。</p>
+
+<p><a href="http://alistapart.com/author/rmurphey">Rebecca Murphey</a>预测，很快DevTools基本上将成为一个IDE。</p>
+
+<h3>asm.js</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/asmjs.png" alt="asm.js" /></p>
+
+<p>这是什么东西，让<a href="http://ejohn.org/blog/asmjs-javascript-compile-target">John Resig这么激动</a>？它只是一个工具，它显示了如何<a href="http://www.2ality.com/2013/02/asm-js.html">弥合JavaScript和本地代码之间的差距</a>，使网络应用程序完成以前，不适合使用JavaScript的计算密集型任务。如果你想知道是否“JavaScript的无处不在”是真的可能，那就没有比看<a href="http://asmjs.org/">asm.js</a>更合适的了。</p>
+
+<h3>WebRTC</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/webrtc.png" alt="WebRTC" /></p>
+
+<p>我当然希望标准机构和浏览器制造商快速移动到<a href="http://www.webrtc.org/">WebRTC</a>。当它赶上并变得更加广泛，实时通信的JavaScript API将会打开的通信应用和网站特征的全新境界，我认为这将在2014年开始发生。做好准备。您的浏览器即将开始跟你说话。</p>
+
+<h3>Web组件和CSS网格布局</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/w3c.png" alt="Web组件和CSS网格布局" /></p>
+
+<p>这一预测来自<a href="http://www.2ality.com/">Axel Rauschmayer</a>，最好的JavaScript新闻博客那里。首先是新的<a href="http://www.w3.org/TR/components-intro/">Web组件规范</a>，将引入一个组件模型为Web，包括装饰、模板和“<a href="http://www.w3.org/TR/components-intro/#shadow-dom-section">影子DOM</a>”，这听起来非常有用。</p>
+
+<p>然后是<a href="http://dev.w3.org/csswg/css-grid/">CSS网格布局</a>模块，这将引入一个标准的方法，使得CSS能够驱动网格。它只是一个时间问题，实际上，我们已经有这样的东西了。正如你们许多人都知道，我们已经可以通过CSS框架得到CSS网格。</p>
+
+<h3>Silex, Composer, and Slim</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/silex.png" alt="Silex, Composer, and Slim" /></p>
+
+<p>现在PHP的微框架非常火热。当我问<a href="http://www.lornajane.net/">Lorna Mitchell</a>，她在PHP方面的预测时，Lorna Mitchell说了很多。她还谈到<a href="http://getcomposer.org/">Composer</a>，这是一个PHP的依赖管理器，就像Ruby的bundler或者Node.js的NPM。</p>
+
+<p>这些工具已经相当流行，但在2014年Composer，伴随着<a href="http://www.slimframework.com/">Slim</a>或<a href="http://silex.sensiolabs.org/">Silex</a>将可能成为开发PHP Web应用程序的首选工具。</p>
+
+<h3>Pandas and Vincent</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/pandas.png" alt="Pandas and Vincent" /></p>
+
+<p>在Python的领地，<a href="http://www.mahdiyusuf.com/">Mahdi Yusuf</a>告诉我，两个Python库：<a href="http://pandas.pydata.org/">Pandas</a>和<a href="https://github.com/wrobstory/vincent">Vincent</a>将在2014年蓬勃发展。Pandas是一种数据结构和分析库，在Python社区备受尊敬。Vincent是一个工具，可以帮助您使用Vega可视化语法构建数据可视化。</p>
+
+<p>Mahdi最近录制了一个<a href="https://www.neckbeardrepublic.com/screencasts/pandas-vincent">视频</a>介绍这两种技术，并且他也有一堆其他的视频在<a href="https://www.neckbeardrepublic.com/">Neckbeard Republic</a>，以提高你的Python技能。</p>
+
+<h3>SignalR 2.0</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/signalr.png" alt="SignalR 2.0" /></p>
+
+<p><a href="http://blog.filipekberg.se/">Filip Ekberg</a>给.NET的读者一个建议。 SignalR的下一个主要的迭代版本已经发布了。因为它比较成熟，一定能在.NET社区找到更多的采用者。</p>
+
+<p>SignalR是一个简化添加实时功能的Web应用程序的工具。你可以在<a href="http://www.asp.net/signalr/overview/signalr-20/getting-started-with-signalr-20/tutorial-getting-started-with-signalr-20">本教程</a>中熟悉SignalR2.0。</p>
+
+<h3>CocoaPods和ReactiveCocoa</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/cocoapods.png" alt="CocoaPods和ReactiveCocoa" /></p>
+
+<p><a href="http://www.alexcurylo.com/blog/">Alex Curylo</a>给了我他在iOS的发展方面的预测。没有犹豫，他预测<a href="http://cocoapods.org/">CocoaPods</a>将占到主导地位。 CocoaPods又是我们的名单上的另一个依赖管理器（我看到了一个趋势。），和Alex不是唯一一个喜欢这个工具的。约翰·布兰科，另一DZONE的iOS MVB，现在正在他的所有项目使用它，这里是<a href="http://java.dzone.com/articles/concise-introduction-cocoapods">他对CocoPods的简单介绍</a>。</p>
+
+<p>Alex还提到<a href="https://github.com/ReactiveCocoa/ReactiveCocoa">ReactiveCocoa</a>，一种<a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">功能反应编程</a>框架，声称“提供的API能编写和转化价值流。”</p>
+
+<h3>离线优先开发</h3>
+
+<p><img src="http://java.dzone.com/sites/all/files/offlinejs.png" alt="离线优先开发" /></p>
+
+<p>一年之前，移动优先发展是设计和UX的社区的焦点话题。我相信，在web开发中的下一个主要范式将是<a href="http://alistapart.com/article/offline-first">离线优先开发</a>。</p>
+
+<p>像<a href="http://github.hubspot.com/offline/docs/welcome">Offline.js</a>这样的工具已经开始帮助开发人员开发离线优先的Web应用程序。作为用户，我想大家都明白，如果在2014年，更多的网站开始使用离线优先的开发方法的话，那还是多么棒的事。</p>
+
+<p>看起来我已经在这个列表中提及了约31件事。如果其中任何一个适用于您的开发生态系统，一定要仔细看看，如果你还没有的话。</p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2014年要火的开发技术（一）]]></title>
