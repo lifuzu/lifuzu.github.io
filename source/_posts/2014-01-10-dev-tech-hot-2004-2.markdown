@@ -1,0 +1,132 @@
+---
+layout: post
+title: "2014年要火的开发技术（二）"
+date: 2014-01-10 21:33:11 -0800
+comments: true
+categories: 
+---
+原文地址：http://java.dzone.com/articles/dev-tech-will-be-hot-2014
+
+这是第二部分内容，第一部分见[这里][1]
+
+###DigitalOcean
+![DigitalOcean][2]
+
+另一个兴风作浪的云平台是DigitalOcean，它在年初只拥有280台能上网的计算机，但现在却有了490K的网站，[增长速度比AWS更快][3]。
+
+DigitalOcean以其低廉的价格和高性能，纯SSD的基础设施，作为一个坚固的立足点，继续在IaaS领域攻城掠地。他们智能的，面向开发人员的营销策略将在2014年为他们很好的服务，实际上，在2013年已经证明是有效的。
+<!--more-->
+
+###FoundationDB
+![FoundationDB][4]
+
+你听说过最新的流行语：[NoNoSQL][5]吗？这不是一个玩笑。一些NoSQL的用户也开始意识到，他们不希望尝试重新解决RDBMS多年前已经解决了的问题。在过去一年中，已经出现了显著回迁到关系数据库的潮流，我认为在2014年，纳入一些NoSQL的优势，同时保持关系的范式和ACID事务的数据库将获得显著增长，。
+
+你不要错误地认为是Postgres，而是另外一个伟大的新型数据库应该在明年看到显著收获，这个数据库是FoundationDB。 FoundationDB是一个分布式数据库，它可以在都使用ACID事务的单一数据库中混合和匹配不同的模型。
+
+###Chrome DevTools
+![Chrome DevTools][6]
+
+这一个在Web开发人员已经广泛使用，但在2014年你应该从DevTools期待更厉害的杀手锏。只要看看那些他们已经添加的[远程调试和移动仿真功能][7]就知道了。
+
+[Rebecca Murphey][8]预测，很快DevTools基本上将成为一个IDE。
+
+###asm.js
+![asm.js][9]
+
+这是什么东西，让[John Resig这么激动][10]？它只是一个工具，它显示了如何[弥合JavaScript和本地代码之间的差距][11]，使网络应用程序完成以前，不适合使用JavaScript的计算密集型任务。如果你想知道是否“JavaScript的无处不在”是真的可能，那就没有比看[asm.js][12]更合适的了。
+
+###WebRTC
+![WebRTC][13]
+
+我当然希望标准机构和浏览器制造商快速移动到[WebRTC][14]。当它赶上并变得更加广泛，实时通信的JavaScript API将会打开的通信应用和网站特征的全新境界，我认为这将在2014年开始发生。做好准备。您的浏览器即将开始跟你说话。
+
+###Web组件和CSS网格布局
+![Web组件和CSS网格布局][15]
+
+这一预测来自[Axel Rauschmayer][16]，最好的JavaScript新闻博客那里。首先是新的[Web组件规范][17]，将引入一个组件模型为Web，包括装饰、模板和“[影子DOM][18]”，这听起来非常有用。
+
+然后是[CSS网格布局][19]模块，这将引入一个标准的方法，使得CSS能够驱动网格。它只是一个时间问题，实际上，我们已经有这样的东西了。正如你们许多人都知道，我们已经可以通过CSS框架得到CSS网格。
+
+###Silex, Composer, and Slim
+![Silex, Composer, and Slim][20]
+
+现在PHP的微框架非常火热。当我问[Lorna Mitchell][21]，她在PHP方面的预测时，Lorna Mitchell说了很多。她还谈到[Composer][22]，这是一个PHP的依赖管理器，就像Ruby的bundler或者Node.js的NPM。
+
+这些工具已经相当流行，但在2014年Composer，伴随着[Slim][23]或[Silex][24]将可能成为开发PHP Web应用程序的首选工具。
+
+###Pandas and Vincent
+![Pandas and Vincent][25]
+
+在Python的领地，[Mahdi Yusuf][26]告诉我，两个Python库：[Pandas][27]和[Vincent][28]将在2014年蓬勃发展。Pandas是一种数据结构和分析库，在Python社区备受尊敬。Vincent是一个工具，可以帮助您使用Vega可视化语法构建数据可视化。
+
+Mahdi最近录制了一个[视频][29]介绍这两种技术，并且他也有一堆其他的视频在[Neckbeard Republic][30]，以提高你的Python技能。
+
+###SignalR 2.0
+![SignalR 2.0][31]
+
+[Filip Ekberg][32]给.NET的读者一个建议。 SignalR的下一个主要的迭代版本已经发布了。因为它比较成熟，一定能在.NET社区找到更多的采用者。
+
+SignalR是一个简化添加实时功能的Web应用程序的工具。你可以在[本教程][33]中熟悉SignalR2.0。
+
+###CocoaPods和ReactiveCocoa
+![CocoaPods和ReactiveCocoa][34]
+
+[Alex Curylo][35]给了我他在iOS的发展方面的预测。没有犹豫，他预测[CocoaPods][36]将占到主导地位。 CocoaPods又是我们的名单上的另一个依赖管理器（我看到了一个趋势。），和Alex不是唯一一个喜欢这个工具的。约翰·布兰科，另一DZONE的iOS MVB，现在正在他的所有项目使用它，这里是[他对CocoPods的简单介绍][37]。
+
+Alex还提到[ReactiveCocoa][38]，一种[功能反应编程][39]框架，声称“提供的API能编写和转化价值流。”
+
+###离线优先开发
+![离线优先开发][40]
+
+一年之前，移动优先发展是设计和UX的社区的焦点话题。我相信，在web开发中的下一个主要范式将是[离线优先开发][41]。
+
+像[Offline.js][42]这样的工具已经开始帮助开发人员开发离线优先的Web应用程序。作为用户，我想大家都明白，如果在2014年，更多的网站开始使用离线优先的开发方法的话，那还是多么棒的事。
+
+看起来我已经在这个列表中提及了约31件事。如果其中任何一个适用于您的开发生态系统，一定要仔细看看，如果你还没有的话。
+
+> Written with [StackEdit](https://stackedit.io/).
+
+
+  [1]: http://lifuzu.com/blog/2014/01/09/dev-tech-hot-2004/
+  [2]: http://java.dzone.com/sites/all/files/digital%20ocean.png
+  [3]: http://css.dzone.com/articles/digitalocean-growth-rate
+  [4]: http://java.dzone.com/sites/all/files/foundationdb.png
+  [5]: http://java.dzone.com/articles/sql-new-nonosql
+  [6]: http://java.dzone.com/sites/all/files/chromedevtools.png
+  [7]: http://www.html5rocks.com/en/tutorials/developertools/mobile
+  [8]: http://alistapart.com/author/rmurphey
+  [9]: http://java.dzone.com/sites/all/files/asmjs.png
+  [10]: http://ejohn.org/blog/asmjs-javascript-compile-target
+  [11]: http://www.2ality.com/2013/02/asm-js.html
+  [12]: http://asmjs.org/
+  [13]: http://java.dzone.com/sites/all/files/webrtc.png
+  [14]: http://www.webrtc.org/
+  [15]: http://java.dzone.com/sites/all/files/w3c.png
+  [16]: http://www.2ality.com/
+  [17]: http://www.w3.org/TR/components-intro/
+  [18]: http://www.w3.org/TR/components-intro/#shadow-dom-section
+  [19]: http://dev.w3.org/csswg/css-grid/
+  [20]: http://java.dzone.com/sites/all/files/silex.png
+  [21]: http://www.lornajane.net/
+  [22]: http://getcomposer.org/
+  [23]: http://www.slimframework.com/
+  [24]: http://silex.sensiolabs.org/
+  [25]: http://java.dzone.com/sites/all/files/pandas.png
+  [26]: http://www.mahdiyusuf.com/
+  [27]: http://pandas.pydata.org/
+  [28]: https://github.com/wrobstory/vincent
+  [29]: https://www.neckbeardrepublic.com/screencasts/pandas-vincent
+  [30]: https://www.neckbeardrepublic.com/
+  [31]: http://java.dzone.com/sites/all/files/signalr.png
+  [32]: http://blog.filipekberg.se/
+  [33]: http://www.asp.net/signalr/overview/signalr-20/getting-started-with-signalr-20/tutorial-getting-started-with-signalr-20
+  [34]: http://java.dzone.com/sites/all/files/cocoapods.png
+  [35]: http://www.alexcurylo.com/blog/
+  [36]: http://cocoapods.org/
+  [37]: http://java.dzone.com/articles/concise-introduction-cocoapods
+  [38]: https://github.com/ReactiveCocoa/ReactiveCocoa
+  [39]: http://en.wikipedia.org/wiki/Functional_reactive_programming
+  [40]: http://java.dzone.com/sites/all/files/offlinejs.png
+  [41]: http://alistapart.com/article/offline-first
+  [42]: http://github.hubspot.com/offline/docs/welcome
