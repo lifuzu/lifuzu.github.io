@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2014-01-10T21:38:06-08:00</updated>
+  <updated>2014-01-13T21:56:40-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Thoughs About Alias Settings in .bashrc]]></title>
+    <link href="http://lifuzu.com/blog/2014/01/13/thoughs-about-alias-in-bashrc/"/>
+    <updated>2014-01-13T21:24:27-08:00</updated>
+    <id>http://lifuzu.com/blog/2014/01/13/thoughs-about-alias-in-bashrc</id>
+    <content type="html"><![CDATA[<p>Sometimes, when we install a package, just as, tomcat, we need to append some lines in .bashrc to add and export the tomcat/bin in the system PATH, then source the entire .bashrc to enable it. It is some a little risky (when you forget append $PATH, :) ) and painful, especially when we try to automate the installation process.</p>
+
+<p>When we have several machines, we always need to synchronize the .bashrc file among them. I hate to copy them when I have more than 3 boxes.</p>
+
+<p>Then I have the below thoughs to simplify it, with a github repository. Of course, you don&rsquo;t need do these things manually again, Just try to clone the github repo at the bottom of this article.</p>
+
+<p><strong>1</strong>. We can create a folder, name it as:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~/.bashrc.d/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>inspired by rc.d, init.d, conf.d etc;</p></blockquote>
+
+<p><strong>2</strong>. We create some files under the folder, name them as:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>~/.bashrc.d/linux/git.alias.bash
+</span><span class='line'>~/.bashrc.d/linux/java.path.bash
+</span><span class='line'>~/.bashrc.d/linux/editor.bash
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>3</strong>. We add an entry point into ~/.bashrc:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">OS</span><span class="o">=</span><span class="k">$(</span> uname | tr <span class="s1">&#39;[:upper:]&#39;</span> <span class="s1">&#39;[:lower:]&#39;</span><span class="k">)</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> -d <span class="nv">$HOME</span>/.bashrc.d <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  for </span>SCRIPT in <span class="k">$(</span> ls <span class="nv">$HOME</span>/.bashrc.d/<span class="k">${</span><span class="nv">OS</span><span class="k">}</span>/* <span class="k">)</span>; <span class="k">do</span>
+</span><span class='line'>    . <span class="k">${</span><span class="nv">SCRIPT</span><span class="k">}</span>
+</span><span class='line'>  <span class="k">done</span>
+</span><span class='line'><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>4</strong>. Then we run the source command to enable them:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">source</span> ~/.bashrc
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>5</strong>. Done!</p>
+
+<p>Here is the repository:</p>
+
+<p><a href="https://github.com/lifuzu/bashrc.d.git">https://github.com/lifuzu/bashrc.d.git</a></p>
+
+<p>Run the command to clone it, fork it, and enjoy!</p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2014年要火的开发技术（二）]]></title>
