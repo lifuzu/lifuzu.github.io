@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "Supported commands:"
+echo -e '\t'"ssh_upload"
+echo -e '\t'"git_upload"
+echo -e '\t'"----"
+echo -e '\t'"demo"
