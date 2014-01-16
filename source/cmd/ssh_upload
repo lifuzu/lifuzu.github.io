@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
 
-echo hello world!
-echo hello $1.
+SSHKEY="$HOME/.ssh/id_rsa.pub"
+USER="git"
+HOST="192.168.1.138"
+WHO=`whoami`
+HOSTNAME=`hostname`
+USERID="${1:-$WHO}@$HOSTNAME"
+COMMAND="gitreceive upload-key $USERID"
+
+#echo "cat $SSHKEY | ssh $USER@$HOST '"$COMMAND"'"
+cat $SSHKEY | ssh $USER@$HOST "$COMMAND"

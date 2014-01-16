@@ -2,6 +2,7 @@
 
 echo "Supported commands:"
 echo -e '\t'"ssh_upload"
+echo -e '\t'"ssh_remove"
 echo -e '\t'"git_upload"
 echo -e '\t'"----"
 echo -e '\t'"demo"

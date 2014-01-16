@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+USER="rlee"    # another user, different from 'git'
+HOST="192.168.1.138"
+WHO=`whoami`
+HOSTNAME=`hostname`
+USERID="${1:-$WHO}@$HOSTNAME"
+COMMAND="sudo gitreceive remove-key $USERID"
+
+
+echo "ssh -t -t $USER@$HOST '"$COMMAND"'"
+#ssh -t -t $USER@$HOST "$COMMAND"
