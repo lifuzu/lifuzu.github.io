@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2014-01-22T22:32:45-08:00</updated>
+  <updated>2014-01-25T12:19:26-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,193 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Raft - Distributed Consensus Protocol]]></title>
+    <link href="http://lifuzu.com/blog/2014/01/25/raft-distributed-consensus-protocol/"/>
+    <updated>2014-01-25T11:52:13-08:00</updated>
+    <id>http://lifuzu.com/blog/2014/01/25/raft-distributed-consensus-protocol</id>
+    <content type="html"><![CDATA[<p>Rafe is a distributed consensus protocol, which allows a collection of processes to maintain consistency even in the face of multiple node failure. The two main tenants of the protocol are leader election and log replication.</p>
+
+<!-- more -->
+
+
+<h3>Learn Notes</h3>
+
+<h4>Raft &ndash; Distributed Consensus</h4>
+
+<ul>
+<li>State
+
+<ul>
+<li>Follower
+
+<ul>
+<li>up to Candidate, if it can&rsquo;t hear from leader (i.e. stop receiving heartbeats)</li>
+<li>all nodes initial state</li>
+</ul>
+</li>
+<li>Condidate
+
+<ul>
+<li>up to Leader, if it gets votes from a majority of nodes</li>
+<li>down to Follower, if it gets &ldquo;Request Vote&rdquo;</li>
+</ul>
+</li>
+<li>Leader
+
+<ul>
+<li>down to follower, when it sees the higher election term</li>
+<li>all changes to the system go through the leader</li>
+<li>only one in a system</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Activity
+
+<ul>
+<li>Leader Election
+
+<ul>
+<li>1. send &lsquo;Request Vote&rsquo; by Candidate</li>
+<li>2. if the receiving node hasn&rsquo;t voted yet in this term then it votes for the candidate</li>
+<li>3. then the node resets its election timeout</li>
+<li>4. once a candidate has a majority of votes</li>
+<li>5. it becomes leader</li>
+</ul>
+</li>
+<li>Log Replication
+
+<ul>
+<li>1. a client send a change to the leader</li>
+<li>2. the change is appended to the leader&rsquo;s log, uncommited</li>
+<li>3. the change is sent/replicate to the followers on the next heartbeat</li>
+<li>4. an entry is committed on leader once a majority of followers acknowledge it</li>
+<li>5. the leader notifies the followers than the entry is committed</li>
+<li>6. a response is sent to the client</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Message
+
+<ul>
+<li>Append Entries
+
+<ul>
+<li>Original from Leader</li>
+<li>Respond by Followers</li>
+<li>In a intervals specified by the heartbeat timeout</li>
+</ul>
+</li>
+<li>Request Vote
+
+<ul>
+<li>Original from Candidate</li>
+<li>Votes by the receiving nodes (one for each node, at same term)</li>
+<li>Immediately</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Timeout
+
+<ul>
+<li>Election Timeout
+
+<ul>
+<li>the amount of time a follower waits until becoming a candidate</li>
+<li>randomized to be between 150ms and 300ms</li>
+<li>doesn&rsquo;t occur on Leader</li>
+</ul>
+</li>
+<li>Heatbeat Timeout
+
+<ul>
+<li>should be shorter than Election Timeout</li>
+<li>occurs on all nodes</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Guarantee
+
+<ul>
+<li>because: requiring a majority of votes</li>
+<li>only one leader can be elected per term</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>JSON expression</h3>
+
+<p>Here is a json, try to express the node to communicate with Raft protocol:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;message_type&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;REQUEST_VOTE&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;VOTE&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;APPEND_ENTRIES&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;RESPOND_to_append_entries&quot;</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'>  <span class="nt">&quot;heartbeat&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;election&quot;</span><span class="p">:</span> <span class="s2">&quot;random_time(150-300ms)&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;random_string&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;follower&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;send_message&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;to&quot;</span><span class="p">:</span> <span class="s2">&quot;who&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;message_type&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nt">&quot;reset_timeout&quot;</span><span class="p">:</span> <span class="s2">&quot;timeout_type: heartbeat|election&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;stop_election&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;leader&quot;</span><span class="p">:</span> <span class="s2">&quot;who&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;no&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;vote_count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Reference:</h3>
+
+<ol>
+<li><a href="https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf">https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf</a></li>
+<li><a href="http://thesecretlivesofdata.com/raft/">http://thesecretlivesofdata.com/raft/</a></li>
+</ol>
+
+
+<blockquote><p>Supported by <a href="http://sourceforge.net/projects/freeplane/">FreePlane</a>, a great mind map editor.
+Supported by <a href="http://jsoneditoronline.org/">JSON Editor Online</a>.
+Supported by <a href="https://github.com/neocotic/html.md">HTML to MD</a>.
+Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[产品设计冲刺：为期五天的创业配方]]></title>
