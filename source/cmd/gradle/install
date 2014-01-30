@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+MODULE=gradle
+VERSION=1.8
+TYPE=all
+DOWNLOAD_URL=http://services.gradle.org/distributions/${MODULE}-${VERSION}-${TYPE}.zip
+INSTALL_PATH=/usr/local
+TEMP_PATH=/tmp
+PATHFILE=${MODULE}.path.bash
+OS=$( uname | tr '[:upper:]' '[:lower:]')
+
+pushd ${TEMP_PATH}
+# download
+wget ${DOWNLOAD_URL}
+pushd ${INSTALL_PATH}
+pwd
+[ ! -d ${MODULE}-${VERSION} ] && unzip /tmp/${MODULE}-${VERSION}-${TYPE}.zip
+[ -h ${MODULE} ] && rm ${MODULE}
+ln -s ${MODULE}-${VERSION} ${MODULE}
+popd
+# create path file
+MODULE_UPPER=$( echo $MODULE | tr '[:lower:]' '[:upper:]' )
+echo "export ${MODULE_UPPER}_HOME=${INSTALL_PATH}/${MODULE}" > ${PATHFILE}
+echo "export PATH=\${${MODULE_UPPER}_HOME}/bin:"'${PATH}' >> ${PATHFILE}
+# install path file
+if [ -d $HOME/.bashrc.d ]; then
+if [ ! -e $HOME/.bashrc.d/${OS}/${PATHFILE} ]; then
+mv ${PATHFILE} $HOME/.bashrc.d/${OS}/${PATHFILE}
+source $HOME/.bashrc.d/${OS}/${PATHFILE}
+fi
+else 
+echo please install bashrc.d at first.
+fi
+# cleanup
+rm ${MODULE}-${VERSION}-${TYPE}.zip
+popd
