@@ -10,6 +10,13 @@ layout: default
     {% if page.date %}<p class="meta">{% include post/date.html %}{{ time }}</p>{% endif %}
   </header>
   {% endif %}
+  <ul class="page-links">
+    {% for link_hash in page.links %}
+      {% for link in link_hash %}
+        <li><a class="button" href="{{ link[1] }}">{{ link[0] }}</a></li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
   {{ content }}
   {% unless page.footer == false %}
     <footer>
