@@ -9,7 +9,7 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="&larr; Older Blog Archives Send an email @lifuzu Richard Lee Recent Posts Raft - Distributed Consensus Protocol 产品设计冲刺：为期五天的创业配方 产品设计Sprint &hellip;">
+  <meta name="description" content="Blog Archives Send an email @lifuzu Richard Lee Recent Posts Raft - Distributed Consensus Protocol 产品设计冲刺：为期五天的创业配方 产品设计Sprint 如何成为一个伟大的开发者 Thoughs &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/playard">
+  <link rel="canonical" href="http://lifuzu.com/playard/.bak">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -70,8 +70,6 @@
   
   <div class="pagination">
     
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
     <a href="/blog/archives">Blog Archives</a>
     
   </div>
@@ -114,7 +112,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/lifuzu">@lifuzu</a> on GitHub

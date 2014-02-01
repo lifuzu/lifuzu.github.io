@@ -1,0 +1,9 @@
+# echo the following content to ~/.local/share/applications/freeplane.desktop with bash
+# then we can run 'curl example.com/cmd/freeplane/desktop | bash' to create it local.
+# TOBECONT.
+[Desktop Entry]
+Type=Application
+Name=FreePlane
+Icon=/usr/local/freeplane/freeplane.png
+Exec=/usr/local/freeplane/freeplane.sh
+Terminal=false
