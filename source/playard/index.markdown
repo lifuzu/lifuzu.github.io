@@ -5,5 +5,6 @@ sharing: false
 footer: true
 categories: 
 ---
-###Hello World!
-[Bashrc.d](bashrc.d/)
+
+###[bashrc.d](bashrc.d/)
+Organize bashrc entries in a new way!

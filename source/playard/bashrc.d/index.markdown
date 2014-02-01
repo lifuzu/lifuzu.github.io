@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Organize bashrc entries in a new way!"
+title: "bashrc.d"
 date: 2014-01-31 01:23
 comments: true
 sharing: true
