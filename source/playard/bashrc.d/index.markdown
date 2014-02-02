@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: playard
 title: "bashrc.d"
 date: 2014-01-31 01:23
 comments: true
