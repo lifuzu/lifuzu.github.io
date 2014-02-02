@@ -76,11 +76,15 @@
     </url>
     <url>
         <loc>http://lifuzu.com/playard/</loc>
-        <lastmod>2014-02-01T16:28:51-08:00</lastmod>
+        <lastmod>2014-02-01T17:42:53-08:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/playard/bashrc.d/</loc>
         <lastmod>2014-02-01T16:30:32-08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lifuzu.com/playard/jsoneditor/</loc>
+        <lastmod>2014-02-01T17:48:29-08:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/robots.txt</loc>
