@@ -1,0 +1,89 @@
+---
+layout: playard
+title: "jsoneditor"
+date: 2014-02-01 01:23
+comments: true
+sharing: true
+footer: true
+categories: 
+links:
+  - Web: http://jsoneditoronline.org/
+  - Source: https://github.com/josdejong/jsoneditor
+---
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+  <!-- jsoneditor -->
+  <link rel="stylesheet" type="text/css" href="css/jsoneditor-min-2.3.6.css">
+  <script type="text/javascript" src="js/jsoneditor-min-2.3.6.js"></script>
+
+  <!-- ace code editor -->
+  <script type="text/javascript" src="js/lib/ace/ace.js"></script>
+  <script type="text/javascript" src="js/lib/ace/mode-json.js"></script>
+  <script type="text/javascript" src="js/lib/ace/theme-textmate.js"></script>
+  <script type="text/javascript" src="js/lib/ace/theme-jsoneditor.js"></script>
+
+  <!-- json lint -->
+  <script type="text/javascript" src="js/lib/jsonlint/jsonlint.js"></script>
+
+  <style type="text/css">
+    /*body {
+      font: 10.5pt arial;
+      color: #4d4d4d;
+      line-height: 150%;
+      width: 500px;
+    }*/
+
+    code {
+      background-color: #f5f5f5;
+    }
+
+    #jsoneditor {
+      width: 500px;
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="jsoneditor"></div>
+
+<script type="text/javascript" >
+  var container = document.getElementById('jsoneditor');
+
+  var options = {
+    mode: 'tree',
+    modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
+    error: function (err) {
+      alert(err.toString());
+    }
+  };
+
+  var json = {
+    "array": [1, 2, 3],
+    "boolean": true,
+    "null": null,
+    "number": 123,
+    "object": {"a": "b", "c": "d"},
+    "string": "Hello World"
+  };
+
+  var editor = new jsoneditor.JSONEditor(container, options, json);
+</script>
+<p>
+  Switch editor mode using the mode box.
+  Note that the mode can be changed programmatically as well using the method
+  <code>editor.setMode(mode)</code>, try it in the console of your browser.
+</p>
+
+<p>
+  <strong>Others:</strong></br>
+  1. http://jsonviewer.jaycodesign.co.nz/</br>
+  2. http://jsbeautifier.org/</br>
+  3. http://marianoguerra.github.io/json.human.js/
+</p>
+
+</body>
+</html>
