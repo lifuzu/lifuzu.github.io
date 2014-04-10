@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Git | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2014-04-09T22:44:34-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Migrate Svn to Git]]></title>
+    <link href="http://lifuzu.com/blog/2014/04/09/migrate-svn-to-git/"/>
+    <updated>2014-04-09T22:21:27-07:00</updated>
+    <id>http://lifuzu.com/blog/2014/04/09/migrate-svn-to-git</id>
+    <content type="html"><![CDATA[<p><img src="https://lh6.googleusercontent.com/-zWvC0T4xLUM/U0YqARAy3HI/AAAAAAAAB34/N0PazinANn0/s0/svn_to_git-860x200.png" title="svn_to_git-860x200.png" alt="migrate svn to git" /></p>
+
+<h3>Instructions:</h3>
+
+<p><em>1</em>. Check out the source tree from SVN server with svn command:
+<code>bash
+svn co http://my-project.googlecode.com/svn/trunk
+</code>
+<em>2</em>. Generate an users.txt with the command:
+```bash
+$ svn log ^/ &mdash;xml | grep -P &ldquo;^&lt;author&rdquo; | sort -u | \</p>
+
+<pre><code>  perl -pe 's/&lt;author&gt;(.*?)&lt;\/author&gt;/$1 = /' &gt; users.txt
+</code></pre>
+
+<p><code>
+   and following the formatting:
+</code>text
+schacon = Scott Chacon <a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x73;&#99;&#104;&#x61;&#99;&#x6f;&#x6e;&#64;&#x67;&#101;&#x65;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#99;&#x68;&#x61;&#x63;&#x6f;&#x6e;&#64;&#103;&#x65;&#x65;&#109;&#97;&#105;&#108;&#x2e;&#99;&#111;&#109;</a>
+selse = Someo Nelse <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x73;&#101;&#108;&#115;&#x65;&#64;&#103;&#101;&#x65;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#x65;&#x6c;&#115;&#x65;&#x40;&#x67;&#101;&#x65;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a>
+```
+<strong>NOTE</strong>: You can try the script to generate authors list automatically: <a href="https://gist.github.com/lifuzu/9081923#file-findauthors-sh">https://gist.github.com/lifuzu/9081923#file-findauthors-sh</a></p>
+
+<p><em>3</em>. Once the users.txt is ready, then checkout the source tree again with the command &lsquo;git svn clone&rsquo;:
+```bash
+$ git svn clone <a href="http://my-project.googlecode.com/svn/">http://my-project.googlecode.com/svn/</a> \</p>
+
+<pre><code>  --authors-file=users.txt --no-metadata -s my_project
+</code></pre>
+
+<p><code>
+*4*. To move the tags to be proper Git tags, run:
+</code>bash
+$ git for-each-ref refs/remotes/tags | cut -d / -f 4- | grep -v @ | while read tagname; do git tag &ldquo;$tagname&rdquo; &ldquo;tags/$tagname&rdquo;; git branch -r -d &ldquo;tags/$tagname&rdquo;; done
+<code>
+*5*. To move the rest of the references under refs/remotes to be local branches:
+</code>bash
+$ git for-each-ref refs/remotes | cut -d / -f 3- | grep -v @ | while read branchname; do git branch &ldquo;$branchname&rdquo; &ldquo;refs/remotes/$branchname&rdquo;; git branch -r -d &ldquo;$branchname&rdquo;; done
+<code>
+*6*. Adding the git server as a remote:
+</code>bash
+$ git remote add origin git@my-git-server:myrepository.git
+<code>
+*7*. Push all your branches and tags to go up:
+</code>bash
+$ git push origin &mdash;all
+$ git push origin &mdash;tags
+<code>
+*8*. Update the changes from SVN (before you update, please cleanup your local workspace)
+</code>bash
+$ git svn fetch
+&hellip;
+r81152 = c2465633b56d16081334336ee87d506b97d10449 (refs/remotes/git-svn)
+$ git checkout master
+$ git merge remotes/git-svn
+<code>
+**NOTE**: Sometimes when you run `git svn fetch`:
+</code>
+&hellip;
+r81217 = eb79c770f852f6158a583bb17a8c1a326f7b4e03 (refs/remotes/trunk)
+<code>
+Then you need to run:
+</code>
+$ git checkout master
+$ git merge remotes/trunk
+<code>
+*9*. Then check them into GIT
+</code>bash
+$ git log # should have some changes merged from SVN
+$ git push origin master
+<code>
+*10*. If you have a temporary migration branch you modified something on that, then you need rebase the changes on master to migration:
+</code>bash
+$ git checkout migration
+$ git rebase master  # fix the conflicts if have
+<code>
+*11*. Finally, you need merge the changes on migration, fast forward, since you have rebased.
+</code>bash
+$ git checkout master
+$ git merge migration
+```</p>
+
+<p>That is it!</p>
+
+<h3>Reference:</h3>
+
+<ol>
+<li><a href="http://git-scm.com/book/en/Git-and-Other-Systems-Migrating-to-Git">http://git-scm.com/book/en/Git-and-Other-Systems-Migrating-to-Git</a></li>
+<li><a href="http://git-scm.com/book/ch3-6.html">http://git-scm.com/book/ch3-6.html</a></li>
+<li><a href="http://stackoverflow.com/questions/16565991/keep-svn-repository-in-sync-with-git-one">http://stackoverflow.com/questions/16565991/keep-svn-repository-in-sync-with-git-one</a></li>
+<li><a href="http://stackoverflow.com/questions/5241898/is-a-bidrectional-git-svn-sync-both-writable-possible">http://stackoverflow.com/questions/5241898/is-a-bidrectional-git-svn-sync-both-writable-possible</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

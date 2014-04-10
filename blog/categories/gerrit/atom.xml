@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Gerrit | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/gerrit/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2014-04-09T22:44:34-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Remove Repository From Gerrit]]></title>
+    <link href="http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit/"/>
+    <updated>2014-04-09T22:42:53-07:00</updated>
+    <id>http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit</id>
+    <content type="html"><![CDATA[<p><img src="https://lh4.googleusercontent.com/-_03bVFvmzzg/U0YvHJPBLCI/AAAAAAAAB4M/SSKXyOR_T3U/s0/diffymute-300x279.png" title="diffymute-300x279.png" alt="Gerrit icon" /></p>
+
+<h3>Instructions:</h3>
+
+<p><em>1</em>. Move the repository folder on server:
+```bash</p>
+
+<h1>on gerrit server</h1>
+
+<p>$ cd $site_path/git;
+$ mv old_name.git new_name.git
+```</p>
+
+<p><em>2</em>. Flush the caches on server:
+```bash</p>
+
+<h1>On another client image:</h1>
+
+<p>$ ssh -p 29418 gerrit.server.com gerrit flush-caches
+```</p>
+
+<p><em>3</em>. Run sql statement to update the changes:
+```bash</p>
+
+<h1>On another client image (need &ldquo;Access Database&rdquo; capability):</h1>
+
+<p>$ ssh -p 29418 gerrit.server.com gerrit gsql [Enter]
+gerrit> USE {Database};
+gerrit> SELECT * FROM changes WHERE dest_project_name = &lsquo;old_name&rsquo;;</p>
+
+<h1>if have more than 1, run the following command to update, otherwise, quit with \q;</h1>
+
+<p>gerrit> UPDATE changes SET dest_project_name = &lsquo;new_name&rsquo; WHERE
+dest_project_name = &lsquo;old_name&rsquo;;
+gerrit> \q
+```</p>
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI">https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

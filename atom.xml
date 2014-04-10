@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2014-04-09T22:24:27-07:00</updated>
+  <updated>2014-04-09T22:44:34-07:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Remove Repository From Gerrit]]></title>
+    <link href="http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit/"/>
+    <updated>2014-04-09T22:42:53-07:00</updated>
+    <id>http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit</id>
+    <content type="html"><![CDATA[<p><img src="https://lh4.googleusercontent.com/-_03bVFvmzzg/U0YvHJPBLCI/AAAAAAAAB4M/SSKXyOR_T3U/s0/diffymute-300x279.png" title="diffymute-300x279.png" alt="Gerrit icon" /></p>
+
+<h3>Instructions:</h3>
+
+<p><em>1</em>. Move the repository folder on server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># on gerrit server</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$site_path</span>/git;
+</span><span class='line'><span class="nv">$ </span>mv old_name.git new_name.git
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>2</em>. Flush the caches on server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image:</span>
+</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit flush-caches
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>3</em>. Run sql statement to update the changes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image (need &quot;Access Database&quot; capability):</span>
+</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit gsql <span class="o">[</span>Enter<span class="o">]</span>
+</span><span class='line'>gerrit&gt; USE <span class="o">{</span>Database<span class="o">}</span>;
+</span><span class='line'>gerrit&gt; SELECT * FROM changes WHERE <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
+</span><span class='line'><span class="c"># if have more than 1, run the following command to update, otherwise, quit with \q;</span>
+</span><span class='line'>gerrit&gt; UPDATE changes SET <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;new_name&#39;</span> WHERE
+</span><span class='line'><span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
+</span><span class='line'>gerrit&gt; <span class="se">\q</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI">https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Migrate Svn to Git]]></title>

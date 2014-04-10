@@ -5,11 +5,16 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>不要有趣 - Build and Release</title>
+  <title>Remove Repository From Gerrit - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="原文地址：http://orderedlist.com/blog/dont-be-interesting/ 我在上一次的文章［创造力的威胁］中，解释了如何用规范的方法来设计，以创造更好的结果。但一个人如何去选择完美的功能组合，包括在设计中呢？ 头脑风暴 首先通过头脑风暴来收集你的想法。 &hellip;">
+  <meta name="description" content="Instructions: 1. Move the repository folder on server: 1
+2
+3
+# on gerrit server
+$ cd $site_path/git;
+$ mv old_name.git new_name.git 2. Flush the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +23,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/blog/2013/12/28/dont-be-interesting">
+  <link rel="canonical" href="http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -70,7 +75,7 @@
   
   <header>
     
-      <h1 class="entry-title">不要有趣</h1>
+      <h1 class="entry-title">Remove Repository From Gerrit</h1>
     
     
       <p class="meta">
@@ -86,33 +91,66 @@
   
 
 
-<time datetime="2013-12-28T10:30:19-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2013</time>
+<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>原文地址：<a href="http://orderedlist.com/blog/dont-be-interesting/">http://orderedlist.com/blog/dont-be-interesting/</a></p>
+<div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-_03bVFvmzzg/U0YvHJPBLCI/AAAAAAAAB4M/SSKXyOR_T3U/s0/diffymute-300x279.png" title="diffymute-300x279.png" alt="Gerrit icon" /></p>
 
-<p>我在上一次的文章［<a href="http://www.lifuzu.com/blog/2013/12/27/the-threat-of-creativity/">创造力的威胁</a>］中，解释了如何用规范的方法来设计，以创造更好的结果。但一个人如何去选择完美的功能组合，包括在设计中呢？</p>
+<h3>Instructions:</h3>
 
-<!-- more -->
+<p><em>1</em>. Move the repository folder on server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># on gerrit server</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$site_path</span>/git;
+</span><span class='line'><span class="nv">$ </span>mv old_name.git new_name.git
+</span></code></pre></td></tr></table></div></figure>
 
 
-<h3><strong>头脑风暴</strong></h3>
+<p><em>2</em>. Flush the caches on server:</p>
 
-<p>首先通过头脑风暴来收集你的想法。与你的团队交谈。把你所有的想法，大的小的，都放在一个地方。与大家交谈过，想想他们给你的感觉是怎样的。尝试用一些简短的形容词来描述功能，越短越好。</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image:</span>
+</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit flush-caches
+</span></code></pre></td></tr></table></div></figure>
 
-<h3><strong>缩减清单</strong></h3>
 
-<p>根据我的经验，当谈到功能的时候，有许多关键字我能听到。我想讨论其中一个特别要引起警觉的：<strong>有趣</strong>。</p>
+<p><em>3</em>. Run sql statement to update the changes:</p>
 
-<p>这个 <em>有趣</em> 几乎总是清楚地表明，你正在讨论的事情并不重要。如果重要，为什么不能描述它呢？比如<em>很有用</em>，<em>省时省力</em>，<em>改变游戏规则</em>，<em>功能强大</em>，<em>精彩</em>，似乎有很多更好的词语来形容强大的功能。但是，当有人诉诸有趣，我听到的是：<strong>分心</strong>。</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image (need &quot;Access Database&quot; capability):</span>
+</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit gsql <span class="o">[</span>Enter<span class="o">]</span>
+</span><span class='line'>gerrit&gt; USE <span class="o">{</span>Database<span class="o">}</span>;
+</span><span class='line'>gerrit&gt; SELECT * FROM changes WHERE <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
+</span><span class='line'><span class="c"># if have more than 1, run the following command to update, otherwise, quit with \q;</span>
+</span><span class='line'>gerrit&gt; UPDATE changes SET <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;new_name&#39;</span> WHERE
+</span><span class='line'><span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
+</span><span class='line'>gerrit&gt; <span class="se">\q</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h3><strong>更多</strong></h3>
 
-<p>你的设计应该比 <em>有趣</em> 多得多。兴趣可以变淡，毫无征兆。把你的设计聚焦在你的清单中让你最兴奋的那些形容词上。那些最能匹配这些形容词的功能，就是你应该开始的地方。</p>
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI">https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 </div>
 
 
@@ -135,15 +173,21 @@
   
 
 
-<time datetime="2013-12-28T10:30:19-08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2013</time>
+<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/gerrit/'>gerrit</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2013/12/28/dont-be-interesting/" data-via="" data-counturl="http://lifuzu.com/blog/2013/12/28/dont-be-interesting/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit/" data-via="" data-counturl="http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -156,10 +200,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/12/27/the-threat-of-creativity/" title="Previous Post: 创造力的威胁">&laquo; 创造力的威胁</a>
+        <a class="basic-alignment left" href="/blog/2014/04/09/migrate-svn-to-git/" title="Previous Post: migrate svn to git">&laquo; migrate svn to git</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/01/05/entrepreneurs-not-government-will-save-europe-economy/" title="Next Post: 企业家，而不是政府，才能拯救欧洲经济！">企业家，而不是政府，才能拯救欧洲经济！ &raquo;</a>
       
     </p>
   </footer>
@@ -260,8 +302,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lifuzu.com/blog/2013/12/28/dont-be-interesting/';
-        var disqus_url = 'http://lifuzu.com/blog/2013/12/28/dont-be-interesting/';
+        var disqus_identifier = 'http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit/';
+        var disqus_url = 'http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit/';
         var disqus_script = 'embed.js';
       
     (function () {
