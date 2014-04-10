@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "remove repository from Gerrit"
+title: "rename repository on Gerrit"
 date: 2014-04-09 22:42:53 -0700
 comments: true
 categories: gerrit
