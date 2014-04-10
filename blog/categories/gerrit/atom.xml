@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Gerrit | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/gerrit/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2014-04-09T22:44:34-07:00</updated>
+  <updated>2014-04-09T22:49:14-07:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Remove Repository From Gerrit]]></title>
-    <link href="http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit/"/>
+    <title type="html"><![CDATA[Rename Repository on Gerrit]]></title>
+    <link href="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/"/>
     <updated>2014-04-09T22:42:53-07:00</updated>
-    <id>http://lifuzu.com/blog/2014/04/09/remove-repository-from-gerrit</id>
+    <id>http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit</id>
     <content type="html"><![CDATA[<p><img src="https://lh4.googleusercontent.com/-_03bVFvmzzg/U0YvHJPBLCI/AAAAAAAAB4M/SSKXyOR_T3U/s0/diffymute-300x279.png" title="diffymute-300x279.png" alt="Gerrit icon" /></p>
 
 <h3>Instructions:</h3>
