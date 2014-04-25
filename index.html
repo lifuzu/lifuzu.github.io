@@ -9,12 +9,10 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Instructions: 1. Move the repository folder on server: 1
+  <meta name="description" content="Intructions: add a submodule 1
 2
-3
-# on gerrit server
-$ cd $site_path/git;
-$ mv old_name.git new_name.git 2. Flush the &hellip;">
+$ git submodule add -b BRANCH ssh://REPO_URL/REPO_PATH SUBMODULE_PATH
+$ git commit -m &quot;add a submodule at &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +70,180 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/24/playing-with-git-submodule/">Playing With Git Submodule</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-24T22:01:03-07:00" pubdate data-updated="true">Apr 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-GW4P0d8zZdM/U1nrsDaCgiI/AAAAAAAAB5I/4mTt3xjfmFo/s0/xlotte-git.jpg" title="xlotte-git.jpg" alt="enter image description here" /></p>
+
+<h3>Intructions:</h3>
+
+<ul>
+<li>add a submodule</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule add -b BRANCH ssh://REPO_URL/REPO_PATH SUBMODULE_PATH
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;add a submodule at SUBMODULE_PATH&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>clone the project with submodule(s)</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone ssh://REPO_URL/REPO_PATH PROJECT
+</span><span class='line'><span class="nb">cd </span>PROJECT
+</span><span class='line'><span class="nv">$ </span>git submodule update --init --rebase
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>get submodule status</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule status
+</span><span class='line'><span class="nv">$ </span>git submodule foreach git branch -a
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>checkout all submodule to a branch defined in .gitmodule (which means we specify the branch when we add the submodule with &lsquo;-b BRANCH&rsquo;)</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule foreach -q --recursive <span class="s1">&#39;branch=&quot;$(git config -f $toplevel/.gitmodules submodule.$name.branch)&quot;; git checkout $branch&#39;</span>
+</span><span class='line'><span class="c"># OR a short version</span>
+</span><span class='line'><span class="nv">$ </span>git submodule foreach git checkout master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>pull the latest master for all of the submodule</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule -q foreach git pull -q origin master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>develop in submodule</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Make your changes in submoduleA</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>submoduleA
+</span><span class='line'><span class="nv">$ </span>git add .
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Updated the submoduleA&quot;</span>
+</span><span class='line'><span class="nv">$ </span>git push origin BRANCH
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>sync to project</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>PROJECT
+</span><span class='line'><span class="nv">$ </span>git pull
+</span><span class='line'><span class="nv">$ </span>git submodule update --rebase
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>manually update the project to track submodule (Gerrit submodule description commit the track automatically)</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>PROJECT
+</span><span class='line'><span class="nv">$ </span>git add submoduleA
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Updated submodule a.&quot;</span>
+</span><span class='line'><span class="nv">$ </span>git push origin BRANCH_NAME
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>deinit, and remove a submodule</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule deinit SUBMODULE_PATH
+</span><span class='line'><span class="nv">$ </span>git rm SUBMODULE_PATH
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;remove the submodule at SUBMODULE_PATH&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="http://git-scm.com/docs/git-submodule">http://git-scm.com/docs/git-submodule</a></li>
+<li><a href="http://git-scm.com/docs/git-rm.html">http://git-scm.com/docs/git-rm.html</a></li>
+<li><a href="http://stackoverflow.com/questions/8642668/how-to-make-submodule-with-detached-head-to-be-attached-to-actual-head">http://stackoverflow.com/questions/8642668/how-to-make-submodule-with-detached-head-to-be-attached-to-actual-head</a></li>
+<li><a href="http://www.vogella.com/tutorials/Git/article.html#submodules">http://www.vogella.com/tutorials/Git/article.html#submodules</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -757,59 +929,6 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/09/dev-tech-hot-2004/">2014年要火的开发技术（一）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-09T23:19:52-08:00" pubdate data-updated="true">Jan 9<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文地址：<a href="http://java.dzone.com/articles/dev-tech-will-be-hot-2014">http://java.dzone.com/articles/dev-tech-will-be-hot-2014</a></p>
-
-<p>大量的开发工具和技术今年已经采用了，有的已经出现了一段时间，但现在要准备进行大规模应用了。本文列出了30+的开发工具和技术，我认为将在2014年变的壮大。我收集的这些预测，其中一部分预测来自各种生态系统（Python、PHP、JS、Java和NET仅举几例）有影响力的开发者，这些预测应该被归类为他们的。但是，大部分的预测是我的。好吧，我们开始吧！</p>
-
-<h3>Docker</h3>
-
-<p><img src="http://java.dzone.com/sites/all/files/docker.png" alt="Docker" /></p>
-
-<p>只有把头躲在沙子里的开发者没有听说过Docker或发现其超级受欢迎。事实上，它是如此受欢迎，是开源了它的公司，dotCloud，把它更名为Docker，我不经常看到一个公司的主打产品拥抱开源技术那么困难。</p>
-
-<p>Docker是一个应用程序的可移植工具。该容器是轻量级的，与硬件无关，与平台无关。你可以在你的笔记本电脑建立一个，其部署到几乎任何生产环境。这真令人惊讶，这种想法虽然没有什么新意，但似乎Docker是执行便携功能比以前的任何工具，都好的工具。而现在，在它大肆宣传之下，它也有了背后支持的社区了。</p>
-
-<p>我认为，Docker要把自己嵌入到最佳实践的开发和部署方式中，就像几年前Vagrant一样。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/09/dev-tech-hot-2004/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -831,6 +950,10 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/24/playing-with-git-submodule/">Playing With Git Submodule</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/09/rename-repository-on-gerrit/">Rename Repository on Gerrit</a>
       </li>
     
@@ -844,10 +967,6 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
     
       <li class="post">
         <a href="/blog/2014/01/25/raft-distributed-consensus-protocol/">Raft - Distributed Consensus Protocol</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/22/produc-design-sprint/">产品设计冲刺：为期五天的创业配方</a>
       </li>
     
   </ul>

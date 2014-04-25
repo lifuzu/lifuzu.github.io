@@ -5,16 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Rename Repository on Gerrit - Build and Release</title>
+  <title>Playing With Git Submodule - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Instructions: 1. Move the repository folder on server: 1
+  <meta name="description" content="Intructions: add a submodule 1
 2
-3
-# on gerrit server
-$ cd $site_path/git;
-$ mv old_name.git new_name.git 2. Flush the &hellip;">
+$ git submodule add -b BRANCH ssh://REPO_URL/REPO_PATH SUBMODULE_PATH
+$ git commit -m &quot;add a submodule at &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,7 +21,7 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit">
+  <link rel="canonical" href="http://lifuzu.com/blog/2014/04/24/playing-with-git-submodule">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -75,7 +73,7 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Rename Repository on Gerrit</h1>
+      <h1 class="entry-title">Playing With Git Submodule</h1>
     
     
       <p class="meta">
@@ -91,62 +89,148 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
 
 
-<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+<time datetime="2014-04-24T22:01:03-07:00" pubdate data-updated="true">Apr 24<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-_03bVFvmzzg/U0YvHJPBLCI/AAAAAAAAB4M/SSKXyOR_T3U/s0/diffymute-300x279.png" title="diffymute-300x279.png" alt="Gerrit icon" /></p>
+<div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-GW4P0d8zZdM/U1nrsDaCgiI/AAAAAAAAB5I/4mTt3xjfmFo/s0/xlotte-git.jpg" title="xlotte-git.jpg" alt="enter image description here" /></p>
 
-<h3>Instructions:</h3>
+<h3>Intructions:</h3>
 
-<p><em>1</em>. Move the repository folder on server:</p>
+<ul>
+<li>add a submodule</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule add -b BRANCH ssh://REPO_URL/REPO_PATH SUBMODULE_PATH
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;add a submodule at SUBMODULE_PATH&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>clone the project with submodule(s)</li>
+</ul>
+
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># on gerrit server</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$site_path</span>/git;
-</span><span class='line'><span class="nv">$ </span>mv old_name.git new_name.git
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone ssh://REPO_URL/REPO_PATH PROJECT
+</span><span class='line'><span class="nb">cd </span>PROJECT
+</span><span class='line'><span class="nv">$ </span>git submodule update --init --rebase
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><em>2</em>. Flush the caches on server:</p>
+<ul>
+<li>get submodule status</li>
+</ul>
+
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image:</span>
-</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit flush-caches
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule status
+</span><span class='line'><span class="nv">$ </span>git submodule foreach git branch -a
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><em>3</em>. Run sql statement to update the changes:</p>
+<ul>
+<li>checkout all submodule to a branch defined in .gitmodule (which means we specify the branch when we add the submodule with &lsquo;-b BRANCH&rsquo;)</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule foreach -q --recursive <span class="s1">&#39;branch=&quot;$(git config -f $toplevel/.gitmodules submodule.$name.branch)&quot;; git checkout $branch&#39;</span>
+</span><span class='line'><span class="c"># OR a short version</span>
+</span><span class='line'><span class="nv">$ </span>git submodule foreach git checkout master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>pull the latest master for all of the submodule</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule -q foreach git pull -q origin master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>develop in submodule</li>
+</ul>
+
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image (need &quot;Access Database&quot; capability):</span>
-</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit gsql <span class="o">[</span>Enter<span class="o">]</span>
-</span><span class='line'>gerrit&gt; USE <span class="o">{</span>Database<span class="o">}</span>;
-</span><span class='line'>gerrit&gt; SELECT * FROM changes WHERE <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
-</span><span class='line'><span class="c"># if have more than 1, run the following command to update, otherwise, quit with \q;</span>
-</span><span class='line'>gerrit&gt; UPDATE changes SET <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;new_name&#39;</span> WHERE
-</span><span class='line'><span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
-</span><span class='line'>gerrit&gt; <span class="se">\q</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Make your changes in submoduleA</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>submoduleA
+</span><span class='line'><span class="nv">$ </span>git add .
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Updated the submoduleA&quot;</span>
+</span><span class='line'><span class="nv">$ </span>git push origin BRANCH
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>sync to project</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>PROJECT
+</span><span class='line'><span class="nv">$ </span>git pull
+</span><span class='line'><span class="nv">$ </span>git submodule update --rebase
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>manually update the project to track submodule (Gerrit submodule description commit the track automatically)</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>PROJECT
+</span><span class='line'><span class="nv">$ </span>git add submoduleA
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Updated submodule a.&quot;</span>
+</span><span class='line'><span class="nv">$ </span>git push origin BRANCH_NAME
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>deinit, and remove a submodule</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule deinit SUBMODULE_PATH
+</span><span class='line'><span class="nv">$ </span>git rm SUBMODULE_PATH
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;remove the submodule at SUBMODULE_PATH&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <h3>References:</h3>
 
 <ol>
-<li><a href="https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI">https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI</a></li>
+<li><a href="http://git-scm.com/docs/git-submodule">http://git-scm.com/docs/git-submodule</a></li>
+<li><a href="http://git-scm.com/docs/git-rm.html">http://git-scm.com/docs/git-rm.html</a></li>
+<li><a href="http://stackoverflow.com/questions/8642668/how-to-make-submodule-with-detached-head-to-be-attached-to-actual-head">http://stackoverflow.com/questions/8642668/how-to-make-submodule-with-detached-head-to-be-attached-to-actual-head</a></li>
+<li><a href="http://www.vogella.com/tutorials/Git/article.html#submodules">http://www.vogella.com/tutorials/Git/article.html#submodules</a></li>
 </ol>
 
 
@@ -173,21 +257,15 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
 
 
-<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+<time datetime="2014-04-24T22:01:03-07:00" pubdate data-updated="true">Apr 24<span>th</span>, 2014</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/gerrit/'>gerrit</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/" data-via="" data-counturl="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/04/24/playing-with-git-submodule/" data-via="" data-counturl="http://lifuzu.com/blog/2014/04/24/playing-with-git-submodule/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -200,10 +278,8 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/04/09/migrate-svn-to-git/" title="Previous Post: migrate svn to git">&laquo; migrate svn to git</a>
+        <a class="basic-alignment left" href="/blog/2014/04/09/rename-repository-on-gerrit/" title="Previous Post: rename repository on Gerrit">&laquo; rename repository on Gerrit</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/04/24/playing-with-git-submodule/" title="Next Post: Playing with git submodule">Playing with git submodule &raquo;</a>
       
     </p>
   </footer>
@@ -304,8 +380,8 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/';
-        var disqus_url = 'http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/';
+        var disqus_identifier = 'http://lifuzu.com/blog/2014/04/24/playing-with-git-submodule/';
+        var disqus_url = 'http://lifuzu.com/blog/2014/04/24/playing-with-git-submodule/';
         var disqus_script = 'embed.js';
       
     (function () {
