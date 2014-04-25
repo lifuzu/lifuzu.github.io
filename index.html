@@ -9,10 +9,7 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Intructions: add a submodule 1
-2
-$ git submodule add -b BRANCH ssh://REPO_URL/REPO_PATH SUBMODULE_PATH
-$ git commit -m &quot;add a submodule at &hellip;">
+  <meta name="description" content="create new job from templates In this article, we will talk about how to create a Jenkins job with a template by some commands. Instructions 1. Get &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +67,249 @@ $ git commit -m &quot;add a submodule at &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/24/playing-with-jenkins-create-job/">Playing With Jenkins Create Job</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-24T22:08:09-07:00" pubdate data-updated="true">Apr 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-iwPM2DPUvJY/U0Y1mjJ70WI/AAAAAAAAB4g/ZOmWzMCL-_0/s0/jenkins_feature.jpg" title="jenkins_feature.jpg" alt="Jenkins logo" /></p>
+
+<h2>create new job from templates</h2>
+
+<p>In this article, we will talk about how to create a Jenkins job with a template by some commands.</p>
+
+<h3>Instructions</h3>
+
+<p><em>1</em>. Get the Jenkins CLI client package</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ wget http://jenkins/jnlpJars/jenkins-cli.jar</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>2</em>. Check which commands supported by the client package [Exception <em>1</em>,<em>2</em>]</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ help</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>3</em>. List all jobs under the view: tools</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ list-jobs tools</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>4</em>. Get the configuration of the job: template</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ get-job template &gt; template.xml</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>5</em>. Create a new job based on the configuration</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ create-job new_job_name &lt; new_job_name.xml</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>6</em>. Run groovy script</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ groovy scripts/add_job_to_view.groovy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If there are any parameters in the script, just as:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import jenkins.model.*
+</span><span class='line'>
+</span><span class='line'>if (args.length != 2 ) {
+</span><span class='line'>  println "Error on arguments!"
+</span><span class='line'>}
+</span><span class='line'>def jobName  = args[0] ?: 'a_job'
+</span><span class='line'>def viewName = args[1] ?: 'a_view'
+</span><span class='line'>
+</span><span class='line'>println jobName + ' ' + viewName
+</span><span class='line'>
+</span><span class='line'>def v = Jenkins.instance.getView(viewName)
+</span><span class='line'>def i = Jenkins.instance.getItemByFullName(jobName)
+</span><span class='line'>if (v && i) {
+</span><span class='line'>  v.add(i)
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>pass the parameters as:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ groovy scripts/add_job_to_view.groovy JOB_NAME VIEM_NAME</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>7</em>. Build a job</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ build new_job_name</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>8</em>. Diable a job</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ disable-job new_job_name</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Exceptions:</h3>
+
+<p><em>1</em>. Description:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Exception in thread "main" java.io.IOException: No X-Jenkins-CLI2-Port among [null, Vary, Date, Content-Length, Keep-Alive, Set-Cookie, Connection, Content-Type, X-Powered-By, Server]
+</span><span class='line'>  at hudson.cli.CLI.getCliTcpPort(CLI.java:281)
+</span><span class='line'>  at hudson.cli.CLI.&lt;init&gt;(CLI.java:128)
+</span><span class='line'>  at hudson.cli.CLIConnectionFactory.connect(CLIConnectionFactory.java:72)
+</span><span class='line'>  at hudson.cli.CLI._main(CLI.java:449)
+</span><span class='line'>  at hudson.cli.CLI.main(CLI.java:378)
+</span><span class='line'>  Suppressed: java.io.EOFException: unexpected stream termination
+</span><span class='line'>      at hudson.remoting.ClassicCommandTransport.create(ClassicCommandTransport.java:100)
+</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:392)
+</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:388)
+</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:349)
+</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:345)
+</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:333)
+</span><span class='line'>      at hudson.cli.CLI.connectViaHttp(CLI.java:159)
+</span><span class='line'>      at hudson.cli.CLI.&lt;init&gt;(CLI.java:132)
+</span><span class='line'>      ... 3 more</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Solution: check the port which Jenkins is running on, put 8080 on URL should fix, just as:</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins:8080/ help</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>2</em>. Description:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Failed to authenticate with your SSH keys.
+</span><span class='line'>hudson.security.AccessDeniedException2: anonymous is missing the ExtendedRead permission
+</span><span class='line'>  at hudson.security.ACL.checkPermission(ACL.java:54)
+</span><span class='line'>  at hudson.model.AbstractItem.checkPermission(AbstractItem.java:441)
+</span><span class='line'>  at hudson.cli.GetJobCommand.run(GetJobCommand.java:46)
+</span><span class='line'>  at hudson.cli.CLICommand.main(CLICommand.java:229)
+</span><span class='line'>  at hudson.cli.CliManagerImpl.main(CliManagerImpl.java:92)
+</span><span class='line'>  at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+</span><span class='line'>  at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+</span><span class='line'>  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+</span><span class='line'>  at java.lang.reflect.Method.invoke(Method.java:616)
+</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.perform(RemoteInvocationHandler.java:275)
+</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:256)
+</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:215)
+</span><span class='line'>  at hudson.remoting.UserRequest.perform(UserRequest.java:118)
+</span><span class='line'>  at hudson.remoting.UserRequest.perform(UserRequest.java:48)
+</span><span class='line'>  at hudson.remoting.Request$2.run(Request.java:326)
+</span><span class='line'>  at hudson.remoting.InterceptingExecutorService$1.call(InterceptingExecutorService.java:72)
+</span><span class='line'>  at hudson.cli.CliManagerImpl$1.call(CliManagerImpl.java:63)
+</span><span class='line'>  at hudson.remoting.InterceptingExecutorService$2.call(InterceptingExecutorService.java:95)
+</span><span class='line'>  at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
+</span><span class='line'>  at java.util.concurrent.FutureTask.run(FutureTask.java:166)
+</span><span class='line'>  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
+</span><span class='line'>  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
+</span><span class='line'>  at java.lang.Thread.run(Thread.java:679)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&#8220;`</p>
+
+<h4>Solution: add client public ssh key to the Jenkins server at: <code>http://jenkins/user/USERNAME/configure</code> | <code>SSH Public Keys</code>.</h4>
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="http://www.blackpepper.co.uk/generating-new-jenkins-jobs-from-templates-and-parameterised-builds/">http://www.blackpepper.co.uk/generating-new-jenkins-jobs-from-templates-and-parameterised-builds/</a></li>
+<li><a href="http://javadoc.jenkins-ci.org/jenkins/model/Jenkins.html">http://javadoc.jenkins-ci.org/jenkins/model/Jenkins.html</a></li>
+<li><a href="https://github.com/jenkinsci/jenkins">https://github.com/jenkinsci/jenkins</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -878,57 +1118,6 @@ $ git commit -m &quot;add a submodule at &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/10/dev-tech-hot-2004-2/">2014年要火的开发技术（二）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-10T21:33:11-08:00" pubdate data-updated="true">Jan 10<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文地址：<a href="http://java.dzone.com/articles/dev-tech-will-be-hot-2014">http://java.dzone.com/articles/dev-tech-will-be-hot-2014</a></p>
-
-<p>这是第二部分内容，第一部分见<a href="http://lifuzu.com/blog/2014/01/09/dev-tech-hot-2004/">这里</a></p>
-
-<h3>DigitalOcean</h3>
-
-<p><img src="http://java.dzone.com/sites/all/files/digital%20ocean.png" alt="DigitalOcean" /></p>
-
-<p>另一个兴风作浪的云平台是DigitalOcean，它在年初只拥有280台能上网的计算机，但现在却有了490K的网站，<a href="http://css.dzone.com/articles/digitalocean-growth-rate">增长速度比AWS更快</a>。</p>
-
-<p>DigitalOcean以其低廉的价格和高性能，纯SSD的基础设施，作为一个坚固的立足点，继续在IaaS领域攻城掠地。他们智能的，面向开发人员的营销策略将在2014年为他们很好的服务，实际上，在2013年已经证明是有效的。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/10/dev-tech-hot-2004-2/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -950,6 +1139,10 @@ $ git commit -m &quot;add a submodule at &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/24/playing-with-jenkins-create-job/">Playing With Jenkins Create Job</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/24/playing-with-git-submodule/">Playing With Git Submodule</a>
       </li>
     
@@ -963,10 +1156,6 @@ $ git commit -m &quot;add a submodule at &hellip;">
     
       <li class="post">
         <a href="/blog/2014/02/13/waterfall-is-trip-agile-is-journey/">如果瀑布是一次出差，那么敏捷是一段旅行</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/25/raft-distributed-consensus-protocol/">Raft - Distributed Consensus Protocol</a>
       </li>
     
   </ul>
