@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2014-08-20T10:36:29-07:00</updated>
+  <updated>2014-08-20T11:46:58-07:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,165 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Install Nodejs Using NVM]]></title>
+    <link href="http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm/"/>
+    <updated>2014-08-20T11:44:12-07:00</updated>
+    <id>http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm</id>
+    <content type="html"><![CDATA[<p><img src="https://lh3.googleusercontent.com/-1_vzgrh5dnI/U_Tq8koEceI/AAAAAAAACYA/S8xhWfrGSoE/s600/Screen+Shot+2014-08-20+at+11.36.59+AM.png" title="Screen Shot 2014-08-20 at 11.36.59 AM.png" alt="enter image description here" /></p>
+
+<p>An alternative to installing Node.js through apt is to use a specially designed tool called nvm, which stands for &ldquo;Node.js version manager&rdquo;.</p>
+
+<p>Using nvm, you can install multiple, self-contained versions of Node.js which will allow you to control your environment easier. It will give you on-demand access to the newest versions of Node.js, but will also allow you to target previous releases that your app may depend on.</p>
+
+<!-- more -->
+
+
+<h3>Install prerequisite package</h3>
+
+<p>To start off, we&rsquo;ll need to get the software packages from our Ubuntu repositories that will allow us to build source packages. The nvm script will leverage these tools to build the necessary components:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update
+</span><span class='line'>sudo apt-get install build-essential libssl-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Install nvm</h3>
+
+<p>Once the prerequisite packages are installed, you can pull down the nvm installation script from the project&rsquo;s GitHub page. The version number may be different, but in general, you can download and install it with the following syntax:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>curl https://raw.githubusercontent.com/creationix/nvm/v0.13.1/install.sh | bash</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will download the script and run it. It will install the software into a subdirectory of your home directory at ~/.nvm. It will also add the necessary lines to your ~/.profile file to use the file.</p>
+
+<p>To gain access to the nvm functionality, you&rsquo;ll need to log out and log back in again, or you can source the ~/.profile file so that your current session knows about the changes:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source ~/.profile</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that you have nvm installed, you can install isolated Node.js versions.</p>
+
+<h3>Install nodejs</h3>
+
+<p>To find out the versions of Node.js that are available for installation, you can type:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nvm ls-remote
+</span><span class='line'>. . .
+</span><span class='line'> v0.11.6
+</span><span class='line'> v0.11.7
+</span><span class='line'> v0.11.8
+</span><span class='line'> v0.11.9
+</span><span class='line'>v0.11.10
+</span><span class='line'>v0.11.11
+</span><span class='line'>v0.11.12
+</span><span class='line'>v0.11.13</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, the newest version at the time of this writing is v0.11.13. You can install that by typing:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nvm install 0.11.13</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Usually, nvm will switch to use the most recently installed version. You can explicitly tell nvm to use the version we just downloaded by typing:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nvm use 0.11.13</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When you install Node.js using nvm, the executable is called node. You can see the version currently being used by the shell by typing:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ node -v
+</span><span class='line'>v.0.11.13
+</span><span class='line'>$ npm -v
+</span><span class='line'>1.4.9</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you have multiple Node.js versions, you can see what is installed by typing:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ nvm ls
+</span><span class='line'>-&gt;  v0.11.13
+</span><span class='line'>      system</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you wish to default one of the versions, you can type:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ nvm alias default 0.11.13</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This version will be automatically selected when a new session spawns. You can also reference it by the alias like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ nvm use default</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each version of Node.js will keep track of its own packages and has npm available to manage these.</p>
+
+<h3>Install nodejs packages with npm</h3>
+
+<p>You can have npm install packages to the Node.js project&rsquo;s ./node_modules directory by using the normal format:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install express</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;d like to install it globally (available to the other projects using the same Node.js version), you can add the -g flag:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install -g express</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will install the package in:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>~/.nvm/node_version/lib/node_modules/package_name</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Installing globally will let you run the commands from the command line, but you&rsquo;ll have to use link the package into your local sphere to require it from within a program:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm link express</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can learn more about the options available to you with nvm by typing:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nvm help</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+
+<h3>Reference:</h3>
+
+<ol>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-an-ubuntu-14-04-server">https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-an-ubuntu-14-04-server</a></li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[加入 Apple iOS 开发者计划]]></title>
@@ -2483,34 +2642,6 @@ Time taken for tests:   0.186 seconds</code></pre></noscript></div>
 <p>企业家，不是政府，将改变世界。是时候让欧洲来帮助他们的公司成长了。</p>
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[不要有趣]]></title>
-    <link href="http://lifuzu.com/blog/2013/12/28/dont-be-interesting/"/>
-    <updated>2013-12-28T10:30:19-08:00</updated>
-    <id>http://lifuzu.com/blog/2013/12/28/dont-be-interesting</id>
-    <content type="html"><![CDATA[<p>原文地址：<a href="http://orderedlist.com/blog/dont-be-interesting/">http://orderedlist.com/blog/dont-be-interesting/</a></p>
-
-<p>我在上一次的文章［<a href="http://www.lifuzu.com/blog/2013/12/27/the-threat-of-creativity/">创造力的威胁</a>］中，解释了如何用规范的方法来设计，以创造更好的结果。但一个人如何去选择完美的功能组合，包括在设计中呢？</p>
-
-<!-- more -->
-
-
-<h3><strong>头脑风暴</strong></h3>
-
-<p>首先通过头脑风暴来收集你的想法。与你的团队交谈。把你所有的想法，大的小的，都放在一个地方。与大家交谈过，想想他们给你的感觉是怎样的。尝试用一些简短的形容词来描述功能，越短越好。</p>
-
-<h3><strong>缩减清单</strong></h3>
-
-<p>根据我的经验，当谈到功能的时候，有许多关键字我能听到。我想讨论其中一个特别要引起警觉的：<strong>有趣</strong>。</p>
-
-<p>这个 <em>有趣</em> 几乎总是清楚地表明，你正在讨论的事情并不重要。如果重要，为什么不能描述它呢？比如<em>很有用</em>，<em>省时省力</em>，<em>改变游戏规则</em>，<em>功能强大</em>，<em>精彩</em>，似乎有很多更好的词语来形容强大的功能。但是，当有人诉诸有趣，我听到的是：<strong>分心</strong>。</p>
-
-<h3><strong>更多</strong></h3>
-
-<p>你的设计应该比 <em>有趣</em> 多得多。兴趣可以变淡，毫无征兆。把你的设计聚焦在你的清单中让你最兴奋的那些形容词上。那些最能匹配这些形容词的功能，就是你应该开始的地方。</p>
 ]]></content>
   </entry>
   

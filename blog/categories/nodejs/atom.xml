@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Nodejs, | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/nodejs/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2014-08-20T11:46:58-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Install Nodejs Using NVM]]></title>
+    <link href="http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm/"/>
+    <updated>2014-08-20T11:44:12-07:00</updated>
+    <id>http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm</id>
+    <content type="html"><![CDATA[<p><img src="https://lh3.googleusercontent.com/-1_vzgrh5dnI/U_Tq8koEceI/AAAAAAAACYA/S8xhWfrGSoE/s600/Screen+Shot+2014-08-20+at+11.36.59+AM.png" title="Screen Shot 2014-08-20 at 11.36.59 AM.png" alt="enter image description here" /></p>
+
+<p>An alternative to installing Node.js through apt is to use a specially designed tool called nvm, which stands for &ldquo;Node.js version manager&rdquo;.</p>
+
+<p>Using nvm, you can install multiple, self-contained versions of Node.js which will allow you to control your environment easier. It will give you on-demand access to the newest versions of Node.js, but will also allow you to target previous releases that your app may depend on.</p>
+
+<!-- more -->
+
+
+<h3>Install prerequisite package</h3>
+
+<p>To start off, we&rsquo;ll need to get the software packages from our Ubuntu repositories that will allow us to build source packages. The nvm script will leverage these tools to build the necessary components:
+<code>
+sudo apt-get update
+sudo apt-get install build-essential libssl-dev
+</code></p>
+
+<h3>Install nvm</h3>
+
+<p>Once the prerequisite packages are installed, you can pull down the nvm installation script from the project&rsquo;s GitHub page. The version number may be different, but in general, you can download and install it with the following syntax:
+<code>
+curl https://raw.githubusercontent.com/creationix/nvm/v0.13.1/install.sh | bash
+</code>
+This will download the script and run it. It will install the software into a subdirectory of your home directory at ~/.nvm. It will also add the necessary lines to your ~/.profile file to use the file.</p>
+
+<p>To gain access to the nvm functionality, you&rsquo;ll need to log out and log back in again, or you can source the ~/.profile file so that your current session knows about the changes:
+<code>
+source ~/.profile
+</code>
+Now that you have nvm installed, you can install isolated Node.js versions.</p>
+
+<h3>Install nodejs</h3>
+
+<p>To find out the versions of Node.js that are available for installation, you can type:
+<code>
+nvm ls-remote
+. . .
+ v0.11.6
+ v0.11.7
+ v0.11.8
+ v0.11.9
+v0.11.10
+v0.11.11
+v0.11.12
+v0.11.13
+</code>
+As you can see, the newest version at the time of this writing is v0.11.13. You can install that by typing:
+<code>
+nvm install 0.11.13
+</code>
+Usually, nvm will switch to use the most recently installed version. You can explicitly tell nvm to use the version we just downloaded by typing:
+<code>
+nvm use 0.11.13
+</code>
+When you install Node.js using nvm, the executable is called node. You can see the version currently being used by the shell by typing:
+<code>
+$ node -v
+v.0.11.13
+$ npm -v
+1.4.9
+</code>
+If you have multiple Node.js versions, you can see what is installed by typing:
+```
+$ nvm ls
+&ndash;>  v0.11.13</p>
+
+<pre><code>  system
+</code></pre>
+
+<p><code>
+If you wish to default one of the versions, you can type:
+</code>
+$ nvm alias default 0.11.13
+<code>
+This version will be automatically selected when a new session spawns. You can also reference it by the alias like this:
+</code>
+$ nvm use default
+```
+Each version of Node.js will keep track of its own packages and has npm available to manage these.</p>
+
+<h3>Install nodejs packages with npm</h3>
+
+<p>You can have npm install packages to the Node.js project&rsquo;s ./node_modules directory by using the normal format:
+<code>
+$ npm install express
+</code>
+If you&rsquo;d like to install it globally (available to the other projects using the same Node.js version), you can add the -g flag:
+<code>
+$ npm install -g express
+</code>
+This will install the package in:
+<code>
+~/.nvm/node_version/lib/node_modules/package_name
+</code>
+Installing globally will let you run the commands from the command line, but you&rsquo;ll have to use link the package into your local sphere to require it from within a program:
+<code>
+npm link express
+</code>
+You can learn more about the options available to you with nvm by typing:
+<code>
+nvm help
+</code></p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+
+<h3>Reference:</h3>
+
+<ol>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-an-ubuntu-14-04-server">https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-an-ubuntu-14-04-server</a></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>
