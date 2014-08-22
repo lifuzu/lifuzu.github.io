@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Install Nodejs Using NVM - Build and Release</title>
+  <title>Install Gollum - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="An alternative to installing Node.js through apt is to use a specially designed tool called nvm, which stands for &ldquo;Node.js version manager& &hellip;">
+  <meta name="description" content="Gollum is a simple wiki system built on top of Git. Gollum wikis are simply Git repositories that adhere to a specific format. Gollum pages may be &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm">
+  <link rel="canonical" href="http://lifuzu.com/blog/2014/08/22/install-gollum">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -70,7 +70,7 @@
   
   <header>
     
-      <h1 class="entry-title">Install Nodejs Using NVM</h1>
+      <h1 class="entry-title">Install Gollum</h1>
     
     
       <p class="meta">
@@ -86,164 +86,165 @@
   
 
 
-<time datetime="2014-08-20T11:44:12-07:00" pubdate data-updated="true">Aug 20<span>th</span>, 2014</time>
+<time datetime="2014-08-22T11:57:46-07:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><img src="https://lh3.googleusercontent.com/-1_vzgrh5dnI/U_Tq8koEceI/AAAAAAAACYA/S8xhWfrGSoE/s600/Screen+Shot+2014-08-20+at+11.36.59+AM.png" title="Screen Shot 2014-08-20 at 11.36.59 AM.png" alt="enter image description here" /></p>
+<div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-DUpioC7fb_I/U_eSdHggv1I/AAAAAAAACYU/4VJAsLqqCSE/s600/Screen+Shot+2014-08-22+at+11.56.27+AM.png" title="Screen Shot 2014-08-22 at 11.56.27 AM.png" alt="gollum snapshot" /></p>
 
-<p>An alternative to installing Node.js through apt is to use a specially designed tool called nvm, which stands for &ldquo;Node.js version manager&rdquo;.</p>
+<p>Gollum is a simple wiki system built on top of Git.</p>
 
-<p>Using nvm, you can install multiple, self-contained versions of Node.js which will allow you to control your environment easier. It will give you on-demand access to the newest versions of Node.js, but will also allow you to target previous releases that your app may depend on.</p>
+<p>Gollum wikis are simply Git repositories that adhere to a specific format. Gollum pages may be written in a variety of formats and can be edited in a number of ways depending on your needs. You can edit your wiki locally:</p>
+
+<ul>
+<li>With your favorite text editor or IDE (changes will be visible after committing).</li>
+<li>With the built-in web interface.</li>
+<li>With the Gollum Ruby API.</li>
+</ul>
+
+
+<p>Here are steps to install gollum.</p>
 
 <!-- more -->
 
 
-<h3>Install prerequisite package</h3>
+<h3>Install some dependencies:</h3>
 
-<p>To start off, we&rsquo;ll need to get the software packages from our Ubuntu repositories that will allow us to build source packages. The nvm script will leverage these tools to build the necessary components:</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install libicu-dev</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Install Gollum with RubyGems:</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install gollum</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Install some text format</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update
-</span><span class='line'>sudo apt-get install build-essential libssl-dev</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install redcarpet
+</span><span class='line'>gem install github-markdown</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>Install nvm</h3>
-
-<p>Once the prerequisite packages are installed, you can pull down the nvm installation script from the project&rsquo;s GitHub page. The version number may be different, but in general, you can download and install it with the following syntax:</p>
+<h3>Create a local git repo on host</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>curl https://raw.githubusercontent.com/creationix/nvm/v0.13.1/install.sh | bash</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir repos/gollum
+</span><span class='line'>cd repos/gollum
+</span><span class='line'>git init .</span></code></pre></td></tr></table></div></figure>
 
 
-<p>This will download the script and run it. It will install the software into a subdirectory of your home directory at ~/.nvm. It will also add the necessary lines to your ~/.profile file to use the file.</p>
-
-<p>To gain access to the nvm functionality, you&rsquo;ll need to log out and log back in again, or you can source the ~/.profile file so that your current session knows about the changes:</p>
+<h3>Run the gollum</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>source ~/.profile</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gollum</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Now that you have nvm installed, you can install isolated Node.js versions.</p>
+<p>This will start up a web server running the Gollum frontend and you can view and edit your wiki at <a href="http://">http://</a><code>&lt;host&gt;</code>:4567.</p>
 
-<h3>Install nodejs</h3>
-
-<p>To find out the versions of Node.js that are available for installation, you can type:</p>
+<h3>BUILDING THE GEM FROM MASTER</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nvm ls-remote
-</span><span class='line'>. . .
-</span><span class='line'> v0.11.6
-</span><span class='line'> v0.11.7
-</span><span class='line'> v0.11.8
-</span><span class='line'> v0.11.9
-</span><span class='line'>v0.11.10
-</span><span class='line'>v0.11.11
-</span><span class='line'>v0.11.12
-</span><span class='line'>v0.11.13</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem uninstall -aIx gollum
+</span><span class='line'>$ git clone https://github.com/gollum/gollum.git
+</span><span class='line'>$ cd gollum
+</span><span class='line'>gollum$ rake build
+</span><span class='line'>gollum$ gem install --no-ri --no-rdoc pkg/gollum*.gem</span></code></pre></td></tr></table></div></figure>
 
 
-<p>As you can see, the newest version at the time of this writing is v0.11.13. You can install that by typing:</p>
+<h3>RUN THE TESTS</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nvm install 0.11.13</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bundle install
+</span><span class='line'>$ bundle exec rake test</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Usually, nvm will switch to use the most recently installed version. You can explicitly tell nvm to use the version we just downloaded by typing:</p>
+<h3>RUNNING WITH UPSTART</h3>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nvm use 0.11.13</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When you install Node.js using nvm, the executable is called node. You can see the version currently being used by the shell by typing:</p>
+<p>Create a wrapper to include environment information:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ node -v
-</span><span class='line'>v.0.11.13
-</span><span class='line'>$ npm -v
-</span><span class='line'>1.4.9</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm alias create mygollum ruby-2.1.2@mygollum
+</span><span class='line'>$ rvm alias list
+</span><span class='line'># $HOME/.rvm/wrappers/mygollum/gollum</span></code></pre></td></tr></table></div></figure>
 
 
-<p>If you have multiple Node.js versions, you can see what is installed by typing:</p>
+<p>Create a config file under /etc/init, name it <code>gollum.cong</code>, as:
+<a href="https://gist.github.com/lifuzu/31af0dc859bf9bfb6da5">https://gist.github.com/lifuzu/31af0dc859bf9bfb6da5</a>
+Start/Stop the service:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># sudo start gollum
+</span><span class='line'>$ sudo stop gollum</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can get the log file at /var/log/upstart/gollum.log to analyze:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo vi /var/log/upstart/gollum.log </span></code></pre></td></tr></table></div></figure>
+
+
+<h3>RUNNING WITH NGINX</h3>
+
+<p>Create a subdomain like &lsquo;gollum.weimed.com&rsquo; point to your server IP;
+Create a nginx configuration file, as /etc/nginx/sites-available/stackedit.weimed.com:
+<a href="https://gist.github.com/lifuzu/2f2ce9095ba4a6969b2c">https://gist.github.com/lifuzu/2f2ce9095ba4a6969b2c</a>
+Create a symbolic link to enable it</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo ln -s /etc/nginx/sites-available/gollum.weimed.com /etc/nginx/sites-enabled/gollum.weimed.com</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Check the configuration:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ nvm ls
-</span><span class='line'>-&gt;  v0.11.13
-</span><span class='line'>      system</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nginx -t
+</span><span class='line'>nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+</span><span class='line'>nginx: configuration file /etc/nginx/nginx.conf test is successful</span></code></pre></td></tr></table></div></figure>
 
 
-<p>If you wish to default one of the versions, you can type:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ nvm alias default 0.11.13</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This version will be automatically selected when a new session spawns. You can also reference it by the alias like this:</p>
+<p>Reload the configuration:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ nvm use default</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo service nginx reload</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Each version of Node.js will keep track of its own packages and has npm available to manage these.</p>
+<p>You should see: <a href="http://gollum.weimed.com/">http://gollum.weimed.com/</a></p>
 
-<h3>Install nodejs packages with npm</h3>
+<h3>AUTH</h3>
 
-<p>You can have npm install packages to the Node.js project&rsquo;s ./node_modules directory by using the normal format:</p>
+<p>TODO, please refer to [5], [6]</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install express</span></code></pre></td></tr></table></div></figure>
+<h3>References:</h3>
 
-
-<p>If you&rsquo;d like to install it globally (available to the other projects using the same Node.js version), you can add the -g flag:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install -g express</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This will install the package in:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>~/.nvm/node_version/lib/node_modules/package_name</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Installing globally will let you run the commands from the command line, but you&rsquo;ll have to use link the package into your local sphere to require it from within a program:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>npm link express</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can learn more about the options available to you with nvm by typing:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>nvm help</span></code></pre></td></tr></table></div></figure>
+<ol>
+<li><a href="https://github.com/gollum/gollum">https://github.com/gollum/gollum</a></li>
+<li><a href="https://gist.github.com/leon/2643936">https://gist.github.com/leon/2643936</a></li>
+<li><a href="http://rvm.io/integration/init-d">http://rvm.io/integration/init-d</a></li>
+<li><a href="https://github.com/rvm/rvm-site-setup/blob/master/conf/smfbot.conf">https://github.com/rvm/rvm-site-setup/blob/master/conf/smfbot.conf</a></li>
+<li><a href="http://www.mfoot.com/blog/2013/05/19/setting-up-a-personal-wiki-with-aws-and-gollum/">http://www.mfoot.com/blog/2013/05/19/setting-up-a-personal-wiki-with-aws-and-gollum/</a></li>
+<li><a href="https://github.com/roman/rack-auth">https://github.com/roman/rack-auth</a></li>
+</ol>
 
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-
-<h3>Reference:</h3>
-
-<ol>
-<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-an-ubuntu-14-04-server">https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-an-ubuntu-14-04-server</a></li>
-</ol>
-
 </div>
 
 
@@ -266,12 +267,12 @@
   
 
 
-<time datetime="2014-08-20T11:44:12-07:00" pubdate data-updated="true">Aug 20<span>th</span>, 2014</time>
+<time datetime="2014-08-22T11:57:46-07:00" pubdate data-updated="true">Aug 22<span>nd</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>, <a class='category' href='/blog/categories/nodejs/'>nodejs,</a>, <a class='category' href='/blog/categories/npm/'>npm,</a>, <a class='category' href='/blog/categories/nvm/'>nvm,</a>
+    <a class='category' href='/blog/categories/git/'>Git,</a>, <a class='category' href='/blog/categories/gollum/'>Gollum,</a>, <a class='category' href='/blog/categories/ruby/'>Ruby,</a>, <a class='category' href='/blog/categories/wiki/'>Wiki</a>
   
 </span>
 
@@ -280,7 +281,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm/" data-via="" data-counturl="http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/08/22/install-gollum/" data-via="" data-counturl="http://lifuzu.com/blog/2014/08/22/install-gollum/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -293,10 +294,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/08/17/join-apple-ios-program/" title="Previous Post: 加入 Apple iOS 开发者计划">&laquo; 加入 Apple iOS 开发者计划</a>
+        <a class="basic-alignment left" href="/blog/2014/08/20/install-nodejs-using-nvm/" title="Previous Post: Install Nodejs Using NVM">&laquo; Install Nodejs Using NVM</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/08/22/install-gollum/" title="Next Post: Install Gollum">Install Gollum &raquo;</a>
       
     </p>
   </footer>
@@ -403,8 +402,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm/';
-        var disqus_url = 'http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm/';
+        var disqus_identifier = 'http://lifuzu.com/blog/2014/08/22/install-gollum/';
+        var disqus_url = 'http://lifuzu.com/blog/2014/08/22/install-gollum/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Git, | Build and Release]]></title>
-  <link href="http://lifuzu.com/blog/categories/git/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Wiki | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/wiki/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
   <updated>2014-08-22T12:00:53-07:00</updated>
   <id>http://lifuzu.com/</id>
