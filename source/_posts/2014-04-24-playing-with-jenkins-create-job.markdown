@@ -118,8 +118,36 @@ hudson.security.AccessDeniedException2: anonymous is missing the ExtendedRead pe
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
 	at java.lang.Thread.run(Thread.java:679)
 ```
-```
 #### Solution: add client public ssh key to the Jenkins server at: `http://jenkins/user/USERNAME/configure` | `SSH Public Keys`.
+
+*3*. Description:
+```
+hudson.security.AccessDeniedException2: <USERNAME> is missing the Job/ExtendedRead permission
+	at hudson.security.ACL.checkPermission(ACL.java:54)
+	at hudson.model.AbstractItem.checkPermission(AbstractItem.java:446)
+	at hudson.cli.GetJobCommand.run(GetJobCommand.java:46)
+	at hudson.cli.CLICommand.main(CLICommand.java:234)
+	at hudson.cli.CliManagerImpl.main(CliManagerImpl.java:92)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at hudson.remoting.RemoteInvocationHandler$RPCRequest.perform(RemoteInvocationHandler.java:300)
+	at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:281)
+	at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:240)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:118)
+	at hudson.remoting.UserRequest.perform(UserRequest.java:48)
+	at hudson.remoting.Request$2.run(Request.java:328)
+	at hudson.remoting.InterceptingExecutorService$1.call(InterceptingExecutorService.java:72)
+	at hudson.cli.CliManagerImpl$1.call(CliManagerImpl.java:63)
+	at hudson.remoting.InterceptingExecutorService$2.call(InterceptingExecutorService.java:95)
+	at jenkins.util.ContextResettingExecutorService$2.call(ContextResettingExecutorService.java:46)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+```
+#### Solution: Jenkins server -> Manage Jenkins -> Configure Global Security to add <USERNAME> related permissions.
 
 ### References:
 1. http://www.blackpepper.co.uk/generating-new-jenkins-jobs-from-templates-and-parameterised-builds/
