@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2014-10-03T17:46:04-07:00</updated>
+  <updated>2015-01-07T16:00:53-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,148 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Setup Mongo Database Master Slave Replication]]></title>
+    <link href="http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/"/>
+    <updated>2015-01-07T13:58:40-08:00</updated>
+    <id>http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication</id>
+    <content type="html"><![CDATA[<p><img src="http://tapainc.com/images/MongoDB.png" alt="enter image description here" /></p>
+
+<p><strong>Prerequisites</strong>:</p>
+
+<p>You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the mongo database which should be acted as a slave.</p>
+
+<p>Here are some commands might be helpful:</p>
+
+<ul>
+<li>To know the external IP of the server:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl http://checkip.dyndns.org/</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>To ping the server which you want to connect, on the specific port ( for example: 27017 ):</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet 1.2.3.4 27017</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Practices</strong>:</p>
+
+<p>Machine A (Master):
+Run Mongo Daemon as master:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongod --master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Machine B (Slave):
+If mongod is running, which is the default behavior when installed, you should stop it before the following steps:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Stop the mongodb which installed by default</span>
+</span><span class='line'><span class="nv">$ </span>sudo stop mongodb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run Mongo Daemon as slave:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongod --slave
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Probably you need to specify the dbpath, in case you have any disk space limitation:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo mongod --slave --dbpath /data/mongodb/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run <code>mongo</code> to open a mongo shell, then config for replication:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; use <span class="nb">local</span>
+</span><span class='line'>&gt; db.sources.find<span class="o">()</span>
+</span><span class='line'>&gt; db.sources.insert<span class="o">(</span> <span class="o">{</span> host: &lt;masterhostname&gt; &lt;,only: databasename&gt; <span class="o">}</span> <span class="o">)</span>;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you run <code>show dbs</code> in the mongo shell:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; show dbs
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will find the databasename which we typed behind the <code>only</code> key above displayed.</p>
+
+<p>You may need to run the command multiple times to make sure the replication is going on. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; show dbs
+</span><span class='line'>databasename    17.9453125GB
+</span><span class='line'><span class="nb">local   </span>0.078125GB
+</span><span class='line'>&gt; show dbs
+</span><span class='line'>databasename    19.9443359375GB
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also run the following commands to show the information of the replication on master and slave side:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Master side:</span>
+</span><span class='line'>&gt; rs.printReplicationInfo<span class="o">()</span> <span class="c"># replace &#39;rs&#39; to &#39;db&#39; for the version prior to 2.6</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Slave side:</span>
+</span><span class='line'>&gt; rs.printSlaveReplicationInfo<span class="o">()</span> <span class="c"># same thing as the above command, you need to replace &#39;rs&#39; to &#39;db&#39; if you run the mongodb which version prior to 2.6</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Besides, you can run the following command to get a defail status of the server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; db.serverStatus<span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You might neet to run resync to recover replication:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; use admin
+</span><span class='line'>&gt; db.runCommand<span class="o">(</span> <span class="o">{</span> resync: 1 <span class="o">}</span> <span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>References</strong>:</p>
+
+<ol>
+<li><a href="http://docs.mongodb.org/manual/core/master-slave/">http://docs.mongodb.org/manual/core/master-slave/</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Install Gollum]]></title>
@@ -2646,155 +2788,6 @@ iPod不仅是一个美丽的实物产品，一个工业设计的符号。而且�
 <p>进化到品牌体验的时代将会对全球很多的行业有益，很大程度上可以影响预测，以及一种21世纪事半功倍的效果。这些影响将波及在等式的两边，所有的必要的支持生态系统将扩展到零售，消费品，运输和建筑，以及在数字化设计和开发领域。</p>
 
 <p>公司将不得不进行一次全方位关注，并认真思考如何精心打造品牌自身的个性，并被翻译成实体和数字化的东西，让客户可以立即识别出品牌运营体系,无论他们在哪里遇到它。这将需要前所未见的简化并精简到一定的程度。</p>
-
-<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Gevent, Eventlet和Node.js的性能分析]]></title>
-    <link href="http://lifuzu.com/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs/"/>
-    <updated>2014-01-05T22:13:56-08:00</updated>
-    <id>http://lifuzu.com/blog/2014/01/05/performance-analysis-of-gevent-eventlet-and-nodejs</id>
-    <content type="html"><![CDATA[<p>原文地址：<a href="http://myprogrammingjourney.blogspot.com/2011/03/meet-my-three-new-friends-eve-eventlet.html">http://myprogrammingjourney.blogspot.com/2011/03/meet-my-three-new-friends-eve-eventlet.html</a></p>
-
-<p>碰到了我的三个朋友：Eve (<a href="eventlet.net">Eventlet</a>)和他的小弟Geve(<a href="gevent.org">Gevent</a>)，以及Node(nodejs.org)。全部三个都承诺对于响应多个Web客户端的请求的可扩展性。Eve是第一个轻巧的、非阻塞I/O 的python网络库。Eve的灵感来自于一个兽名Twisted，后者也提供了非阻塞I/O，但很重量级，不易tame。因此Eve为下一代轻量级的，可扩展的网络库铺平了道路。Geve虽然开始时是一个更年轻和更小的Eve版本，随着一些重大的修改，现在也已经发展成为最强大的Python网络库。它可以毫不费力地处理来自Web客户端的多个并发请求，很容易理解和实现。现在，这些Python脚本可以用来设计网页爬虫，网络机器人或Python/WSGI服务器，设计者真的很高兴能使用这些库来把他们的应用程序提升到一个新的水平。</p>
-
-<p>一个Python的Web应用程序都有两个方面：服务器编程（在Python中完成）和客户端编程（使用HTML，CSS和JavaScript来完成）。Node.js通过提供一个JavaScript的Web开发框架，内置了一个高效的连接服务器和客户端编程之间的的HTTP 服务器。这个服务器也是可扩展的，重量轻，提供异步，非阻塞I/O。Node.js服务器其实更优于它的对手Python。Node.js允许服务器和客户端脚本都使用JavaScript。现在，这点对许多JavaScript程序员来说是个好消息。他们曾经对不能控制服务器端编程有点困惑。Node.js提供的服务器是强大的，但框架非常简单，需要许多组件支持。但是，随着Node.js的日益普及，越来越多的人也没闲着，他们提供一些有效的框架来支持Node.js。<a href="http://expressjs.com/">Express</a>就是其中一种。在<a href="https://npmjs.org/">npm</a>资源库中人们可以找到一些真正有用的JavaScript模块，这些模块是其他人在面临同样问题时开发的。这些模块都是免费的有点像Python cheese shop（PyPi）。</p>
-
-<!--more-->
-
-
-<p>无论怎么样，我想使用Apache Benchmark测试这三个框架。就是利用这三个朋友创建三个简单的服务器，然后利用Apache Benchmark抛出多个并发请求，看他们如何响应。对于服务器而言，就是返回一个简单的 Hello World 字符串。看看我们的代码：</p>
-
-<p>先来Gevent：</p>
-
-<div><script src='https://gist.github.com/8278468.js?file=geve.py'></script>
-<noscript><pre><code>import gevent
-from gevent import wsgi,pool
-#the application to handle the response  
-def app(environ,start_response):
-  start_response(&quot;200 OK&quot;,[(&quot;Content-Type&quot;,&quot;text/plain&quot;)])
-  return &quot;Hello World\n&quot;
-if __name__==&quot;__main__&quot;:
-  print &quot;The sweet thing is running on http://localhost:8912/&quot;
-  pool=gevent.pool.Pool() #A pool of greenlets.Each greenlets runs the above defined function app for a client request  
-  server=wsgi.WSGIServer((&quot;localhost&quot;,8912),app,spawn=pool) #the server is created and runs multiple greenlets concurrently  
-  server.serve_forever() #the server is made to run in loop</code></pre></noscript></div>
-
-
-<p>保存上述脚本为geve.py，在终端执行“$python geve.py”，这将触发Gevent服务器，端口为8912。现在在另一个终端窗口运行：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 1000 -c 100 http://localhost:8912/</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上述命令运行用ab发出1000个请求（-n），100个并发请求（-c）到服务器。你可以改变的数字，这个取决于你的操作系统能力。检查以下行：“Time taken for tests:”，我这里的数字是：<strong>0.360</strong>秒。如下：</p>
-
-<div><script src='https://gist.github.com/8278468.js?file=ab_gevent.log'></script>
-<noscript><pre><code>$ sudo pip install gevent
-$ ab -n 1000 -c 100 http://localhost:8912/
-This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 100 requests
-...
-Finished 1000 requests
-
-
-Server Software:        
-Server Hostname:        localhost
-Server Port:            8912
-
-Document Path:          /
-Document Length:        12 bytes
-
-Concurrency Level:      100
-Time taken for tests:   0.360 seconds</code></pre></noscript></div>
-
-
-<p>现在是Eventlet：</p>
-
-<div><script src='https://gist.github.com/8278468.js?file=eve.py'></script>
-<noscript><pre><code>import eventlet
-from eventlet import wsgi
-def app(environ,start_response):
-  start_response(&quot;200 OK&quot;,[(&quot;Content-Type&quot;,&quot;text/plain&quot;)])
-  return &quot;Hello World\n&quot;
-if __name__==&quot;__main__&quot;:
-  wsgi.server(eventlet.listen((&quot;localhost&quot;,6785)),app)</code></pre></noscript></div>
-
-
-<p>保存为eve.py，然后用ab运行:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 1000 -c 100 http://localhost:6785/</span></code></pre></td></tr></table></div></figure>
-
-
-<p>结果是<strong>0.639</strong>秒。（注意区别）</p>
-
-<div><script src='https://gist.github.com/8278468.js?file=ab_eventlet.log'></script>
-<noscript><pre><code>$ ab -n 1000 -c 100 http://localhost:6785/
-This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 100 requests
-...
-Finished 1000 requests
-
-
-Server Software:        
-Server Hostname:        localhost
-Server Port:            6785
-
-Document Path:          /
-Document Length:        12 bytes
-
-Concurrency Level:      100
-Time taken for tests:   0.639 seconds</code></pre></noscript></div>
-
-
-<p>最后但并非最不重要的Node.js：</p>
-
-<div><script src='https://gist.github.com/8278468.js?file=node.js'></script>
-<noscript><pre><code>var http=require(&quot;http&quot;);
-http.createServer(function(req,res){
-  res.writeHead(200,{&quot;Content-Type&quot;:&quot;text/plain&quot;});
-  res.end(&quot;Hello World\n&quot;);
-}).listen(9124,&quot;localhost&quot;);
-console.log(&quot;The sweet thing is running on http://localhost:9124&quot;);</code></pre></noscript></div>
-
-
-<p>其结果是<strong>0.186</strong>秒（好吧，这个是最好的结果）。</p>
-
-<div><script src='https://gist.github.com/8278468.js?file=ab_nodejs.log'></script>
-<noscript><pre><code>$ ab -n 1000 -c 100 http://localhost:9124/
-This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
-Licensed to The Apache Software Foundation, http://www.apache.org/
-
-Benchmarking localhost (be patient)
-Completed 100 requests
-...
-Finished 1000 requests
-
-
-Server Software:        
-Server Hostname:        localhost
-Server Port:            9124
-
-Document Path:          /
-Document Length:        12 bytes
-
-Concurrency Level:      100
-Time taken for tests:   0.186 seconds</code></pre></noscript></div>
-
-
-<p>该分析在Ubunut（12.04.3）上执行。这里是<a href="https://gist.github.com/lifuzu/8278468/raw/c92933b471c63ed2b607ad09551655ba3274392d/hardware.info">硬件</a>以及<a href="https://gist.github.com/lifuzu/8278468/raw/ddb00a3d17f951c61a5a3deda272dd337bd27859/software.info">软件</a>信息。欢迎留下评论和分享您的经验。</p>
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 ]]></content>

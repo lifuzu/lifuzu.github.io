@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Database, | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/database/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2015-01-07T16:00:53-08:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Setup Mongo Database Master Slave Replication]]></title>
+    <link href="http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/"/>
+    <updated>2015-01-07T13:58:40-08:00</updated>
+    <id>http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication</id>
+    <content type="html"><![CDATA[<p><img src="http://tapainc.com/images/MongoDB.png" alt="enter image description here" /></p>
+
+<p><strong>Prerequisites</strong>:</p>
+
+<p>You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the mongo database which should be acted as a slave.</p>
+
+<p>Here are some commands might be helpful:</p>
+
+<ul>
+<li><p>To know the external IP of the server:
+<code>
+$ curl http://checkip.dyndns.org/
+</code></p></li>
+<li><p>To ping the server which you want to connect, on the specific port ( for example: 27017 ):
+<code>
+$ telnet 1.2.3.4 27017
+</code></p></li>
+</ul>
+
+
+<p><strong>Practices</strong>:</p>
+
+<p>Machine A (Master):
+Run Mongo Daemon as master:
+<code>bash
+$ mongod --master
+</code></p>
+
+<p>Machine B (Slave):
+If mongod is running, which is the default behavior when installed, you should stop it before the following steps:
+```bash</p>
+
+<h1>Stop the mongodb which installed by default</h1>
+
+<p>$ sudo stop mongodb
+<code>
+Run Mongo Daemon as slave:
+</code>bash
+$ mongod &mdash;slave
+<code>
+Probably you need to specify the dbpath, in case you have any disk space limitation:
+</code>bash
+$ sudo mongod &mdash;slave &mdash;dbpath /data/mongodb/
+```</p>
+
+<p>Run <code>mongo</code> to open a mongo shell, then config for replication:
+```</p>
+
+<blockquote><p>use local
+db.sources.find()
+db.sources.insert( { host: <masterhostname> &lt;,only: databasename> } );
+<code>
+Then you run `show dbs` in the mongo shell:
+</code>
+show dbs
+<code>``
+You will find the databasename which we typed behind the</code>only` key above displayed.</p></blockquote>
+
+<p>You may need to run the command multiple times to make sure the replication is going on. For example:
+```</p>
+
+<blockquote><p>show dbs
+databasename    17.9453125GB
+local   0.078125GB
+show dbs
+databasename    19.9443359375GB
+```</p></blockquote>
+
+<p>You can also run the following commands to show the information of the replication on master and slave side:
+```bash</p>
+
+<h1>Master side:</h1>
+
+<blockquote><p>rs.printReplicationInfo() # replace &lsquo;rs&rsquo; to &lsquo;db&rsquo; for the version prior to 2.6</p></blockquote>
+
+<h1>Slave side:</h1>
+
+<blockquote><p>rs.printSlaveReplicationInfo() # same thing as the above command, you need to replace &lsquo;rs&rsquo; to &lsquo;db&rsquo; if you run the mongodb which version prior to 2.6
+```</p></blockquote>
+
+<p>Besides, you can run the following command to get a defail status of the server:
+```</p>
+
+<blockquote><p>db.serverStatus()
+```</p></blockquote>
+
+<p>You might neet to run resync to recover replication:
+```</p>
+
+<blockquote><p>use admin
+db.runCommand( { resync: 1 } )
+```</p></blockquote>
+
+<p><strong>References</strong>:</p>
+
+<ol>
+<li><a href="http://docs.mongodb.org/manual/core/master-slave/">http://docs.mongodb.org/manual/core/master-slave/</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

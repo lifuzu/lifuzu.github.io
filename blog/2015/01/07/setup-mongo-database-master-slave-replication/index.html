@@ -5,16 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Rename Repository on Gerrit - Build and Release</title>
+  <title>Setup Mongo Database Master Slave Replication - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Instructions: 1. Move the repository folder on server: 1
-2
-3
-# on gerrit server
-$ cd $site_path/git;
-$ mv old_name.git new_name.git 2. Flush the &hellip;">
+  <meta name="description" content="Prerequisites: You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,7 +18,7 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit">
+  <link rel="canonical" href="http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -75,7 +70,7 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Rename Repository on Gerrit</h1>
+      <h1 class="entry-title">Setup Mongo Database Master Slave Replication</h1>
     
     
       <p class="meta">
@@ -91,62 +86,143 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
 
 
-<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+<time datetime="2015-01-07T13:58:40-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-_03bVFvmzzg/U0YvHJPBLCI/AAAAAAAAB4M/SSKXyOR_T3U/s0/diffymute-300x279.png" title="diffymute-300x279.png" alt="Gerrit icon" /></p>
+<div class="entry-content"><p><img src="http://tapainc.com/images/MongoDB.png" alt="enter image description here" /></p>
 
-<h3>Instructions:</h3>
+<p><strong>Prerequisites</strong>:</p>
 
-<p><em>1</em>. Move the repository folder on server:</p>
+<p>You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the mongo database which should be acted as a slave.</p>
+
+<p>Here are some commands might be helpful:</p>
+
+<ul>
+<li>To know the external IP of the server:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl http://checkip.dyndns.org/</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>To ping the server which you want to connect, on the specific port ( for example: 27017 ):</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet 1.2.3.4 27017</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Practices</strong>:</p>
+
+<p>Machine A (Master):
+Run Mongo Daemon as master:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongod --master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Machine B (Slave):
+If mongod is running, which is the default behavior when installed, you should stop it before the following steps:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Stop the mongodb which installed by default</span>
+</span><span class='line'><span class="nv">$ </span>sudo stop mongodb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run Mongo Daemon as slave:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongod --slave
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Probably you need to specify the dbpath, in case you have any disk space limitation:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo mongod --slave --dbpath /data/mongodb/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run <code>mongo</code> to open a mongo shell, then config for replication:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># on gerrit server</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$site_path</span>/git;
-</span><span class='line'><span class="nv">$ </span>mv old_name.git new_name.git
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; use <span class="nb">local</span>
+</span><span class='line'>&gt; db.sources.find<span class="o">()</span>
+</span><span class='line'>&gt; db.sources.insert<span class="o">(</span> <span class="o">{</span> host: &lt;masterhostname&gt; &lt;,only: databasename&gt; <span class="o">}</span> <span class="o">)</span>;
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><em>2</em>. Flush the caches on server:</p>
+<p>Then you run <code>show dbs</code> in the mongo shell:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image:</span>
-</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit flush-caches
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; show dbs
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><em>3</em>. Run sql statement to update the changes:</p>
+<p>You will find the databasename which we typed behind the <code>only</code> key above displayed.</p>
+
+<p>You may need to run the command multiple times to make sure the replication is going on. For example:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image (need &quot;Access Database&quot; capability):</span>
-</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit gsql <span class="o">[</span>Enter<span class="o">]</span>
-</span><span class='line'>gerrit&gt; USE <span class="o">{</span>Database<span class="o">}</span>;
-</span><span class='line'>gerrit&gt; SELECT * FROM changes WHERE <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
-</span><span class='line'><span class="c"># if have more than 1, run the following command to update, otherwise, quit with \q;</span>
-</span><span class='line'>gerrit&gt; UPDATE changes SET <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;new_name&#39;</span> WHERE
-</span><span class='line'><span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
-</span><span class='line'>gerrit&gt; <span class="se">\q</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; show dbs
+</span><span class='line'>databasename    17.9453125GB
+</span><span class='line'><span class="nb">local   </span>0.078125GB
+</span><span class='line'>&gt; show dbs
+</span><span class='line'>databasename    19.9443359375GB
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>References:</h3>
+<p>You can also run the following commands to show the information of the replication on master and slave side:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Master side:</span>
+</span><span class='line'>&gt; rs.printReplicationInfo<span class="o">()</span> <span class="c"># replace &#39;rs&#39; to &#39;db&#39; for the version prior to 2.6</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Slave side:</span>
+</span><span class='line'>&gt; rs.printSlaveReplicationInfo<span class="o">()</span> <span class="c"># same thing as the above command, you need to replace &#39;rs&#39; to &#39;db&#39; if you run the mongodb which version prior to 2.6</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Besides, you can run the following command to get a defail status of the server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; db.serverStatus<span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You might neet to run resync to recover replication:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; use admin
+</span><span class='line'>&gt; db.runCommand<span class="o">(</span> <span class="o">{</span> resync: 1 <span class="o">}</span> <span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>References</strong>:</p>
 
 <ol>
-<li><a href="https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI">https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI</a></li>
+<li><a href="http://docs.mongodb.org/manual/core/master-slave/">http://docs.mongodb.org/manual/core/master-slave/</a></li>
 </ol>
 
 
@@ -173,12 +249,12 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
 
 
-<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+<time datetime="2015-01-07T13:58:40-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/gerrit/'>gerrit</a>
+    <a class='category' href='/blog/categories/admin/'>admin</a>, <a class='category' href='/blog/categories/database/'>database,</a>
   
 </span>
 
@@ -187,7 +263,7 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/" data-via="" data-counturl="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/" data-via="" data-counturl="http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -200,10 +276,8 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/04/09/migrate-svn-to-git/" title="Previous Post: migrate svn to git">&laquo; migrate svn to git</a>
+        <a class="basic-alignment left" href="/blog/2014/08/22/install-gollum/" title="Previous Post: Install Gollum">&laquo; Install Gollum</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/04/24/playing-with-git-submodule/" title="Next Post: Playing with git submodule">Playing with git submodule &raquo;</a>
       
     </p>
   </footer>
@@ -310,8 +384,8 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/';
-        var disqus_url = 'http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/';
+        var disqus_identifier = 'http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/';
+        var disqus_url = 'http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/';
         var disqus_script = 'embed.js';
       
     (function () {
