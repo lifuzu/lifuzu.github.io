@@ -23,6 +23,6 @@ To achieve the goal, besides an elegant design blueprint, functional prototyping
 
 Succeed to DCOM and CORBA, the popular technology so far for designing a strong cohesive and loose coupled interface on cloud is REST, which based on the simple HTTP protocol verbs (GET, PUT, POST, DELETE). REST API is an analogous to SQL for interaction between systems on cloud, the latter provides several common verbs to query and manipulate data with relational database, such as SELECT, INSERT, UPDATE, DELETE, etc.
 
-In a conclusion, as the main task for design, we need to decompose functionalities in order to reuse and 'de-use' modules, which act as a container to host functions. The design goal is make functionality as most as strong cohesive, and loose coupled. We can leverage configuration management and testing to achieve the design goal. REST interface provides a good practice for designing a strong cohesive, and loose coupled cloud system.
+In a conclusion, as the main task for design, we need to decompose functionalities in order to reuse and 'de-use' modules, which act as a container to host functions. The design goal is to make functionality as most as strong cohesive, and loose coupled. We can leverage configuration management and testing to achieve the design goal. REST interface provides a good practice for designing a strong cohesive, and loose coupled cloud system.
 
 > Written with [StackEdit](https://stackedit.io/).
