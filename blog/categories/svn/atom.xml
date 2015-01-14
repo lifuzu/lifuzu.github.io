@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Svn | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/svn/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2015-01-07T16:00:53-08:00</updated>
+  <updated>2015-01-14T09:59:47-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -36,8 +36,8 @@ $ svn log ^/ &mdash;xml | grep -P &ldquo;^&lt;author&rdquo; | sort -u | \</p>
 <p><code>
    and following the formatting:
 </code>text
-schacon = Scott Chacon <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x73;&#x63;&#104;&#x61;&#x63;&#111;&#x6e;&#x40;&#103;&#101;&#x65;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#109;">&#115;&#x63;&#104;&#97;&#x63;&#x6f;&#x6e;&#x40;&#103;&#x65;&#101;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#109;</a>
-selse = Someo Nelse <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#x73;&#101;&#108;&#x73;&#101;&#64;&#103;&#101;&#x65;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#109;">&#115;&#x65;&#108;&#115;&#x65;&#64;&#103;&#x65;&#x65;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#109;</a>
+schacon = Scott Chacon <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x73;&#99;&#x68;&#97;&#x63;&#x6f;&#x6e;&#64;&#103;&#101;&#101;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;">&#x73;&#x63;&#x68;&#97;&#99;&#x6f;&#x6e;&#64;&#x67;&#101;&#101;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a>
+selse = Someo Nelse <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x73;&#101;&#108;&#x73;&#x65;&#x40;&#103;&#101;&#x65;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#115;&#101;&#x6c;&#115;&#101;&#64;&#x67;&#101;&#x65;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a>
 ```
 <strong>NOTE</strong>: You can try the script to generate authors list automatically: <a href="https://gist.github.com/lifuzu/9081923#file-findauthors-sh">https://gist.github.com/lifuzu/9081923#file-findauthors-sh</a></p>
 

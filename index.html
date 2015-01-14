@@ -9,7 +9,7 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Prerequisites: You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the &hellip;">
+  <meta name="description" content="Design a reuse and &lsquo;de-use&rsquo; modularized software system Keywords: reuse, &lsquo;de-use&rsquo;, minimum equipped interface (MEI), strong &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/14/design-a-reuse-and-de-use-modularized-software-system/">Design a Reuse and &#8216;De-use&#8217; Modularized Software System</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-14T09:49:13-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="http://www.edmentum.com/sites/edmentum.com/files/solutions/content/building_0.jpg" alt="enter image description here" /></p>
+
+<h2>Design a reuse and &lsquo;de-use&rsquo; modularized software system</h2>
+
+<p><strong>Keywords</strong>: reuse, &lsquo;de-use&rsquo;, minimum equipped interface (MEI), strong cohesion, loose coupling, software engineering</p>
+
+<p>Most of the task on software design are to analyze requirements, decompose functionalities and connect the parts of artifacts to fulfill customer requirements.</p>
+
+<p>This time we focus on decomposition of functionalities. Why we need to decompose the requirements to each small module or package, one of the reasons is to reuse them, another reason, I think, is to &lsquo;de-use&rsquo; them. When we do not need any of modules, we can separate them from system very easily, which also provide much convenience for testing. We can test each of the seperated modules, packages or interfaces isolated, without interference between each other.</p>
+
+<p>The goal of the software design, include architectural design and detail design, is to decompose functionalities with the characteristics of strong cohesive, and loose coupled, which means we need a complete, but most minimal system function set. Interface is a very important element between two systems to access those functionalities, in addition to deployment environment. In fact, we can treat the environment as the interface between system and the system host. So we need a minimum equipped interface (MEI), which refers to Minimum Viable Product (MVP) definition.</p>
+
+<p>To achieve the goal, besides an elegant design blueprint, functional prototyping, we also need supports from configuration management and testing. We should have many different configuration profiles to include or exclude the modules according to the reuse and &lsquo;de-use&rsquo; specifications, which we planned in design. Testing should have different test scenarios to verify and/or validate the interfaces, which are exported by modules or packages according the configuration profiles.</p>
+
+<p>Succeed to DCOM and CORBA, the popular technology so far for designing a strong cohesive and loose coupled interface on cloud is REST, which based on the simple HTTP protocol verbs (GET, PUT, POST, DELETE). REST API is an analogous to SQL for interaction between systems on cloud, the latter provides several common verbs to query and manipulate data with relational database, such as SELECT, INSERT, UPDATE, DELETE, etc.</p>
+
+<p>In a conclusion, as the main task for design, we need to decompose functionalities in order to reuse and &lsquo;de-use&rsquo; modules, which act as a container to host functions. The design goal is make functionality as most as strong cohesive, and loose coupled. We can leverage configuration management and testing to achieve the design goal. REST interface provides a good practice for designing a strong cohesive, and loose coupled cloud system.</p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1674,49 +1728,6 @@ If mongod is running, which is the default behavior when installed, you should s
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/13/waterfall-is-trip-agile-is-journey/">如果瀑布是一次出差，那么敏捷是一段旅行</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-13T11:03:12-08:00" pubdate data-updated="true">Feb 13<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文地址：<a href="http://theadaptivepm.wordpress.com/2013/09/10/if-waterfall-is-a-trip-then-agile-is-a-journey/">http://theadaptivepm.wordpress.com/2013/09/10/if-waterfall-is-a-trip-then-agile-is-a-journey/</a>
-<img src="http://cdn.moj.managementisajourney.com/wp-content/uploads/2013/04/Road-Journey.jpg" alt="road journey" />
-一个项目就像是从一个海岸前往另一个海岸开车的旅程。很少有一些比喻能这样形象地表示瀑布/传统和敏捷项目管理方法之间的意识形态差异。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/02/13/waterfall-is-trip-agile-is-journey/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1738,6 +1749,10 @@ If mongod is running, which is the default behavior when installed, you should s
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/14/design-a-reuse-and-de-use-modularized-software-system/">Design a Reuse and &#8216;De-use&#8217; Modularized Software System</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/07/setup-mongo-database-master-slave-replication/">Setup Mongo Database Master Slave Replication</a>
       </li>
     
@@ -1751,10 +1766,6 @@ If mongod is running, which is the default behavior when installed, you should s
     
       <li class="post">
         <a href="/blog/2014/08/17/join-apple-ios-program/">加入 Apple iOS 开发者计划</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/05/playing-with-gerrit-jira-plugin/">Playing With Gerrit Jira Plugin</a>
       </li>
     
   </ul>
