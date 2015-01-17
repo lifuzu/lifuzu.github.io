@@ -1,0 +1,698 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Programming for Android: Download, Progressbar and FileProvider - Build and Release</title>
+  <meta name="author" content="Richard Lee">
+
+  
+  <meta name="description" content="In this article, we try to download a file from Internet, show the progress of downloading, then share the file to gallery for displaying with &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lifuzu.com/blog/2015/01/16/programming-for-android-download">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Build and Release</a></h1>
+  
+    <h2>A hacker for work and life.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lifuzu.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <!--<li><a href="/home.html">Home</a></li>-->
+  <li><a href="/">Blog</a></li>
+  <li><a href="/playard/">Playard</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Programming for Android: Download, Progressbar and FileProvider</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-16T17:50:20-08:00" pubdate data-updated="true">Jan 16<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="https://turbotax.intuit.com/handlebars/noncampaign/hp/images/melissa-tablet.jpg" alt="enter image description here" />
+In this article, we try to download a file from Internet, show the progress of downloading, then share the file to gallery for displaying with FileProvider.</p>
+
+<p><strong>Keywords</strong>: Android, Programming, Download, Image, Progressbar, FileProvider</p>
+
+<p><strong>Prerequisites</strong>:</p>
+
+<p><em>0</em>. Create an Android project with name: FileProviderExample, you can also clone this project directly from github here: [<a href="https://github.com/lifuzu/FileProviderExample">3</a>]</p>
+
+<p><strong>Steps</strong>:</p>
+
+<p><em>1</em>. Download</p>
+
+<p>We intend to download an image file with foreground mode since we want to block the consequent actions until the download process is complete. If you try to download file(s) with background mode, please reference some other articles <a href="http://stackoverflow.com/questions/3028306/download-a-file-with-android-and-showing-the-progress-in-a-progressdialog">here</a></p>
+
+<!--more-->
+
+
+<p>Update the activity layout file <code>res/layout/activity_main.xml</code> to add a button for downloading:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;Button</span>
+</span><span class='line'>    <span class="na">android:layout_width=</span><span class="s">&quot;wrap_content&quot;</span>
+</span><span class='line'>    <span class="na">android:layout_height=</span><span class="s">&quot;wrap_content&quot;</span>
+</span><span class='line'>    <span class="na">android:id=</span><span class="s">&quot;@+id/btnDownload&quot;</span>
+</span><span class='line'>    <span class="na">android:onClick=</span><span class="s">&quot;startDownload&quot;</span>
+</span><span class='line'>    <span class="na">android:text=</span><span class="s">&quot;Download Image&quot;</span><span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With the above update, we need to define a function named <code>startDownload</code> to trigger the download process:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">startDownload</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">download</span><span class="o">(</span><span class="s">&quot;http://farm1.static.flickr.com/114/298125983_0e4bf66782_b.jpg&quot;</span><span class="o">,</span> <span class="s">&quot;abc.jpg&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we download an image from the above URL, and save it to direct local path with the name <code>abc.jpg</code>.</p>
+
+<p>We design the download interface with a simple way. For the download function, what we want is a URL then a local file path that we saved the URL:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">download</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">strUrl</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With the <code>Thread</code> support, we create the download precedure:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="nd">@Override</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">getFilesDir</span><span class="o">(),</span> <span class="n">fileName</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="n">strUrl</span><span class="o">);</span>
+</span><span class='line'>                <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;FILE_NAME&quot;</span><span class="o">,</span> <span class="s">&quot;File name is &quot;</span> <span class="o">+</span> <span class="n">fileName</span><span class="o">);</span>
+</span><span class='line'>                <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;FILE_URL&quot;</span><span class="o">,</span> <span class="s">&quot;File URL is &quot;</span> <span class="o">+</span> <span class="n">url</span><span class="o">);</span>
+</span><span class='line'>                <span class="n">URLConnection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">openConnection</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">connection</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span>
+</span><span class='line'>                <span class="c1">// get the file length</span>
+</span><span class='line'>                <span class="kt">int</span> <span class="n">fileLength</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">getContentLength</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="c1">// download the file</span>
+</span><span class='line'>                <span class="n">InputStream</span> <span class="n">input</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedInputStream</span><span class="o">(</span><span class="n">url</span><span class="o">.</span><span class="na">openStream</span><span class="o">());</span>
+</span><span class='line'>                <span class="n">OutputStream</span> <span class="n">output</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileOutputStream</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="kt">byte</span> <span class="n">data</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">1024</span><span class="o">];</span>
+</span><span class='line'>                <span class="kt">long</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>                <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>
+</span><span class='line'>                <span class="k">while</span> <span class="o">((</span><span class="n">count</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">data</span><span class="o">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="n">total</span> <span class="o">+=</span> <span class="n">count</span><span class="o">;</span>
+</span><span class='line'>                    <span class="c1">// increase progress bar here</span>
+</span><span class='line'>                    <span class="c1">// write data into file</span>
+</span><span class='line'>                    <span class="n">output</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">count</span><span class="o">);</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="c1">// flush output and close streams</span>
+</span><span class='line'>                <span class="n">output</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">output</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">input</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;ERROR ON DOWNLOADING FILES&quot;</span><span class="o">,</span> <span class="s">&quot;ERROR IS&quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}).</span><span class="na">start</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From the above code, we save the file just direct local path, without any more directory:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>            <span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">getFilesDir</span><span class="o">(),</span> <span class="n">fileName</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then we call <code>URLConnection</code> to connect the URL which we want to download:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>                <span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="n">strUrl</span><span class="o">);</span>
+</span><span class='line'>                <span class="n">URLConnection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">openConnection</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">connection</span><span class="o">.</span><span class="na">connect</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Read the input stream write to output stream recursively, until the input stream reach the end:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>                <span class="n">InputStream</span> <span class="n">input</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedInputStream</span><span class="o">(</span><span class="n">url</span><span class="o">.</span><span class="na">openStream</span><span class="o">());</span>
+</span><span class='line'>                <span class="n">OutputStream</span> <span class="n">output</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileOutputStream</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="kt">byte</span> <span class="n">data</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">1024</span><span class="o">];</span>
+</span><span class='line'>                <span class="kt">long</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>                <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>
+</span><span class='line'>                <span class="k">while</span> <span class="o">((</span><span class="n">count</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">data</span><span class="o">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="n">total</span> <span class="o">+=</span> <span class="n">count</span><span class="o">;</span>
+</span><span class='line'>                    <span class="n">output</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">count</span><span class="o">);</span>
+</span><span class='line'>                <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then flush the output incase some data left in memory, and close the streams:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>                <span class="n">output</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">output</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">input</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One more thing before compiling a successful application is to check permission, we need an Internet permission to download the image. We need to add the permission into <code>manifests/AndroidManifest.xml</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.INTERNET&quot;</span><span class="nt">&gt;&lt;/uses-permission&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To verify the download function, run the application on Android device, click the button <code>DOWNLOAD IMAGE</code>
+<img src="https://lh4.googleusercontent.com/ttxff19bogmzdV1aX7HC-JsiB4w0irGnqvj1Z3JPf-4=s600" title="Screen Shot 2015-01-16 at 10.08.35 AM.png" alt="enter image description here" />
+Nothing seems happen, since we do not have any vision way to indicate the download progress is completed right now. For verification, we need adb to enter Android file system to have a file check.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>adb devices
+</span><span class='line'><span class="nv">$ </span>adb shell
+</span><span class='line'>root@vbox86tp:/ <span class="c">#  ls /data/data/com.example.rlee.fileproviderexample/files/</span>
+</span><span class='line'>abc.jpg
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cool, the file <code>abc.jpg</code> is downloaded from the URL <code>http://farm1.static.flickr.com/114/298125983_0e4bf66782_b.jpg</code>. You even would like to pull the file into desktop then have an exact content check:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>adb pull /data/data/com.example.rlee.fileproviderexample/files/abc.jpg
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then open it in File Explorer (like Finder for Mac OS), and open the URL in brower (like Chrome) to have a comparison.</p>
+
+<p><em>2</em>. Progressbar to show the status of download</p>
+
+<p>To display the status of downloading, we need ProgressDialog component, which will show a progress indicator and an optional text message or view.</p>
+
+<p>We need add a declaration for the ProgressDialog in the class <code>MainActivity</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// Progress Bar</span>
+</span><span class='line'><span class="n">ProgressDialog</span> <span class="n">progressDialog</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Initialize the variable with activity instance under the function <code>onCreate</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="n">progressDialog</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProgressDialog</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When we start to download the image, we need to set the initial state for the progress bar:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="n">progressDialog</span><span class="o">.</span><span class="na">setTitle</span><span class="o">(</span><span class="s">&quot;Downloading Image ...&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">progressDialog</span><span class="o">.</span><span class="na">setMessage</span><span class="o">(</span><span class="s">&quot;Download in progress ...&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">progressDialog</span><span class="o">.</span><span class="na">setProgressStyle</span><span class="o">(</span><span class="n">progressDialog</span><span class="o">.</span><span class="na">STYLE_HORIZONTAL</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">progressDialog</span><span class="o">.</span><span class="na">setProgress</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">progressDialog</span><span class="o">.</span><span class="na">setMax</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">progressDialog</span><span class="o">.</span><span class="na">show</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And we have the image size which we will download:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>                <span class="c1">// get the file length</span>
+</span><span class='line'>                <span class="kt">int</span> <span class="n">fileLength</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">getContentLength</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After we read and write some partial data, we update the state for progress bar:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>                    <span class="c1">// increase progress bar here</span>
+</span><span class='line'>                    <span class="n">progressDialog</span><span class="o">.</span><span class="na">setProgress</span><span class="o">((</span><span class="kt">int</span><span class="o">)(</span><span class="n">total</span><span class="o">*</span><span class="mi">100</span><span class="o">)/</span><span class="n">fileLength</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At last, when we complete the download, we dismiss the progress bar:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>                <span class="c1">// dismiss the progress bar</span>
+</span><span class='line'>                <span class="n">progressDialog</span><span class="o">.</span><span class="na">dismiss</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To verify the progress bar, try to find a big jpg image file on Internet, then replace the URL in download function.
+Run the application on Android device, click the button <code>DOWNLOAD IMAGE</code> again, you should see the progressbar like this:
+<img src="https://lh4.googleusercontent.com/-dqDPYup6e6w/VLlh3vI0zlI/AAAAAAAACuE/kbQ1Gxy6Kv0/s600/Screen+Shot+2015-01-16+at+11.08.44+AM.png" title="Screen Shot 2015-01-16 at 11.08.44 AM.png" alt="enter image description here" /></p>
+
+<p><em>3</em>. Show the file with FileProvider</p>
+
+<p>Android do NOT allow apps to access the private folder of another application. To share our downloaded image, we have to offer the image to other applications from our side. With FileProvider, we can share the file in my own app domain to other apps.</p>
+
+<p>For FileProvider, we need to add the provider element in android manifest file <code>manifests/AndroidManifest.xml</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>    <span class="nt">&lt;provider</span>
+</span><span class='line'>        <span class="na">android:authorities=</span><span class="s">&quot;com.example.rlee.fileproviderexample.fileprovider&quot;</span>
+</span><span class='line'>        <span class="na">android:name=</span><span class="s">&quot;android.support.v4.content.FileProvider&quot;</span>
+</span><span class='line'>        <span class="na">android:grantUriPermissions=</span><span class="s">&quot;true&quot;</span>
+</span><span class='line'>        <span class="na">android:exported=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;meta-data</span>
+</span><span class='line'>            <span class="na">android:name=</span><span class="s">&quot;android.support.FILE_PROVIDER_PATHS&quot;</span>
+</span><span class='line'>            <span class="na">android:resource=</span><span class="s">&quot;@xml/filepaths&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/provider&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>then add a new file under <code>res/xml</code> with the name <code>filepaths.xml</code> (create the xml folder if it does not exist), with the content:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+</span><span class='line'><span class="nt">&lt;paths</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;files-path</span> <span class="na">path=</span><span class="s">&quot;.&quot;</span> <span class="na">name=</span><span class="s">&quot;image&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/paths&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Add another button to trigger an intent to display the image in <code>res/layout/activity_main.xml</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;Button</span>
+</span><span class='line'>    <span class="na">android:layout_width=</span><span class="s">&quot;wrap_content&quot;</span>
+</span><span class='line'>    <span class="na">android:layout_height=</span><span class="s">&quot;wrap_content&quot;</span>
+</span><span class='line'>    <span class="na">android:id=</span><span class="s">&quot;@+id/btnDisplay&quot;</span>
+</span><span class='line'>    <span class="na">android:onClick=</span><span class="s">&quot;startDisplay&quot;</span>
+</span><span class='line'>    <span class="na">android:text=</span><span class="s">&quot;Display Image......&quot;</span><span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Create the function <code>startDisplay</code>, which defined in the above code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">startDisplay</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// show jpg in gallery</span>
+</span><span class='line'>    <span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">getFilesDir</span><span class="o">(),</span> <span class="s">&quot;abc.jpg&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">Uri</span> <span class="n">fileUri</span> <span class="o">=</span> <span class="n">FileProvider</span><span class="o">.</span><span class="na">getUriForFile</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">&quot;com.example.rlee.fileproviderexample.fileprovider&quot;</span><span class="o">,</span> <span class="n">file</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">Intent</span> <span class="n">intent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">Intent</span><span class="o">.</span><span class="na">ACTION_VIEW</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">intent</span><span class="o">.</span><span class="na">setDataAndType</span><span class="o">(</span><span class="n">fileUri</span><span class="o">,</span> <span class="s">&quot;image/*&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">intent</span><span class="o">.</span><span class="na">addFlags</span><span class="o">(</span>
+</span><span class='line'>            <span class="n">Intent</span><span class="o">.</span><span class="na">FLAG_GRANT_READ_URI_PERMISSION</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&quot;FILE_URI&quot;</span><span class="o">,</span> <span class="s">&quot;File Uri is &quot;</span> <span class="o">+</span> <span class="n">Uri</span><span class="o">.</span><span class="na">fromFile</span><span class="o">(</span><span class="n">file</span><span class="o">));</span>
+</span><span class='line'>    <span class="n">startActivity</span><span class="o">(</span><span class="n">intent</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To verify the display function, run the application on Android device, click the button <code>DISPLAY IMAGE ......</code>
+<img src="https://lh5.googleusercontent.com/-9CgNpo_-BFI/VLlT17IEKMI/AAAAAAAACtc/O2ec7Ia5Uj0/s600/Screen+Shot+2015-01-16+at+10.08.35+AM.png" title="Screen Shot 2015-01-16 at 10.08.35 AM.png" alt="enter image description here" />
+Then the image will be displayed by the Android Gallery application:
+<img src="https://lh6.googleusercontent.com/-X3R3BNX123M/VLlUKn-K1EI/AAAAAAAACto/IHuToVCF8wI/s600/Screen+Shot+2015-01-16+at+10.08.56+AM.png" title="Screen Shot 2015-01-16 at 10.08.56 AM.png" alt="enter image description here" /></p>
+
+<p>If you have any question, please add comments below or submit issues <a href="https://github.com/lifuzu/FileProviderExample/issues">here</a>.</p>
+
+<p>Have fun to try!</p>
+
+<p><strong>Tips</strong>:
+<a href="https://www.genymotion.com/?utm_source=dlvr.it&amp;utm_medium=twitter#!/product">Genymotion</a> might be your friend.</p>
+
+<p><strong>References</strong>:</p>
+
+<ol>
+<li><a href="https://developer.android.com/training/secure-file-sharing/setup-sharing.html">https://developer.android.com/training/secure-file-sharing/setup-sharing.html</a></li>
+<li><a href="https://developer.android.com/training/secure-file-sharing/share-file.html">https://developer.android.com/training/secure-file-sharing/share-file.html</a></li>
+<li><a href="https://github.com/lifuzu/FileProviderExample">https://github.com/lifuzu/FileProviderExample</a></li>
+<li><a href="http://stackoverflow.com/questions/3028306/download-a-file-with-android-and-showing-the-progress-in-a-progressdialog">http://stackoverflow.com/questions/3028306/download-a-file-with-android-and-showing-the-progress-in-a-progressdialog</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Lee</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-16T17:50:20-08:00" pubdate data-updated="true">Jan 16<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/development/'>development</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2015/01/16/programming-for-android-download/" data-via="" data-counturl="http://lifuzu.com/blog/2015/01/16/programming-for-android-download/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/01/14/design-a-reuse-and-de-use-modularized-software-system/" title="Previous Post: Design a reuse and 'de-use' modularized software system">&laquo; Design a reuse and 'de-use' modularized software system</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <div id="nrelate_related_placeholder"></div>
+    <script async id="nrelate_loader_script" type="text/javascript" src="http://staticjs.nrcdn.com/common_js/0.52.1/loader.min.js"></script>
+  </section>
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  <div class='social'>
+  <a id="gmail" href="mailto:lifuzu@gmail.com"><span></span>Send an email</a>
+  <a id="github" href="https://github.com/lifuzu"><span></span>@lifuzu</a>
+  <a id="linkedin" href="http://linkedin.com/in/lifuzu"><span></span>Richard Lee</a>
+</div>
+
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/16/programming-for-android-download/">Programming for Android: Download, Progressbar and FileProvider</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/14/design-a-reuse-and-de-use-modularized-software-system/">Design a Reuse and 'De-use' Modularized Software System</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/07/setup-mongo-database-master-slave-replication/">Setup Mongo Database Master Slave Replication</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/22/install-gollum/">Install Gollum</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/20/install-nodejs-using-nvm/">Install Nodejs Using NVM</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lifuzu">@lifuzu</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lifuzu',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Richard Lee -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'lifuzu';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lifuzu.com/blog/2015/01/16/programming-for-android-download/';
+        var disqus_url = 'http://lifuzu.com/blog/2015/01/16/programming-for-android-download/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
