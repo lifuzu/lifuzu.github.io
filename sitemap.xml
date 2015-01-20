@@ -119,12 +119,18 @@
         <lastmod>2015-01-16T17:57:58-08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://lifuzu.com/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler/
+        </loc>
+        <lastmod>2015-01-19T20:35:56-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://lifuzu.com/blog/archives/</loc>
-        <lastmod>2015-01-16T17:57:58-08:00</lastmod>
+        <lastmod>2015-01-19T20:35:56-08:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/</loc>
-        <lastmod>2015-01-16T17:57:58-08:00</lastmod>
+        <lastmod>2015-01-19T20:35:56-08:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/playard/bashrc.d/</loc>
@@ -136,7 +142,7 @@
     </url>
     <url>
         <loc>http://lifuzu.com/playard/jsoneditor/</loc>
-        <lastmod>2015-01-16T17:57:58-08:00</lastmod>
+        <lastmod>2015-01-19T20:35:56-08:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/robots.txt</loc>

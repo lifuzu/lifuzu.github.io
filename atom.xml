@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2015-01-16T17:58:01-08:00</updated>
+  <updated>2015-01-19T20:35:59-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Programming for Andorid: Synchronize Actions With Handler]]></title>
+    <link href="http://lifuzu.com/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler/"/>
+    <updated>2015-01-19T20:32:10-08:00</updated>
+    <id>http://lifuzu.com/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler</id>
+    <content type="html"><![CDATA[<p><img src="http://rxtracepz.dirkrodgersconsu.netdna-cdn.com/wp-content/uploads/2010/02/synchronized-swimmers.jpg" alt="enter image description here" /></p>
+
+<p>Sometimes, we need to synchronize the actions in a series but not in parallel. For example, we need to download an image then display it on Google Gallery. It seems we cannot display a partial image during downloading. OK, there is another story, probably, we will mention later, for displaying image with a coarse one then detailed the clear picture. Now let&rsquo;s fix how to download an image then display it, without manual interference.</p>
+
+<p>This program bases on the last one: <a href="http://lifuzu.com/blog/2015/01/16/programming-for-android-download/">Programming for Android: Download, Progressbar and FileProvider</a></p>
+
+<!--more-->
+
+
+<p><strong>Steps</strong>:</p>
+
+<p><em>1</em>. Declare a handler and a message ID, which we need to indicate what action is completed:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Handler</span> <span class="n">handler</span><span class="o">;</span>
+</span><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">DOWNLOAD_COMPLETED</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>2</em>. Send out the message, when the first action is completed:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>                <span class="c1">// send message to trigger the following event</span>
+</span><span class='line'>                <span class="n">Message</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="o">.</span><span class="na">obtain</span><span class="o">();</span>
+</span><span class='line'>                <span class="n">msg</span><span class="o">.</span><span class="na">what</span> <span class="o">=</span> <span class="n">DOWNLOAD_COMPLETED</span><span class="o">;</span>
+</span><span class='line'>                <span class="n">handler</span><span class="o">.</span><span class="na">sendMessage</span><span class="o">(</span><span class="n">msg</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>3</em>. Handle the message, then trigger the following action(s):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'>    <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Handler</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="nd">@Override</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">switch</span> <span class="o">(</span><span class="n">msg</span><span class="o">.</span><span class="na">what</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                <span class="k">case</span> <span class="nl">DOWNLOAD_COMPLETED:</span>
+</span><span class='line'>                    <span class="n">startDisplay</span><span class="o">();</span>
+</span><span class='line'>                    <span class="k">break</span><span class="o">;</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can clone the entire source code <a href="https://github.com/lifuzu/FileProviderExample">here</a> [2].</p>
+
+<p><strong>References</strong>:</p>
+
+<ol>
+<li><a href="http://stackoverflow.com/questions/4592716/multithreading-question">http://stackoverflow.com/questions/4592716/multithreading-question</a></li>
+<li><a href="https://github.com/lifuzu/FileProviderExample">https://github.com/lifuzu/FileProviderExample</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Programming for Android: Download, Progressbar and FileProvider]]></title>
@@ -2989,90 +3066,6 @@ Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 <p>此外，Redhat的OpenShift开发者是一个伟大的，互动的群体，因此，当一个热门的新东西，像Ghost被发布，他们就添加对它的支持，并写一本关于如何在他们的平台上部署的博客。我去试了试，很快就在OpenShift部署好了。</p>
 
 <p>&lt;未完待续></p>
-
-<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[10种正在改变企业的现代绩效管理方式]]></title>
-    <link href="http://lifuzu.com/blog/2014/01/07/10-ways-modern-enterprise-performance-management-changing-businesses/"/>
-    <updated>2014-01-07T21:20:12-08:00</updated>
-    <id>http://lifuzu.com/blog/2014/01/07/10-ways-modern-enterprise-performance-management-changing-businesses</id>
-    <content type="html"><![CDATA[<p>原文地址：<a href="http://thenextweb.com/entrepreneur/2013/12/28/10-ways-modern-enterprise-performance-management-changing-businesses/">http://thenextweb.com/entrepreneur/2013/12/28/10-ways-modern-enterprise-performance-management-changing-businesses/</a></p>
-
-<p><img src="http://cdn2.tnwcdn.com/wp-content/blogs.dir/1/files/2013/05/160620356-645x250.jpg" alt="10种正在改变企业的现代绩效管理方式" /></p>
-
-<p>“这是90天前的数据，不过没关系。”</p>
-
-<p>当你听到一个C级高管这么说的最后一次是什么时候？我的猜测是它已经有一段时间了，因为这些天，如果你没有来实时接触驱动业务的数据，这是几乎不可能有意义的结果，从而帮助你成长和与对手竞争。</p>
-
-<p>不幸的是，在今天的企业里，这个问题是太普遍了，企业绩效管理（EPM）平台不能从当前和相关数据中产生可操作的结果。最重要的是，大多数EPM的实现仍然复杂和难以管理，并且要求超级用户为数据把关。没有一劳永逸的秘诀。</p>
-
-<p>但是EPM是变化的，并且作为一个结果，它改变企业在世界各地的操作方式。因此，这里有10种方法，作为一种新的方式，正在全球范围内改变企业绩效管理业务的游戏规则。</p>
-
-<!--more-->
-
-
-<h3>1. 云计算优先成为新的标准</h3>
-
-<p><a href="http://www.forbes.com/sites/louiscolumbus/2013/12/03/idcs-top-ten-technology-predictions-for-2014-cloud-spending-will-exceed-100b/">IDC的研究</a>预测，2014年云计算技术开支将增加25％的增长，达到了1000亿美元。随着进一步普及以及进一步专业化 &ndash; 而且因为供应商不断寻求提供更多的基础设施能力，云服务正日益具有差异化。</p>
-
-<p>较好的公共云基础设施产生了更多的能力和可扩展的企业应用程序，亚马逊，谷歌和其他公司为企业在云上运行提供了更多的工具。 提供更好的云计算能力的EPM解决方案，将为企业在新的一年引领成长。</p>
-
-<h3>2. 也不能忽视移动办公</h3>
-
-<p>现在，劳动力是全球性和远程连接的，每时每刻。所以平板电脑和智能手机的增长预计将持续到明年，并不奇怪。<a href="http://thenextweb.com/apps/2013/10/31/optimize-mobile-apps-different-os/">移动现在是事实上的平台上</a>。商务人士和消费者都在吞噬数据，与往年不同，他们现在同样也产生数据。</p>
-
-<p>EPM工具现在需要能够在线提供报告 &ndash; 在任何设备上。在未来的一年，没有设计为设备无关的技术将失去市场份额。</p>
-
-<h3>3. 大数据转而专注于可执行性</h3>
-
-<p>对任何EPM系统而言，大数据都是一个关键考虑因素 &ndash; 今天单独的数据运算能力是远远不够。决策者们现在正在寻找能够提供实时的、更精细、可操作的、更易于管理的应用程序。</p>
-
-<p>预计云应用程序可以通过不同的数据流进行筛选，在金融领域广泛存在。</p>
-
-<h3>4. 协作已经从笨拙的青春期涌现</h3>
-
-<p>几年前，协作技术在企业中是新颖的，有点笨拙。但是，这已经成为历史。不包括协作功能的平台都要灭绝。</p>
-
-<p>创新的技术，如<a href="https://www.yammer.com/">Yammer</a>和<a href="https://www.box.com/">Box</a>，使员工相互协作和共享信息成为关键业务功能，而不仅仅是新鲜的华而不实。 IDC还预计，到2016年，60％的财富500强企业将有社会功能的创新管理解决方案到位。</p>
-
-<p>这也对EPM有意义：促使跨组织的协作的解决方案适合今天的企业，而那些没有这些功能的方案将没有地方可去。</p>
-
-<h3>5. CFO们也越来越有影响力</h3>
-
-<p>华尔街日报最近报道的CFO比以往任何时候有更大的发言权，他们确定公司在何处以及如何压上赌注。引用来自Gartner的最新研究，该杂志指出，CFO们现在比他们两年前有高出40％的影响力来决定IT投资。</p>
-
-<p>因此，尽管CFO们在转变组织中是领导角色，许多人仍然在努力确定最佳做法来实施EPM解决方案，可以帮助他们充分利用他们越来越大的影响力。</p>
-
-<h3>6. 上下文分析驱动的决策制定</h3>
-
-<p>我们正在从一个有足够的日志分析时代，过渡到以商业的分析为视角的时代，后者可以预测现在正在发生什么。上下文和实时数据的重要性，现在是EPM的关键任务。</p>
-
-<p>在未来一年，<a href="http://www.linkedin.com/today/post/article/20131210125224-1336307-big-idea-2014-the-warm-embrace-of-context?trk=prof-post">角色在上下文中明智地使用数据</a> 将开始得到应有的承认。</p>
-
-<h3>7. 机器生成的数据现在是系统的一部分</h3>
-
-<p>更多的数据连接到每一个系统，机器产生的和非结构化的数据包含了丰富的信息，EPM解决方案也需要考虑这个问题。 RFID标识，传感器数据和更多的数据来源将变得越来越重要。</p>
-
-<h3>8. 企业技术创新将开始推动消费技术创新</h3>
-
-<p>企业将成为创新的新来源。而在过去的IT消费化带动企业的发展，明年企业将开始带头。</p>
-
-<p><a href="http://thenextweb.com/entrepreneur/2013/11/06/enterprise-cloud-will-kill-mobile-device-management/">云计算，移动和社交在企业规模的的交叉点</a>正在帮助在工作场所建立高可用的和用户友好的体验。企业应用程序的设计没有考虑到这些因素将不会被采纳。</p>
-
-<h3>9. 竞争将推动技术的快速采用</h3>
-
-<p>这对CFO们是一个机会，他们的系统已经过时，而且需要长达4个月完成预算的预算编制平台已经不能满足。根据由<a href="http://www.journalofaccountancy.com/Issues/2013/Oct/20137811.htm">美国生产力与质量中心的研究</a>，平均而言，采用滚动预测的公司每年可以节省他们的预算编制5到25天。</p>
-
-<p>CFO们开始明白，目前的环境是“吃还是被吃”，如果他们不采用新技术，以减少他们花费规划的时候，他们会变得无关紧要。</p>
-
-<h3>10. 敏捷总是赢</h3>
-
-<p>在当今不断变化的市场，任何行业都没有灵丹妙药取得成功。说到底，工作就是不断寻找未来，并考虑下一步的行动。</p>
-
-<p>有远见的CFO们将寻找EPM解决方案，就像他们做的 &ndash; 远远超过现在 &ndash; 如果情况改变，他们希望能够快速改变，适应新的条件下的解决方案。对于唯一不变的就是变化本身- 即使需要进行规划。</p>
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 ]]></content>

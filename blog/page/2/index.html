@@ -9,8 +9,12 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Instructions: 1. Check out the source tree from SVN server with svn command: 1
-svn co http://my-project.googlecode.com/svn/trunk 2. Generate an &hellip;">
+  <meta name="description" content="Instructions: 1. Move the repository folder on server: 1
+2
+3
+# on gerrit server
+$ cd $site_path/git;
+$ mv old_name.git new_name.git 2. Flush the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +72,94 @@ svn co http://my-project.googlecode.com/svn/trunk 2. Generate an &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/09/rename-repository-on-gerrit/">Rename Repository on Gerrit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-_03bVFvmzzg/U0YvHJPBLCI/AAAAAAAAB4M/SSKXyOR_T3U/s0/diffymute-300x279.png" title="diffymute-300x279.png" alt="Gerrit icon" /></p>
+
+<h3>Instructions:</h3>
+
+<p><em>1</em>. Move the repository folder on server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># on gerrit server</span>
+</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$site_path</span>/git;
+</span><span class='line'><span class="nv">$ </span>mv old_name.git new_name.git
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>2</em>. Flush the caches on server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image:</span>
+</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit flush-caches
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>3</em>. Run sql statement to update the changes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image (need &quot;Access Database&quot; capability):</span>
+</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit gsql <span class="o">[</span>Enter<span class="o">]</span>
+</span><span class='line'>gerrit&gt; USE <span class="o">{</span>Database<span class="o">}</span>;
+</span><span class='line'>gerrit&gt; SELECT * FROM changes WHERE <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
+</span><span class='line'><span class="c"># if have more than 1, run the following command to update, otherwise, quit with \q;</span>
+</span><span class='line'>gerrit&gt; UPDATE changes SET <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;new_name&#39;</span> WHERE
+</span><span class='line'><span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
+</span><span class='line'>gerrit&gt; <span class="se">\q</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI">https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -718,57 +810,6 @@ svn co http://my-project.googlecode.com/svn/trunk 2. Generate an &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/07/10-ways-modern-enterprise-performance-management-changing-businesses/">10种正在改变企业的现代绩效管理方式</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-07T21:20:12-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文地址：<a href="http://thenextweb.com/entrepreneur/2013/12/28/10-ways-modern-enterprise-performance-management-changing-businesses/">http://thenextweb.com/entrepreneur/2013/12/28/10-ways-modern-enterprise-performance-management-changing-businesses/</a></p>
-
-<p><img src="http://cdn2.tnwcdn.com/wp-content/blogs.dir/1/files/2013/05/160620356-645x250.jpg" alt="10种正在改变企业的现代绩效管理方式" /></p>
-
-<p>“这是90天前的数据，不过没关系。”</p>
-
-<p>当你听到一个C级高管这么说的最后一次是什么时候？我的猜测是它已经有一段时间了，因为这些天，如果你没有来实时接触驱动业务的数据，这是几乎不可能有意义的结果，从而帮助你成长和与对手竞争。</p>
-
-<p>不幸的是，在今天的企业里，这个问题是太普遍了，企业绩效管理（EPM）平台不能从当前和相关数据中产生可操作的结果。最重要的是，大多数EPM的实现仍然复杂和难以管理，并且要求超级用户为数据把关。没有一劳永逸的秘诀。</p>
-
-<p>但是EPM是变化的，并且作为一个结果，它改变企业在世界各地的操作方式。因此，这里有10种方法，作为一种新的方式，正在全球范围内改变企业绩效管理业务的游戏规则。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/07/10-ways-modern-enterprise-performance-management-changing-businesses/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -792,6 +833,10 @@ svn co http://my-project.googlecode.com/svn/trunk 2. Generate an &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler/">Programming for Andorid: Synchronize Actions With Handler</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/16/programming-for-android-download/">Programming for Android: Download, Progressbar and FileProvider</a>
       </li>
     
@@ -805,10 +850,6 @@ svn co http://my-project.googlecode.com/svn/trunk 2. Generate an &hellip;">
     
       <li class="post">
         <a href="/blog/2014/08/22/install-gollum/">Install Gollum</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/20/install-nodejs-using-nvm/">Install Nodejs Using NVM</a>
       </li>
     
   </ul>
