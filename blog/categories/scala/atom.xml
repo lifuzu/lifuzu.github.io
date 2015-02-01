@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Programming, | Build and Release]]></title>
-  <link href="http://lifuzu.com/blog/categories/programming/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Scala | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
   <updated>2015-01-31T22:20:04-08:00</updated>
   <id>http://lifuzu.com/</id>

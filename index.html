@@ -9,7 +9,7 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Sometimes, we need to synchronize the actions in a series but not in parallel. For example, we need to download an image then display it on Google &hellip;">
+  <meta name="description" content="Have no any idea what to do today after dinner, although I have some homeworks need to submit soon, I still decided to try something new in a short &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,48 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/31/getting-started-with-scala/">Getting Started With Scala</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-31T21:58:42-08:00" pubdate data-updated="true">Jan 31<span>st</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="http://grab.by/grabs/d3bb7c13cd4b40142fab4a7eb0ef7155.png" alt="enter image description here" />
+Have no any idea what to do today after dinner, although I have some homeworks need to submit soon, I still decided to try something new in a short time. I recalled I read an article yesterday on stackshare.io, it seems there is a company named instacarts tried Scala programming language to setup their development stack. I am very curious on the programming language, it seems someone said: &ldquo;Speaking More Than One Language Could Sharpen Your Brain.&rdquo;, how about Scala?</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/01/31/getting-started-with-scala/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -1387,180 +1429,6 @@ If mongod is running, which is the default behavior when installed, you should s
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/24/playing-with-git-submodule/">Playing With Git Submodule</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-24T22:01:03-07:00" pubdate data-updated="true">Apr 24<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-GW4P0d8zZdM/U1nrsDaCgiI/AAAAAAAAB5I/4mTt3xjfmFo/s0/xlotte-git.jpg" title="xlotte-git.jpg" alt="enter image description here" /></p>
-
-<h3>Intructions:</h3>
-
-<ul>
-<li>add a submodule</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule add -b BRANCH ssh://REPO_URL/REPO_PATH SUBMODULE_PATH
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;add a submodule at SUBMODULE_PATH&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>clone the project with submodule(s)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone ssh://REPO_URL/REPO_PATH PROJECT
-</span><span class='line'><span class="nb">cd </span>PROJECT
-</span><span class='line'><span class="nv">$ </span>git submodule update --init --rebase
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>get submodule status</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule status
-</span><span class='line'><span class="nv">$ </span>git submodule foreach git branch -a
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>checkout all submodule to a branch defined in .gitmodule (which means we specify the branch when we add the submodule with &lsquo;-b BRANCH&rsquo;)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule foreach -q --recursive <span class="s1">&#39;branch=&quot;$(git config -f $toplevel/.gitmodules submodule.$name.branch)&quot;; git checkout $branch&#39;</span>
-</span><span class='line'><span class="c"># OR a short version</span>
-</span><span class='line'><span class="nv">$ </span>git submodule foreach git checkout master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>pull the latest master for all of the submodule</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule -q foreach git pull -q origin master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>develop in submodule</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Make your changes in submoduleA</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>submoduleA
-</span><span class='line'><span class="nv">$ </span>git add .
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Updated the submoduleA&quot;</span>
-</span><span class='line'><span class="nv">$ </span>git push origin BRANCH
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>sync to project</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>PROJECT
-</span><span class='line'><span class="nv">$ </span>git pull
-</span><span class='line'><span class="nv">$ </span>git submodule update --rebase
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>manually update the project to track submodule (Gerrit submodule description commit the track automatically)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>PROJECT
-</span><span class='line'><span class="nv">$ </span>git add submoduleA
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Updated submodule a.&quot;</span>
-</span><span class='line'><span class="nv">$ </span>git push origin BRANCH_NAME
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>deinit, and remove a submodule</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule deinit SUBMODULE_PATH
-</span><span class='line'><span class="nv">$ </span>git rm SUBMODULE_PATH
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;remove the submodule at SUBMODULE_PATH&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>References:</h3>
-
-<ol>
-<li><a href="http://git-scm.com/docs/git-submodule">http://git-scm.com/docs/git-submodule</a></li>
-<li><a href="http://git-scm.com/docs/git-rm.html">http://git-scm.com/docs/git-rm.html</a></li>
-<li><a href="http://stackoverflow.com/questions/8642668/how-to-make-submodule-with-detached-head-to-be-attached-to-actual-head">http://stackoverflow.com/questions/8642668/how-to-make-submodule-with-detached-head-to-be-attached-to-actual-head</a></li>
-<li><a href="http://www.vogella.com/tutorials/Git/article.html#submodules">http://www.vogella.com/tutorials/Git/article.html#submodules</a></li>
-</ol>
-
-
-<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1582,6 +1450,10 @@ If mongod is running, which is the default behavior when installed, you should s
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/31/getting-started-with-scala/">Getting Started With Scala</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler/">Programming for Andorid: Synchronize Actions With Handler</a>
       </li>
     
@@ -1595,10 +1467,6 @@ If mongod is running, which is the default behavior when installed, you should s
     
       <li class="post">
         <a href="/blog/2015/01/07/setup-mongo-database-master-slave-replication/">Setup Mongo Database Master Slave Replication</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/22/install-gollum/">Install Gollum</a>
       </li>
     
   </ul>
