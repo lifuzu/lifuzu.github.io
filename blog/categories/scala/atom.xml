@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2015-01-31T22:20:04-08:00</updated>
+  <updated>2015-02-03T21:37:09-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -32,16 +32,14 @@ $ wget http://downloads.typesafe.com/scala/2.11.5/scala-2.11.5.tgz
 </code></p>
 
 <p><em>2</em>. Uncompress the package, put the folder into <code>/usr/local</code>, add the path into system environment variable <code>PATH</code>:
-```bash
+<code>bash
 $ cd /usr/local
 $ sudo tar -zxf ~/Downloads/scala-2.11.5.tgz
 $ sudo ln -s scala-2.11.5 scala
 $ vi ~/.bashrc
-$ export SCALA_HOME=/usr/local/scala</p>
-
-<h1>export PATH=$PATH:$SCALA_HOME/bin</h1>
-
-<p>```
+$ export SCALA_HOME=/usr/local/scala
+$ export PATH=$PATH:$SCALA_HOME/bin
+</code>
 <em>NOTE</em>: You can skip the above two steps with a full-fledged docker image, which even do not affect your local system, but allow you to try the following steps. Please see the instruction on how to download the docker image on Scala at the bottom.</p>
 
 <p><em>3</em>. Open your perfered Editor, for me, it is sublime text and/or vi, type the followind code in:
