@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Setup Mongo Database Master Slave Replication - Build and Release</title>
+  <title>Playing With Hadoop on Dockerbase - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Prerequisites: You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the &hellip;">
+  <meta name="description" content="Apache Hadoop is a map reduce computing environment, which provide a reliable, scalable and distributed computing environment to handle big data. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication">
+  <link rel="canonical" href="http://lifuzu.com/blog/2015/02/03/playing-with-hadoop-on-dockerbase">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -70,7 +70,7 @@
   
   <header>
     
-      <h1 class="entry-title">Setup Mongo Database Master Slave Replication</h1>
+      <h1 class="entry-title">Playing With Hadoop on Dockerbase</h1>
     
     
       <p class="meta">
@@ -86,143 +86,108 @@
   
 
 
-<time datetime="2015-01-07T13:58:40-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2015</time>
+<time datetime="2015-02-03T21:52:03-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><img src="http://tapainc.com/images/MongoDB.png" alt="enter image description here" /></p>
+<div class="entry-content"><p><img src="https://www.ombud.com/asset/3607" alt="Apache Hadoop Logo" />
+Apache Hadoop is a map reduce computing environment, which provide a reliable, scalable and distributed computing environment to handle big data. This article introduce how to setup a Apache Hadoop Dockerbase image to play with the standalone operation of Hadoop on Docker.</p>
 
-<p><strong>Prerequisites</strong>:</p>
+<p><strong>Steps</strong>:</p>
 
-<p>You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the mongo database which should be acted as a slave.</p>
-
-<p>Here are some commands might be helpful:</p>
-
-<ul>
-<li>To know the external IP of the server:</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl http://checkip.dyndns.org/</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>To ping the server which you want to connect, on the specific port ( for example: 27017 ):</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet 1.2.3.4 27017</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Practices</strong>:</p>
-
-<p>Machine A (Master):
-Run Mongo Daemon as master:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongod --master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Machine B (Slave):
-If mongod is running, which is the default behavior when installed, you should stop it before the following steps:</p>
+<p><em>1</em>. Install Docker:
+Install the latest version of Docker on Ubuntu:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Stop the mongodb which installed by default</span>
-</span><span class='line'><span class="nv">$ </span>sudo stop mongodb
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>curl -sSL https://get.docker.com/ubuntu/ | sudo sh
+</span><span class='line'><span class="nv">$ </span>docker --version
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Run Mongo Daemon as slave:</p>
+<p>For Microsoft Windows or Mac OS, there is a tool named <code>boot2docker</code> [1] need to be installed to provide a terminal to run the following commands. You can also get more information about other platform you are on from reference [2].</p>
+
+<p><em>2</em>. Download Dockerbase image for Hadoop:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongod --slave
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo docker run -it --rm --name dockerbase-devbase-hadoop dockerbase/devbase-hadoop
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Probably you need to specify the dbpath, in case you have any disk space limitation:</p>
+<p>It takes a little bit time (depends on network speed) to download docker image from public Docker hub registry [3].</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo mongod --slave --dbpath /data/mongodb/
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Run <code>mongo</code> to open a mongo shell, then config for replication:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; use <span class="nb">local</span>
-</span><span class='line'>&gt; db.sources.find<span class="o">()</span>
-</span><span class='line'>&gt; db.sources.insert<span class="o">(</span> <span class="o">{</span> host: &lt;masterhostname&gt; &lt;,only: databasename&gt; <span class="o">}</span> <span class="o">)</span>;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then you run <code>show dbs</code> in the mongo shell:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; show dbs
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You will find the databasename which we typed behind the <code>only</code> key above displayed.</p>
-
-<p>You may need to run the command multiple times to make sure the replication is going on. For example:</p>
+<p><em>3</em>. Enter Docker image automatically after the above step, try the command <code>hadoop</code> to display usage documentation for the hadoop script:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; show dbs
-</span><span class='line'>databasename    17.9453125GB
-</span><span class='line'><span class="nb">local   </span>0.078125GB
-</span><span class='line'>&gt; show dbs
-</span><span class='line'>databasename    19.9443359375GB
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>hadoop
+</span><span class='line'>Usage: hadoop <span class="o">[</span>--config confdir<span class="o">]</span> COMMAND
+</span><span class='line'>       where COMMAND is one of:
+</span><span class='line'>  fs                   run a generic filesystem user client
+</span><span class='line'>  version              print the version
+</span><span class='line'>  jar &lt;jar&gt;            run a jar file
+</span><span class='line'>  checknative <span class="o">[</span>-a|-h<span class="o">]</span>  check native hadoop and compression libraries availability
+</span><span class='line'>  distcp &lt;srcurl&gt; &lt;desturl&gt; copy file or directories recursively
+</span><span class='line'>  archive -archiveName NAME -p &lt;parent path&gt; &lt;src&gt;* &lt;dest&gt; create a hadoop archive
+</span><span class='line'>  classpath            prints the class path needed to get the
+</span><span class='line'>                       Hadoop jar and the required libraries
+</span><span class='line'>  daemonlog            get/set the log level <span class="k">for </span>each daemon
+</span><span class='line'> or
+</span><span class='line'>  CLASSNAME            run the class named CLASSNAME
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>You can also run the following commands to show the information of the replication on master and slave side:</p>
+<p><em>4</em>. The following example copies configuration files under the <code>hadoop</code> folder which we installed in <code>/usr/local</code>, then run the <code>hadoop</code> command to find every match of the given regular expression.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Master side:</span>
-</span><span class='line'>&gt; rs.printReplicationInfo<span class="o">()</span> <span class="c"># replace &#39;rs&#39; to &#39;db&#39; for the version prior to 2.6</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Slave side:</span>
-</span><span class='line'>&gt; rs.printSlaveReplicationInfo<span class="o">()</span> <span class="c"># same thing as the above command, you need to replace &#39;rs&#39; to &#39;db&#39; if you run the mongodb which version prior to 2.6</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>mkdir input
+</span><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>cp /usr/local/hadoop/etc/hadoop/*.xml input/
+</span><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0.jar grep input output <span class="s1">&#39;dfs[a-z.]+&#39;</span>
+</span><span class='line'>15/02/03 17:49:21 INFO Configuration.deprecation: session.id is deprecated. Instead, use dfs.metrics.session-id
+</span><span class='line'>15/02/03 17:49:21 INFO jvm.JvmMetrics: Initializing JVM Metrics with <span class="nv">processName</span><span class="o">=</span>JobTracker, <span class="nv">sessionId</span><span class="o">=</span>
+</span><span class='line'>15/02/03 17:49:22 WARN mapreduce.JobSubmitter: No job jar file set.  User classes may not be found. See Job or Job#setJar<span class="o">(</span>String<span class="o">)</span>.
+</span><span class='line'>...
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Besides, you can run the following command to get a defail status of the server:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; db.serverStatus<span class="o">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You might neet to run resync to recover replication:</p>
+<p><em>5</em>. Display the matchs from the output folder:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; use admin
-</span><span class='line'>&gt; db.runCommand<span class="o">(</span> <span class="o">{</span> resync: 1 <span class="o">}</span> <span class="o">)</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>cat output/*
+</span><span class='line'>1 dfsadmin
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p><strong>References</strong>:</p>
 
 <ol>
-<li><a href="http://docs.mongodb.org/manual/core/master-slave/">http://docs.mongodb.org/manual/core/master-slave/</a></li>
+<li><a href="http://boot2docker.io/">http://boot2docker.io/</a></li>
+<li><a href="https://docs.docker.com/installation/">https://docs.docker.com/installation/</a></li>
+<li><a href="https://registry.hub.docker.com/u/dockerbase/devbase-hadoop/">https://registry.hub.docker.com/u/dockerbase/devbase-hadoop/</a></li>
+<li><a href="http://hadoop.apache.org/">http://hadoop.apache.org/</a></li>
+<li><a href="http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html">http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html</a></li>
 </ol>
 
 
@@ -249,12 +214,12 @@ If mongod is running, which is the default behavior when installed, you should s
   
 
 
-<time datetime="2015-01-07T13:58:40-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2015</time>
+<time datetime="2015-02-03T21:52:03-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/admin/'>admin</a>, <a class='category' href='/blog/categories/database/'>database,</a>
+    <a class='category' href='/blog/categories/dockerbase/'>dockerbase,</a>, <a class='category' href='/blog/categories/hadoop/'>hadoop</a>
   
 </span>
 
@@ -263,7 +228,7 @@ If mongod is running, which is the default behavior when installed, you should s
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/" data-via="" data-counturl="http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2015/02/03/playing-with-hadoop-on-dockerbase/" data-via="" data-counturl="http://lifuzu.com/blog/2015/02/03/playing-with-hadoop-on-dockerbase/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -276,10 +241,8 @@ If mongod is running, which is the default behavior when installed, you should s
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/08/22/install-gollum/" title="Previous Post: Install Gollum">&laquo; Install Gollum</a>
+        <a class="basic-alignment left" href="/blog/2015/02/03/getting-familiar-with-hbase-on-dockerbase/" title="Previous Post: Getting Familiar With HBase on Dockerbase">&laquo; Getting Familiar With HBase on Dockerbase</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/01/14/design-a-reuse-and-de-use-modularized-software-system/" title="Next Post: Design a reuse and 'de-use' modularized software system">Design a reuse and 'de-use' modularized software system &raquo;</a>
       
     </p>
   </footer>
@@ -386,8 +349,8 @@ If mongod is running, which is the default behavior when installed, you should s
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/';
-        var disqus_url = 'http://lifuzu.com/blog/2015/01/07/setup-mongo-database-master-slave-replication/';
+        var disqus_identifier = 'http://lifuzu.com/blog/2015/02/03/playing-with-hadoop-on-dockerbase/';
+        var disqus_url = 'http://lifuzu.com/blog/2015/02/03/playing-with-hadoop-on-dockerbase/';
         var disqus_script = 'embed.js';
       
     (function () {
