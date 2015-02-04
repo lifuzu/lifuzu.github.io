@@ -99,104 +99,12 @@
   <div class="entry-content"><p><img src="https://www.ombud.com/asset/3607" alt="Apache Hadoop Logo" />
 Apache Hadoop is a map reduce computing environment, which provide a reliable, scalable and distributed computing environment to handle big data. This article introduce how to setup a Apache Hadoop Dockerbase image to play with the standalone operation of Hadoop on Docker.</p>
 
-<p><strong>Steps</strong>:</p>
-
-<p><em>1</em>. Install Docker:
-Install the latest version of Docker on Ubuntu:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>curl -sSL https://get.docker.com/ubuntu/ | sudo sh
-</span><span class='line'><span class="nv">$ </span>docker --version
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>For Microsoft Windows or Mac OS, there is a tool named <code>boot2docker</code> [1] need to be installed to provide a terminal to run the following commands. You can also get more information about other platform you are on from reference [2].</p>
-
-<p><em>2</em>. Download Dockerbase image for Hadoop:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo docker run -it --rm --name dockerbase-devbase-hadoop dockerbase/devbase-hadoop
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It takes a little bit time (depends on network speed) to download docker image from public Docker hub registry [3].</p>
-
-<p><em>3</em>. Enter Docker image automatically after the above step, try the command <code>hadoop</code> to display usage documentation for the hadoop script:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>hadoop
-</span><span class='line'>Usage: hadoop <span class="o">[</span>--config confdir<span class="o">]</span> COMMAND
-</span><span class='line'>       where COMMAND is one of:
-</span><span class='line'>  fs                   run a generic filesystem user client
-</span><span class='line'>  version              print the version
-</span><span class='line'>  jar &lt;jar&gt;            run a jar file
-</span><span class='line'>  checknative <span class="o">[</span>-a|-h<span class="o">]</span>  check native hadoop and compression libraries availability
-</span><span class='line'>  distcp &lt;srcurl&gt; &lt;desturl&gt; copy file or directories recursively
-</span><span class='line'>  archive -archiveName NAME -p &lt;parent path&gt; &lt;src&gt;* &lt;dest&gt; create a hadoop archive
-</span><span class='line'>  classpath            prints the class path needed to get the
-</span><span class='line'>                       Hadoop jar and the required libraries
-</span><span class='line'>  daemonlog            get/set the log level <span class="k">for </span>each daemon
-</span><span class='line'> or
-</span><span class='line'>  CLASSNAME            run the class named CLASSNAME
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>4</em>. The following example copies configuration files under the <code>hadoop</code> folder which we installed in <code>/usr/local</code>, then run the <code>hadoop</code> command to find every match of the given regular expression.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>mkdir input
-</span><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>cp /usr/local/hadoop/etc/hadoop/*.xml input/
-</span><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0.jar grep input output <span class="s1">&#39;dfs[a-z.]+&#39;</span>
-</span><span class='line'>15/02/03 17:49:21 INFO Configuration.deprecation: session.id is deprecated. Instead, use dfs.metrics.session-id
-</span><span class='line'>15/02/03 17:49:21 INFO jvm.JvmMetrics: Initializing JVM Metrics with <span class="nv">processName</span><span class="o">=</span>JobTracker, <span class="nv">sessionId</span><span class="o">=</span>
-</span><span class='line'>15/02/03 17:49:22 WARN mapreduce.JobSubmitter: No job jar file set.  User classes may not be found. See Job or Job#setJar<span class="o">(</span>String<span class="o">)</span>.
-</span><span class='line'>...
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>5</em>. Display the matchs from the output folder:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>devbase@145878b9c8c7:~<span class="nv">$ </span>cat output/*
-</span><span class='line'>1 dfsadmin
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>References</strong>:</p>
-
-<ol>
-<li><a href="http://boot2docker.io/">http://boot2docker.io/</a></li>
-<li><a href="https://docs.docker.com/installation/">https://docs.docker.com/installation/</a></li>
-<li><a href="https://registry.hub.docker.com/u/dockerbase/devbase-hadoop/">https://registry.hub.docker.com/u/dockerbase/devbase-hadoop/</a></li>
-<li><a href="http://hadoop.apache.org/">http://hadoop.apache.org/</a></li>
-<li><a href="http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html">http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SingleCluster.html</a></li>
-</ol>
-
-
-<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/02/03/playing-with-hadoop-on-dockerbase/">Read on &rarr;</a>
+    </footer>
   
 
 
