@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Thoughs About Alias Settings in .bashrc - Build and Release</title>
+  <title>Using Git Command to Find Build Failure Very Quickly - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Sometimes, when we install a package, just as, tomcat, we need to append some lines in .bashrc to add and export the tomcat/bin in the system PATH, &hellip;">
+  <meta name="description" content="When some changes broke your build during the mid night, how to find the culprit of the failure very quickly? Like this: If you are using git as your &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/blog/2014/01/13/thoughs-about-alias-in-bashrc">
+  <link rel="canonical" href="http://lifuzu.com/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -70,7 +70,7 @@
   
   <header>
     
-      <h1 class="entry-title">Thoughs About Alias Settings in .bashrc</h1>
+      <h1 class="entry-title">Using Git Command to Find Build Failure Very Quickly</h1>
     
     
       <p class="meta">
@@ -86,70 +86,88 @@
   
 
 
-<time datetime="2014-01-13T21:24:27-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2014</time>
+<time datetime="2015-06-02T10:32:09-07:00" pubdate data-updated="true">Jun 2<span>nd</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Sometimes, when we install a package, just as, tomcat, we need to append some lines in .bashrc to add and export the tomcat/bin in the system PATH, then source the entire .bashrc to enable it. It is some a little risky (when you forget append $PATH, :) ) and painful, especially when we try to automate the installation process.</p>
+<div class="entry-content"><p>When some changes broke your build during the mid night, how to find the culprit of the failure very quickly? Like this:
+<img src="https://lh3.googleusercontent.com/-20gdQ7Sswwk/VW3cw-UhgWI/AAAAAAAAC04/b3cysga0Cr8/s0/Screen+Shot+2015-06-02+at+9.39.06+AM.png" title="Screen Shot 2015-06-02 at 9.39.06 AM.png" alt="build failure history" /></p>
 
-<p>When we have several machines, we always need to synchronize the .bashrc file among them. I hate to copy them when I have more than 3 boxes.</p>
+<p>If you are using git as your version control system, then the short answer is &lsquo;<strong>git bisect</strong>&rsquo;.</p>
 
-<p>Then I have the below thoughs to simplify it, with a github repository. Of course, you don&rsquo;t need do these things manually again, Just try to clone the github repo at the bottom of this article.</p>
+<p>As the above screenshot, you know the latest good version is 4.7.0.310, and the earliest bad version is 4.7.0.311, so some changes between the two version failed the build. Then how to use &lsquo;git bisect&rsquo; to help us debug the issue very quickly?</p>
 
-<p><strong>1</strong>. We can create a folder, name it as:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>~/.bashrc.d/
-</span></code></pre></td></tr></table></div></figure>
+<!--more-->
 
 
-<blockquote><p>inspired by rc.d, init.d, conf.d etc;</p></blockquote>
+<p>Firstly, checking out the source tree to an environment:</p>
 
-<p><strong>2</strong>. We create some files under the folder, name them as:</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone ...</span></code></pre></td></tr></table></div></figure>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+
+<p>Starting the git bisect command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git bisect start</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Marking the good version and the bad one with the tag name (or commit id):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>~/.bashrc.d/linux/git.alias.bash
-</span><span class='line'>~/.bashrc.d/linux/java.path.bash
-</span><span class='line'>~/.bashrc.d/linux/editor.bash
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git bisect good 4.7.0.310
+</span><span class='line'>$ git bisect bad 4.7.0.311</span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>3</strong>. We add an entry point into ~/.bashrc:</p>
+<p>Then git bisect analyzes the changes between, checkout the middle one (bisected) to the current environment and wait for verification. What we need to do now is just to run the build command to get the build result for the snapshot:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ./gradlew clean build</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If the build failed, then mark it bad:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git bisect bad</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Git should checkout another version between this one and the good one, bisectedly. Then what we need to do is to run the build command again to get the build result:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ./gradlew clean build</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If the build is successful, then git should bisect to another version between this one and the latest verified bad one. Until git find which commit failed the build.</p>
+
+<p>Assuming you mark the build is successful, and git find out which commit is the root cause, it should display the commit after the mark command immediately:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">OS</span><span class="o">=</span><span class="k">$(</span> uname | tr <span class="s1">&#39;[:upper:]&#39;</span> <span class="s1">&#39;[:lower:]&#39;</span><span class="k">)</span>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -d <span class="nv">$HOME</span>/.bashrc.d <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">  for </span>SCRIPT in <span class="k">$(</span> ls <span class="nv">$HOME</span>/.bashrc.d/<span class="k">${</span><span class="nv">OS</span><span class="k">}</span>/* <span class="k">)</span>; <span class="k">do</span>
-</span><span class='line'>    . <span class="k">${</span><span class="nv">SCRIPT</span><span class="k">}</span>
-</span><span class='line'>  <span class="k">done</span>
-</span><span class='line'><span class="k">fi</span>
-</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git bisect good
+</span><span class='line'>f0810993941d6bc2f4985c9830780f5bc86e0f35 is the first bad commit
+</span><span class='line'>commit f0810993941d6bc2f4985c9830780f5bc86e0f35
+</span><span class='line'>Author: ABC &lt;abc@abc.com&gt;
+</span><span class='line'>Date:   Tue Jun 2 15:14:09 2015 +0800
+</span><span class='line'>
+</span><span class='line'>    ABC-1234: move a function to another class to avoid ClassNotFound if API level &lt; 18
+</span><span class='line'>
+</span><span class='line'>:040000 040000 56a19c7814dea9aee78bf3453c223e428a31e451 29a6fbc67b3d1e521683739270b186a86f6f9240 M    abcmoduleA
+</span><span class='line'>:040000 040000 f9045aaf28eef5c250d110c4580c76ed90a642eb 8ddeced2ceaa41a0d93ba8b1f6333976f6104342 M    abcmoduleB</span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>4</strong>. Then we run the source command to enable them:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">source</span> ~/.bashrc
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>5</strong>. Done!</p>
-
-<p>Here is the repository:</p>
-
-<p><a href="https://github.com/lifuzu/bashrc.d.git">https://github.com/lifuzu/bashrc.d.git</a></p>
-
-<p>Run the command to clone it, fork it, and enjoy!</p>
+<p>Done!</p>
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 </div>
@@ -174,15 +192,21 @@
   
 
 
-<time datetime="2014-01-13T21:24:27-08:00" pubdate data-updated="true">Jan 13<span>th</span>, 2014</time>
+<time datetime="2015-06-02T10:32:09-07:00" pubdate data-updated="true">Jun 2<span>nd</span>, 2015</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/build/'>build,</a>, <a class='category' href='/blog/categories/git/'>git</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/01/13/thoughs-about-alias-in-bashrc/" data-via="" data-counturl="http://lifuzu.com/blog/2014/01/13/thoughs-about-alias-in-bashrc/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/" data-via="" data-counturl="http://lifuzu.com/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -195,10 +219,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/01/10/dev-tech-hot-2004-2/" title="Previous Post: 2014年要火的开发技术（二）">&laquo; 2014年要火的开发技术（二）</a>
+        <a class="basic-alignment left" href="/blog/2015/02/03/playing-with-hadoop-on-dockerbase/" title="Previous Post: Playing with Hadoop on Dockerbase">&laquo; Playing with Hadoop on Dockerbase</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/01/19/be-a-great-developer/" title="Next Post: 如何成为一个伟大的开发者">如何成为一个伟大的开发者 &raquo;</a>
       
     </p>
   </footer>
@@ -305,8 +327,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lifuzu.com/blog/2014/01/13/thoughs-about-alias-in-bashrc/';
-        var disqus_url = 'http://lifuzu.com/blog/2014/01/13/thoughs-about-alias-in-bashrc/';
+        var disqus_identifier = 'http://lifuzu.com/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/';
+        var disqus_url = 'http://lifuzu.com/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/';
         var disqus_script = 'embed.js';
       
     (function () {

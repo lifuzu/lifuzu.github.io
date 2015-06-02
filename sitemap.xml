@@ -137,12 +137,18 @@
         <lastmod>2015-02-03T21:54:09-08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://lifuzu.com/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/
+        </loc>
+        <lastmod>2015-06-02T10:37:11-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://lifuzu.com/blog/archives/</loc>
-        <lastmod>2015-02-03T21:54:09-08:00</lastmod>
+        <lastmod>2015-06-02T10:37:11-07:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/</loc>
-        <lastmod>2015-02-03T21:54:09-08:00</lastmod>
+        <lastmod>2015-06-02T10:37:11-07:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/playard/bashrc.d/</loc>
@@ -154,7 +160,7 @@
     </url>
     <url>
         <loc>http://lifuzu.com/playard/jsoneditor/</loc>
-        <lastmod>2015-02-03T21:54:09-08:00</lastmod>
+        <lastmod>2015-06-02T10:37:11-07:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/robots.txt</loc>

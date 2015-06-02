@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Build, | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/build/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2015-06-02T10:37:15-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Git Command to Find Build Failure Very Quickly]]></title>
+    <link href="http://lifuzu.com/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/"/>
+    <updated>2015-06-02T10:32:09-07:00</updated>
+    <id>http://lifuzu.com/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly</id>
+    <content type="html"><![CDATA[<p>When some changes broke your build during the mid night, how to find the culprit of the failure very quickly? Like this:
+<img src="https://lh3.googleusercontent.com/-20gdQ7Sswwk/VW3cw-UhgWI/AAAAAAAAC04/b3cysga0Cr8/s0/Screen+Shot+2015-06-02+at+9.39.06+AM.png" title="Screen Shot 2015-06-02 at 9.39.06 AM.png" alt="build failure history" /></p>
+
+<p>If you are using git as your version control system, then the short answer is &lsquo;<strong>git bisect</strong>&rsquo;.</p>
+
+<p>As the above screenshot, you know the latest good version is 4.7.0.310, and the earliest bad version is 4.7.0.311, so some changes between the two version failed the build. Then how to use &lsquo;git bisect&rsquo; to help us debug the issue very quickly?</p>
+
+<!--more-->
+
+
+<p>Firstly, checking out the source tree to an environment:
+<code>
+$ git clone ...
+</code>
+Starting the git bisect command:
+<code>
+$ git bisect start
+</code>
+Marking the good version and the bad one with the tag name (or commit id):
+<code>
+$ git bisect good 4.7.0.310
+$ git bisect bad 4.7.0.311
+</code>
+Then git bisect analyzes the changes between, checkout the middle one (bisected) to the current environment and wait for verification. What we need to do now is just to run the build command to get the build result for the snapshot:
+<code>
+$ ./gradlew clean build
+</code>
+If the build failed, then mark it bad:
+<code>
+$ git bisect bad
+</code>
+Git should checkout another version between this one and the good one, bisectedly. Then what we need to do is to run the build command again to get the build result:
+<code>
+$ ./gradlew clean build
+</code>
+If the build is successful, then git should bisect to another version between this one and the latest verified bad one. Until git find which commit failed the build.</p>
+
+<p>Assuming you mark the build is successful, and git find out which commit is the root cause, it should display the commit after the mark command immediately:
+```
+$ git bisect good
+f0810993941d6bc2f4985c9830780f5bc86e0f35 is the first bad commit
+commit f0810993941d6bc2f4985c9830780f5bc86e0f35
+Author: ABC <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#97;&#98;&#x63;&#64;&#97;&#x62;&#x63;&#46;&#x63;&#111;&#x6d;">&#97;&#x62;&#x63;&#64;&#97;&#98;&#x63;&#x2e;&#x63;&#x6f;&#x6d;</a>
+Date:   Tue Jun 2 15:14:09 2015 +0800</p>
+
+<pre><code>ABC-1234: move a function to another class to avoid ClassNotFound if API level &lt; 18
+</code></pre>
+
+<p>:040000 040000 56a19c7814dea9aee78bf3453c223e428a31e451 29a6fbc67b3d1e521683739270b186a86f6f9240 M  abcmoduleA
+:040000 040000 f9045aaf28eef5c250d110c4580c76ed90a642eb 8ddeced2ceaa41a0d93ba8b1f6333976f6104342 M  abcmoduleB
+```</p>
+
+<p>Done!</p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>
