@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>创造力的威胁 - Build and Release</title>
+  <title>Playing With iOS Background Multitasking - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="原文地址：http://orderedlist.com/blog/the-threat-of-creativity/ 设计师往往赞美创造力的概念。那是以前从未存在的一个独特的，原创的想法。这需要想象力、技能、愿景、信心。 但以我的经验，优秀的设计很少有关创建新的东西。所谓的 闪现-灵光 不是发明， &hellip;">
+  <meta name="description" content="In the realm of the background multitasking, Apple has made some significant changes by exposing additional APIs since iOS7.​ iOS7 introduced some &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/blog/2013/12/27/the-threat-of-creativity">
+  <link rel="canonical" href="http://lifuzu.com/blog/2015/08/05/playing-with-ios-background-multitasking">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -70,7 +70,7 @@
   
   <header>
     
-      <h1 class="entry-title">创造力的威胁</h1>
+      <h1 class="entry-title">Playing With iOS Background Multitasking</h1>
     
     
       <p class="meta">
@@ -86,35 +86,62 @@
   
 
 
-<time datetime="2013-12-27T23:02:42-08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
+<time datetime="2015-08-05T22:45:30-07:00" pubdate data-updated="true">Aug 5<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>原文地址：<a href="http://orderedlist.com/blog/the-threat-of-creativity/">http://orderedlist.com/blog/the-threat-of-creativity/</a></p>
+<div class="entry-content"><p><img src="https://possiblemobile.com/wp-content/uploads/2013/09/ios7_dev.png" alt="enter image description here" /></p>
 
-<p>设计师往往赞美创造力的概念。那是以前从未存在的一个独特的，原创的想法。这需要想象力、技能、愿景、信心。</p>
+<p>In the realm of the background multitasking, Apple has made some significant changes by exposing additional APIs since iOS7.​ iOS7 introduced some new background task handlings that help developers achieve some great user experiences, just like schedule the content update some spefice times, or allow the app to launch immediately whenever you send it a special push notification. They are called &lsquo;background app fetch&rsquo; and &lsquo;remote notifications&rsquo; correspondingly.</p>
 
-<p>但以我的经验，优秀的设计很少有关创建新的东西。所谓的 <em>闪现-灵光</em> 不是发明，而是思想的升华。这种感觉惊人地简单，你不会觉得是全新的。而是感觉就像它应该一直是这样。了解了这一点，我要说，最好的设计是来自<strong>纪律</strong>，而不是创造力。</p>
-
-<!-- more -->
+<!--more-->
 
 
-<h3><strong>创意与执行</strong></h3>
+<p>Let&rsquo;s see how to configure the features:</p>
 
-<p>想法很廉价。有问题要解决吗？任何一群聪明的人都可以涌现出一堆可能的想法来解决问题。想出创意和解决方案<strong>绝不是</strong>设计的问题。几乎每一次，都会有<strong>太多的</strong>解决方案提出来。太多的好点子，事实上，多得如果你想将它们全部实现得话，你将面临一个可怕的结果。<em>实施创意的结果是千差万别的。</em></p>
+<p><img src="https://lh3.googleusercontent.com/-DbJXdNazt6U/VcGhOILO4SI/AAAAAAAADeM/hAZE32GW29o/s600/Screen+Shot+2015-08-04+at+10.00.28+PM.png" title="Screen Shot 2015-08-04 at 10.00.28 PM.png" alt="iOS_Background_Configuration" /></p>
 
-<p>创意从来都不是良好设计的障碍。事实上，依靠创造力来解决设计问题经常会导致错误的执行。许多的创意仅仅是许许多多设计路径中的第一步。</p>
+<p>To implement &lsquo;background app fetch&rsquo;, only two steps needed:</p>
 
-<p>对于创意真正有用的执行需要太多的东西，比这个想法本身多得多。它需要全面地理解这个问题，以及所有可能的解决方案。这需要研究、心想、反思、实验、提炼和<strong>纪律</strong>。</p>
+<p><em>1</em>. Set the minimum background fetch interval in the application:didFinishLaunchingWithOptions: method of the AppDelegate:</p>
 
-<p>拒绝不能完全解决问题的好点子是相当重要的。如果你形容一个想法是有趣的，它可能不值得推行。这是设计纪律的艺术。当很多好的想法展示自己，很容易让你变得心烦意乱。不要让好的创意取代伟大的执行力。</p>
+<pre><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Override point for customization after application launch.
+    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    return YES;
+}
+</code></pre>
 
-<h3><strong>聚焦</strong></h3>
+<p><em>2</em>. Implement a new AppDelegate method when the App is background launched called application:performFetchWithCompletionHandler:</p>
 
-<p>因此，设计师的重点不应该放在创意。他们的重点应该放在<strong>真正理解这一问题</strong>，深入而透彻。只有到那时，真正辉煌的解决方案将自己展示出来，很多时候，都是那些最明显的、简单的方法。</p>
+<pre><code>- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"Background Fetch: Called in the background!");
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+</code></pre>
+
+<p> To test the functionality, Xcode provide a very nice method under the menu &lsquo;Debug&rsquo;, called &ldquo;Simulate Background Fetch&rdquo;:</p>
+
+<p><img src="https://lh3.googleusercontent.com/-C0iXBlzT4Fo/VcGhuXcIqCI/AAAAAAAADeY/NOXFTfPl1Bo/s600/Debug_Background_Fetch.png" title="Debug_Background_Fetch.png" alt="enter image description here" /></p>
+
+<p>After selecting the submenu, Xcode will close your application in the simulator, sending it to the background, and call the application:performFetchWithCompletionHandler: that we added. You should have something printed in the console window now, like this (in the red rectangle):</p>
+
+<p><img src="https://lh3.googleusercontent.com/-SAUI2F65duk/VcGh1YdIBII/AAAAAAAADek/KXGv1upNkLc/s600/Screen+Shot+2015-08-04+at+10.07.15+PM.png" title="Screen Shot 2015-08-04 at 10.07.15 PM.png" alt="enter image description here" /></p>
+
+<p>There are more steps to implment &ldquo;remote notification&rdquo;, please refer to the following links:
+<a href="http://www.huffingtonpost.com/dulio-denis/ios-quick-read-implementi_2_b_5351099.html">http://www.huffingtonpost.com/dulio-denis/ios-quick-read-implementi_2_b_5351099.html</a>
+<a href="https://parse.com/tutorials/ios-push-notifications">https://parse.com/tutorials/ios-push-notifications</a>  <br/>
+<a href="https://developer.apple.com/notifications/">https://developer.apple.com/notifications/</a></p>
+
+<p>Here is the github repository for your reference as well:
+<a href="https://github.com/lifuzu/iOSBackground.git">https://github.com/lifuzu/iOSBackground.git</a></p>
+
+<p>Hope this can help you.</p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 </div>
 
 
@@ -137,15 +164,21 @@
   
 
 
-<time datetime="2013-12-27T23:02:42-08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
+<time datetime="2015-08-05T22:45:30-07:00" pubdate data-updated="true">Aug 5<span>th</span>, 2015</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/background/'>background</a>, <a class='category' href='/blog/categories/ios/'>iOS,</a>, <a class='category' href='/blog/categories/multitask/'>multitask</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2013/12/27/the-threat-of-creativity/" data-via="" data-counturl="http://lifuzu.com/blog/2013/12/27/the-threat-of-creativity/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2015/08/05/playing-with-ios-background-multitasking/" data-via="" data-counturl="http://lifuzu.com/blog/2015/08/05/playing-with-ios-background-multitasking/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -158,8 +191,8 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/" title="Previous Post: Using git command to find build failure very quickly">&laquo; Using git command to find build failure very quickly</a>
       
-        <a class="basic-alignment right" href="/blog/2013/12/28/dont-be-interesting/" title="Next Post: 不要有趣">不要有趣 &raquo;</a>
       
     </p>
   </footer>
@@ -266,8 +299,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lifuzu.com/blog/2013/12/27/the-threat-of-creativity/';
-        var disqus_url = 'http://lifuzu.com/blog/2013/12/27/the-threat-of-creativity/';
+        var disqus_identifier = 'http://lifuzu.com/blog/2015/08/05/playing-with-ios-background-multitasking/';
+        var disqus_url = 'http://lifuzu.com/blog/2015/08/05/playing-with-ios-background-multitasking/';
         var disqus_script = 'embed.js';
       
     (function () {

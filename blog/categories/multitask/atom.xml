@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Multitask | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/multitask/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2015-08-05T22:48:43-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Playing With iOS Background Multitasking]]></title>
+    <link href="http://lifuzu.com/blog/2015/08/05/playing-with-ios-background-multitasking/"/>
+    <updated>2015-08-05T22:45:30-07:00</updated>
+    <id>http://lifuzu.com/blog/2015/08/05/playing-with-ios-background-multitasking</id>
+    <content type="html"><![CDATA[<p><img src="https://possiblemobile.com/wp-content/uploads/2013/09/ios7_dev.png" alt="enter image description here" /></p>
+
+<p>In the realm of the background multitasking, Apple has made some significant changes by exposing additional APIs since iOS7.​ iOS7 introduced some new background task handlings that help developers achieve some great user experiences, just like schedule the content update some spefice times, or allow the app to launch immediately whenever you send it a special push notification. They are called &lsquo;background app fetch&rsquo; and &lsquo;remote notifications&rsquo; correspondingly.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s see how to configure the features:</p>
+
+<p><img src="https://lh3.googleusercontent.com/-DbJXdNazt6U/VcGhOILO4SI/AAAAAAAADeM/hAZE32GW29o/s600/Screen+Shot+2015-08-04+at+10.00.28+PM.png" title="Screen Shot 2015-08-04 at 10.00.28 PM.png" alt="iOS_Background_Configuration" /></p>
+
+<p>To implement &lsquo;background app fetch&rsquo;, only two steps needed:</p>
+
+<p><em>1</em>. Set the minimum background fetch interval in the application:didFinishLaunchingWithOptions: method of the AppDelegate:</p>
+
+<pre><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Override point for customization after application launch.
+    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    return YES;
+}
+</code></pre>
+
+<p><em>2</em>. Implement a new AppDelegate method when the App is background launched called application:performFetchWithCompletionHandler:</p>
+
+<pre><code>- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"Background Fetch: Called in the background!");
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+</code></pre>
+
+<p> To test the functionality, Xcode provide a very nice method under the menu &lsquo;Debug&rsquo;, called &ldquo;Simulate Background Fetch&rdquo;:</p>
+
+<p><img src="https://lh3.googleusercontent.com/-C0iXBlzT4Fo/VcGhuXcIqCI/AAAAAAAADeY/NOXFTfPl1Bo/s600/Debug_Background_Fetch.png" title="Debug_Background_Fetch.png" alt="enter image description here" /></p>
+
+<p>After selecting the submenu, Xcode will close your application in the simulator, sending it to the background, and call the application:performFetchWithCompletionHandler: that we added. You should have something printed in the console window now, like this (in the red rectangle):</p>
+
+<p><img src="https://lh3.googleusercontent.com/-SAUI2F65duk/VcGh1YdIBII/AAAAAAAADek/KXGv1upNkLc/s600/Screen+Shot+2015-08-04+at+10.07.15+PM.png" title="Screen Shot 2015-08-04 at 10.07.15 PM.png" alt="enter image description here" /></p>
+
+<p>There are more steps to implment &ldquo;remote notification&rdquo;, please refer to the following links:
+<a href="http://www.huffingtonpost.com/dulio-denis/ios-quick-read-implementi_2_b_5351099.html">http://www.huffingtonpost.com/dulio-denis/ios-quick-read-implementi_2_b_5351099.html</a>
+<a href="https://parse.com/tutorials/ios-push-notifications">https://parse.com/tutorials/ios-push-notifications</a>  <br/>
+<a href="https://developer.apple.com/notifications/">https://developer.apple.com/notifications/</a></p>
+
+<p>Here is the github repository for your reference as well:
+<a href="https://github.com/lifuzu/iOSBackground.git">https://github.com/lifuzu/iOSBackground.git</a></p>
+
+<p>Hope this can help you.</p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>
