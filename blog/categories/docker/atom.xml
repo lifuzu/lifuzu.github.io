@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Docker | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/docker/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2015-10-05T23:00:01-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Wordpress in Docker]]></title>
+    <link href="http://lifuzu.com/blog/2015/10/05/wordpress-in-docker/"/>
+    <updated>2015-10-05T22:52:37-07:00</updated>
+    <id>http://lifuzu.com/blog/2015/10/05/wordpress-in-docker</id>
+    <content type="html"><![CDATA[<p><img src="http://blog.loadimpact.com/wp-content/uploads/2014/12/WordPress-Docker.png" alt="enter image description here" /></p>
+
+<h3>Install docker container</h3>
+
+<p>On Windows/MacOS X, please go to Docker-toolbox: <a href="https://www.docker.com/toolbox">https://www.docker.com/toolbox</a>
+Following the instruction to install docker-toolbox;</p>
+
+<h3>Open the docker quickstart terminal:</h3>
+
+<p><img src="https://lh3.googleusercontent.com/-Ku1FRq1LhCM/VhNc3Asx9RI/AAAAAAAADmk/wW1l3jUqF-g/s600/Screen+Shot+2015-10-05+at+10.30.59+PM.png" title="Screen Shot 2015-10-05 at 10.30.59 PM.png" alt="enter image description here" /></p>
+
+<!-- more -->
+
+
+<h3>Install mysql database</h3>
+
+<p><code>
+$ docker pull mysql
+</code></p>
+
+<h3>Install wordpress application</h3>
+
+<p><code>
+$ docker pull wordpress
+</code></p>
+
+<h3>Compose the application with database, with a file named: <code>docker-compose.yml</code></h3>
+
+<p>```yml
+wordpress:
+  image: wordpress
+  links:</p>
+
+<pre><code>- db:mysql
+</code></pre>
+
+<p>  ports:</p>
+
+<pre><code>- 8080:80
+</code></pre>
+
+<p>db:
+  image: mysql
+  environment:</p>
+
+<pre><code>MYSQL_ROOT_PASSWORD: example
+</code></pre>
+
+<p>```</p>
+
+<h3>Launch the composed service</h3>
+
+<p><code>
+$ docker-compose up
+</code>
+The service should be launched as following:
+<code>console
+db_1        | 2015-10-06 05:13:50 1 [Note] Event Scheduler: Loaded 0 events
+db_1        | 2015-10-06 05:13:50 1 [Note] mysqld: ready for connections.
+db_1        | Version: '5.6.27'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server (GPL)
+wordpress_1 | WordPress not found in /var/www/html - copying now
+wordpress_1 | Complete! WordPress has been successfully copied to /var/www/html
+wordpress_1 | AH00558: apache2: Could not reliably determine the server's fully
+wordpress_1 | [Tue Oct 06 05:15:13.163996 2015] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.10 (Debian) PHP/5.6.14 configured -- resuming normal operations
+wordpress_1 | [Tue Oct 06 05:15:13.164050 2015] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+</code></p>
+
+<h3>Access the service with 2 steps:</h3>
+
+<p>```</p>
+
+<h1>Get your container IP address (from another console):</h1>
+
+<p>$ docker-machine ls # to get the launched container
+NAME      ACTIVE   DRIVER       STATE     URL                         SWARM
+default            virtualbox   Running   tcp://192.168.99.100:2376</p>
+
+<p>$ docker-machine ip default
+192.168.99.100
+<code>
+Now you can open a browser then try to access:
+</code>
+<a href="http://192.168.99.100:8080">http://192.168.99.100:8080</a>
+```
+Done!</p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

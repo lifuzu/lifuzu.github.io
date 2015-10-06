@@ -5,16 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Rename Repository on Gerrit - Build and Release</title>
+  <title>Wordpress in Docker - Build and Release</title>
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Instructions: 1. Move the repository folder on server: 1
-2
-3
-# on gerrit server
-$ cd $site_path/git;
-$ mv old_name.git new_name.git 2. Flush the &hellip;">
+  <meta name="description" content="Install docker container On Windows/MacOS X, please go to Docker-toolbox: https://www.docker.com/toolbox
+Following the instruction to install docker &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,7 +19,7 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit">
+  <link rel="canonical" href="http://lifuzu.com/blog/2015/10/05/wordpress-in-docker">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
@@ -75,7 +71,7 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Rename Repository on Gerrit</h1>
+      <h1 class="entry-title">Wordpress in Docker</h1>
     
     
       <p class="meta">
@@ -91,38 +87,40 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
 
 
-<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+<time datetime="2015-10-05T22:52:37-07:00" pubdate data-updated="true">Oct 5<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-_03bVFvmzzg/U0YvHJPBLCI/AAAAAAAAB4M/SSKXyOR_T3U/s0/diffymute-300x279.png" title="diffymute-300x279.png" alt="Gerrit icon" /></p>
+<div class="entry-content"><p><img src="http://blog.loadimpact.com/wp-content/uploads/2014/12/WordPress-Docker.png" alt="enter image description here" /></p>
 
-<h3>Instructions:</h3>
+<h3>Install docker container</h3>
 
-<p><em>1</em>. Move the repository folder on server:</p>
+<p>On Windows/MacOS X, please go to Docker-toolbox: <a href="https://www.docker.com/toolbox">https://www.docker.com/toolbox</a>
+Following the instruction to install docker-toolbox;</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># on gerrit server</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$site_path</span>/git;
-</span><span class='line'><span class="nv">$ </span>mv old_name.git new_name.git
-</span></code></pre></td></tr></table></div></figure>
+<h3>Open the docker quickstart terminal:</h3>
 
+<p><img src="https://lh3.googleusercontent.com/-Ku1FRq1LhCM/VhNc3Asx9RI/AAAAAAAADmk/wW1l3jUqF-g/s600/Screen+Shot+2015-10-05+at+10.30.59+PM.png" title="Screen Shot 2015-10-05 at 10.30.59 PM.png" alt="enter image description here" /></p>
 
-<p><em>2</em>. Flush the caches on server:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image:</span>
-</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit flush-caches
-</span></code></pre></td></tr></table></div></figure>
+<!-- more -->
 
 
-<p><em>3</em>. Run sql statement to update the changes:</p>
+<h3>Install mysql database</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ docker pull mysql</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Install wordpress application</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ docker pull wordpress</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Compose the application with database, with a file named: <code>docker-compose.yml</code></h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -132,23 +130,78 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># On another client image (need &quot;Access Database&quot; capability):</span>
-</span><span class='line'><span class="nv">$ </span>ssh -p 29418 gerrit.server.com gerrit gsql <span class="o">[</span>Enter<span class="o">]</span>
-</span><span class='line'>gerrit&gt; USE <span class="o">{</span>Database<span class="o">}</span>;
-</span><span class='line'>gerrit&gt; SELECT * FROM changes WHERE <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
-</span><span class='line'><span class="c"># if have more than 1, run the following command to update, otherwise, quit with \q;</span>
-</span><span class='line'>gerrit&gt; UPDATE changes SET <span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;new_name&#39;</span> WHERE
-</span><span class='line'><span class="nv">dest_project_name</span> <span class="o">=</span> <span class="s1">&#39;old_name&#39;</span>;
-</span><span class='line'>gerrit&gt; <span class="se">\q</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">wordpress</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">wordpress</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db:mysql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">8080:80</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">example</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>References:</h3>
+<h3>Launch the composed service</h3>
 
-<ol>
-<li><a href="https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI">https://groups.google.com/forum/#!topic/repo-discuss/ltIxBipUPKI</a></li>
-</ol>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">$ docker-compose up</span>
+</span></code></pre></td></tr></table></div></figure>
 
+
+<p>The service should be launched as following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">db_1        | 2015-10-06 05:13:50 1 [Note] Event Scheduler: Loaded 0 events</span>
+</span><span class='line'><span class="go">db_1        | 2015-10-06 05:13:50 1 [Note] mysqld: ready for connections.</span>
+</span><span class='line'><span class="go">db_1        | Version: &#39;5.6.27&#39;  socket: &#39;/var/run/mysqld/mysqld.sock&#39;  port: 3306  MySQL Community Server (GPL)</span>
+</span><span class='line'><span class="go">wordpress_1 | WordPress not found in /var/www/html - copying now</span>
+</span><span class='line'><span class="go">wordpress_1 | Complete! WordPress has been successfully copied to /var/www/html</span>
+</span><span class='line'><span class="go">wordpress_1 | AH00558: apache2: Could not reliably determine the server&#39;s fully</span>
+</span><span class='line'><span class="go">wordpress_1 | [Tue Oct 06 05:15:13.163996 2015] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.10 (Debian) PHP/5.6.14 configured -- resuming normal operations</span>
+</span><span class='line'><span class="go">wordpress_1 | [Tue Oct 06 05:15:13.164050 2015] [core:notice] [pid 1] AH00094: Command line: &#39;apache2 -D FOREGROUND&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Access the service with 2 steps:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">#</span> Get your container IP address <span class="o">(</span>from another console<span class="o">)</span>:
+</span><span class='line'><span class="gp">$</span> docker-machine ls <span class="c"># to get the launched container</span>
+</span><span class='line'><span class="go">NAME      ACTIVE   DRIVER       STATE     URL                         SWARM</span>
+</span><span class='line'><span class="go">default            virtualbox   Running   tcp://192.168.99.100:2376</span>
+</span><span class='line'>
+</span><span class='line'><span class="gp">$</span> docker-machine ip default
+</span><span class='line'><span class="go">192.168.99.100</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can open a browser then try to access:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">http://192.168.99.100:8080</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Done!</p>
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 </div>
@@ -173,12 +226,12 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
   
 
 
-<time datetime="2014-04-09T22:42:53-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+<time datetime="2015-10-05T22:52:37-07:00" pubdate data-updated="true">Oct 5<span>th</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/gerrit/'>gerrit</a>
+    <a class='category' href='/blog/categories/docker/'>docker</a>, <a class='category' href='/blog/categories/wordpress/'>wordpress</a>
   
 </span>
 
@@ -187,7 +240,7 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/" data-via="" data-counturl="http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2015/10/05/wordpress-in-docker/" data-via="" data-counturl="http://lifuzu.com/blog/2015/10/05/wordpress-in-docker/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -200,10 +253,8 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/04/09/migrate-svn-to-git/" title="Previous Post: migrate svn to git">&laquo; migrate svn to git</a>
+        <a class="basic-alignment left" href="/blog/2015/08/05/playing-with-ios-background-multitasking/" title="Previous Post: Playing with iOS background multitasking">&laquo; Playing with iOS background multitasking</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/04/24/playing-with-git-submodule/" title="Next Post: Playing with git submodule">Playing with git submodule &raquo;</a>
       
     </p>
   </footer>
@@ -310,8 +361,8 @@ $ mv old_name.git new_name.git 2. Flush the &hellip;">
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/';
-        var disqus_url = 'http://lifuzu.com/blog/2014/04/09/rename-repository-on-gerrit/';
+        var disqus_identifier = 'http://lifuzu.com/blog/2015/10/05/wordpress-in-docker/';
+        var disqus_url = 'http://lifuzu.com/blog/2015/10/05/wordpress-in-docker/';
         var disqus_script = 'embed.js';
       
     (function () {
