@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2015-10-05T23:00:01-07:00</updated>
+  <updated>2015-10-07T09:57:51-07:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -59,6 +59,13 @@ wordpress:
 <pre><code>- 8080:80
 </code></pre>
 
+<p>  net: &ldquo;bridge&rdquo;
+  dns:</p>
+
+<pre><code>- 8.8.8.8
+- 4.4.4.4
+</code></pre>
+
 <p>db:
   image: mysql
   environment:</p>
@@ -85,6 +92,36 @@ wordpress_1 | [Tue Oct 06 05:15:13.163996 2015] [mpm_prefork:notice] [pid 1] AH0
 wordpress_1 | [Tue Oct 06 05:15:13.164050 2015] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 </code></p>
 
+<p>Or run as background processes:
+<code>
+$ docker-compose up -d
+</code>
+The output console should like:
+<code>
+Starting wordpress_db_1...
+Starting wordpress_wordpress_1...
+</code></p>
+
+<p>You can take a look the background containers:
+```
+$ docker-compose ps</p>
+
+<pre><code>    Name                       Command               State          Ports         
+</code></pre>
+
+<hr />
+
+<p>wordpress_db_1          /entrypoint.sh mysqld            Up      3306/tcp           <br/>
+wordpress_wordpress_1   /entrypoint.sh apache2-for &hellip;   Up      0.0.0.0:8888->80/tcp
+```</p>
+
+<p>Or stop the composed containers:
+<code>
+$ docker-compose stop
+Stopping wordpress_wordpress_1... done
+Stopping wordpress_db_1... done
+</code></p>
+
 <h3>Access the service with 2 steps:</h3>
 
 <p>```</p>
@@ -103,6 +140,13 @@ Now you can open a browser then try to access:
 <a href="http://192.168.99.100:8080">http://192.168.99.100:8080</a>
 ```
 Done!</p>
+
+<h2>References:</h2>
+
+<ol>
+<li><a href="https://docs.docker.com/compose/">https://docs.docker.com/compose/</a></li>
+</ol>
+
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 ]]></content>

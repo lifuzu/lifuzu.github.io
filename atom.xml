@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2015-10-05T23:00:01-07:00</updated>
+  <updated>2015-10-07T09:57:51-07:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -57,12 +57,22 @@ Following the instruction to install docker-toolbox;</p>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
 </pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">wordpress</span><span class="p-Indicator">:</span>
 </span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">wordpress</span>
 </span><span class='line'>  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
 </span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db:mysql</span>
 </span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
 </span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">8080:80</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="l-Scalar-Plain">net</span><span class="p-Indicator">:</span> <span class="s">&quot;bridge&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">dns</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">8.8.8.8</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">4.4.4.4</span>
 </span><span class='line'>
 </span><span class='line'><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
 </span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql</span>
@@ -99,6 +109,48 @@ Following the instruction to install docker-toolbox;</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Or run as background processes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">$</span> docker-compose up -d
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output console should like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">Starting wordpress_db_1...</span>
+</span><span class='line'><span class="go">Starting wordpress_wordpress_1...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can take a look the background containers:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">$</span> docker-compose ps
+</span><span class='line'><span class="go">        Name                       Command               State          Ports         </span>
+</span><span class='line'><span class="go">-------------------------------------------------------------------------------------</span>
+</span><span class='line'><span class="go">wordpress_db_1          /entrypoint.sh mysqld            Up      3306/tcp             </span>
+</span><span class='line'><span class="go">wordpress_wordpress_1   /entrypoint.sh apache2-for ...   Up      0.0.0.0:8888-&gt;80/tcp </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or stop the composed containers:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">$</span> docker-compose stop
+</span><span class='line'><span class="go">Stopping wordpress_wordpress_1... done</span>
+</span><span class='line'><span class="go">Stopping wordpress_db_1... done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <h3>Access the service with 2 steps:</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -126,6 +178,13 @@ Following the instruction to install docker-toolbox;</p>
 
 
 <p>Done!</p>
+
+<h2>References:</h2>
+
+<ol>
+<li><a href="https://docs.docker.com/compose/">https://docs.docker.com/compose/</a></li>
+</ol>
+
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 ]]></content>
