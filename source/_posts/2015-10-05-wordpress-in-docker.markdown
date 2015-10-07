@@ -32,6 +32,11 @@ wordpress:
   ports:
     - 8080:80
 
+  net: "bridge"
+  dns:
+    - 8.8.8.8
+    - 4.4.4.4
+
 db:
   image: mysql
   environment:
@@ -54,6 +59,33 @@ wordpress_1 | [Tue Oct 06 05:15:13.163996 2015] [mpm_prefork:notice] [pid 1] AH0
 wordpress_1 | [Tue Oct 06 05:15:13.164050 2015] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 ```
 
+Or run as background processes:
+```
+$ docker-compose up -d
+```
+The output console should like:
+```
+Starting wordpress_db_1...
+Starting wordpress_wordpress_1...
+```
+
+You can take a look the background containers:
+```
+$ docker-compose ps
+        Name                       Command               State          Ports         
+-------------------------------------------------------------------------------------
+wordpress_db_1          /entrypoint.sh mysqld            Up      3306/tcp             
+wordpress_wordpress_1   /entrypoint.sh apache2-for ...   Up      0.0.0.0:8888->80/tcp 
+```
+
+Or stop the composed containers:
+```
+$ docker-compose stop
+Stopping wordpress_wordpress_1... done
+Stopping wordpress_db_1... done
+```
+
+
 ### Access the service with 2 steps:
 ```
 # Get your container IP address (from another console):
@@ -69,5 +101,8 @@ Now you can open a browser then try to access:
 http://192.168.99.100:8080
 ```
 Done!
+
+##References:
+1. https://docs.docker.com/compose/
 
 > Written with [StackEdit](https://stackedit.io/).
