@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: WordPress | Build and Release]]></title>
-  <link href="http://lifuzu.com/blog/categories/wordpress/atom.xml" rel="self"/>
+  <title><![CDATA[Category: RESTful | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/restful/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
   <updated>2015-10-08T22:50:27-07:00</updated>
   <id>http://lifuzu.com/</id>

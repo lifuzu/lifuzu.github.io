@@ -9,7 +9,7 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Gollum is a simple wiki system built on top of Git. Gollum wikis are simply Git repositories that adhere to a specific format. Gollum pages may be &hellip;">
+  <meta name="description" content="Prerequisites: You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,175 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/07/setup-mongo-database-master-slave-replication/">Setup Mongo Database Master Slave Replication</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-07T13:58:40-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="http://tapainc.com/images/MongoDB.png" alt="enter image description here" /></p>
+
+<p><strong>Prerequisites</strong>:</p>
+
+<p>You need know the IP or hostname of the Mongo database which should be acted as a master, and you can ping the port 27017 from the mongo database which should be acted as a slave.</p>
+
+<p>Here are some commands might be helpful:</p>
+
+<ul>
+<li>To know the external IP of the server:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl http://checkip.dyndns.org/</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>To ping the server which you want to connect, on the specific port ( for example: 27017 ):</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet 1.2.3.4 27017</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Practices</strong>:</p>
+
+<p>Machine A (Master):
+Run Mongo Daemon as master:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongod --master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Machine B (Slave):
+If mongod is running, which is the default behavior when installed, you should stop it before the following steps:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Stop the mongodb which installed by default</span>
+</span><span class='line'><span class="nv">$ </span>sudo stop mongodb
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run Mongo Daemon as slave:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>mongod --slave
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Probably you need to specify the dbpath, in case you have any disk space limitation:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>sudo mongod --slave --dbpath /data/mongodb/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Run <code>mongo</code> to open a mongo shell, then config for replication:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; use <span class="nb">local</span>
+</span><span class='line'>&gt; db.sources.find<span class="o">()</span>
+</span><span class='line'>&gt; db.sources.insert<span class="o">(</span> <span class="o">{</span> host: &lt;masterhostname&gt; &lt;,only: databasename&gt; <span class="o">}</span> <span class="o">)</span>;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you run <code>show dbs</code> in the mongo shell:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; show dbs
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will find the databasename which we typed behind the <code>only</code> key above displayed.</p>
+
+<p>You may need to run the command multiple times to make sure the replication is going on. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; show dbs
+</span><span class='line'>databasename    17.9453125GB
+</span><span class='line'><span class="nb">local   </span>0.078125GB
+</span><span class='line'>&gt; show dbs
+</span><span class='line'>databasename    19.9443359375GB
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also run the following commands to show the information of the replication on master and slave side:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Master side:</span>
+</span><span class='line'>&gt; rs.printReplicationInfo<span class="o">()</span> <span class="c"># replace &#39;rs&#39; to &#39;db&#39; for the version prior to 2.6</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Slave side:</span>
+</span><span class='line'>&gt; rs.printSlaveReplicationInfo<span class="o">()</span> <span class="c"># same thing as the above command, you need to replace &#39;rs&#39; to &#39;db&#39; if you run the mongodb which version prior to 2.6</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Besides, you can run the following command to get a defail status of the server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; db.serverStatus<span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You might neet to run resync to recover replication:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; use admin
+</span><span class='line'>&gt; db.runCommand<span class="o">(</span> <span class="o">{</span> resync: 1 <span class="o">}</span> <span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>References</strong>:</p>
+
+<ol>
+<li><a href="http://docs.mongodb.org/manual/core/master-slave/">http://docs.mongodb.org/manual/core/master-slave/</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1548,47 +1717,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/25/raft-distributed-consensus-protocol/">Raft - Distributed Consensus Protocol</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-25T11:52:13-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Rafe is a distributed consensus protocol, which allows a collection of processes to maintain consistency even in the face of multiple node failure. The two main tenants of the protocol are leader election and log replication.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/25/raft-distributed-consensus-protocol/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1612,6 +1740,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/10/08/restful-wordpress/">RESTful WordPress</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/10/05/wordpress-in-docker/">Wordpress in Docker</a>
       </li>
     
@@ -1625,10 +1757,6 @@
     
       <li class="post">
         <a href="/blog/2015/02/03/playing-with-hadoop-on-dockerbase/">Playing With Hadoop on Dockerbase</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/02/03/getting-familiar-with-hbase-on-dockerbase/">Getting Familiar With HBase on Dockerbase</a>
       </li>
     
   </ul>

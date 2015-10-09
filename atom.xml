@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2015-10-07T09:57:51-07:00</updated>
+  <updated>2015-10-08T22:50:27-07:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,160 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RESTful WordPress]]></title>
+    <link href="http://lifuzu.com/blog/2015/10/08/restful-wordpress/"/>
+    <updated>2015-10-08T22:36:58-07:00</updated>
+    <id>http://lifuzu.com/blog/2015/10/08/restful-wordpress</id>
+    <content type="html"><![CDATA[<p><img src="http://www.codediesel.com/wp-content/uploads/2015/07/wordpress-rest-api.jpg" alt="enter image description here" />
+This article introduce how to launch and config WordPress at first time, based on the composed WordPress docker container. With the several WordPress plugins, setup the RESTful API and config their permissions to register users, create new posts etc.</p>
+
+<!-- more -->
+
+
+<p>At first, please following the <a href="http://lifuzu.com/blog/2015/10/05/wordpress-in-docker/">previous post</a> to compose the latest WordPress docker container.</p>
+
+<h3>Start the composed WordPress docker container</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Inside the directory contained docker-compose.yml
+</span><span class='line'>$ docker-compose up -d</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should be able to get the container IP address (not localhost, or 127.0.0.1) with the commands:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># 1. to find the launched container
+</span><span class='line'>$ docker-machine ls
+</span><span class='line'>NAME      ACTIVE   DRIVER       STATE     URL                         SWARM
+</span><span class='line'>default            virtualbox   Running   tcp://192.168.99.100:2376
+</span><span class='line'>
+</span><span class='line'># 2. to address the IP address with the name
+</span><span class='line'>$ docker-machine ip default
+</span><span class='line'>192.168.99.100</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now open a browser to access the IP address with the port which set up in the composed yaml file: <code>docker-compose.yml</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://192.168.99.100:8080</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Config WordPress with a blog name and admin account</h3>
+
+<p>At the very beginning, you should get the following web interface:
+<img src="https://lh3.googleusercontent.com/-t0RPSrXRc5c/VhdEXMZ-W3I/AAAAAAAADnE/jSkbOTK9-AE/s600/Screen+Shot+2015-10-08+at+9.28.34+PM.png" title="Screen Shot 2015-10-08 at 9.28.34 PM.png" alt="enter image description here" /></p>
+
+<p>Selecting your favorite language, then click &ldquo;Continue&rdquo;. At the next UI, you have to input some critical information, like site title, the first user name, password and email address. The first user should be the administrator for this installation by default. (You can change them all after the first successful login):</p>
+
+<p><img src="https://lh3.googleusercontent.com/-c2yoHZQahOE/VhdE3jCBemI/AAAAAAAADnQ/ilowua9GOjs/s600/Screen+Shot+2015-10-08+at+9.34.00+PM.png" title="Screen Shot 2015-10-08 at 9.34.00 PM.png" alt="enter image description here" />  <br/>
+After clicking &ldquo;Install WordPress&rdquo; button at bottom, several seconds later, the WordPress is ready on your machine.</p>
+
+<p>Login WordPress with your first user name and password:
+<img src="https://lh3.googleusercontent.com/--QsmbOgVBZs/VhdE--mE81I/AAAAAAAADnc/K0E5hPLukaA/s600/Screen+Shot+2015-10-08+at+9.34.45+PM.png" title="Screen Shot 2015-10-08 at 9.34.45 PM.png" alt="enter image description here" /></p>
+
+<p>Then done, WordPress admin UI is displayed:
+<img src="https://lh3.googleusercontent.com/-ZQ0RrnS4vbY/VhdFDqkfgZI/AAAAAAAADno/G9TOX6DYPgM/s600/Screen+Shot+2015-10-08+at+9.35.03+PM.png" title="Screen Shot 2015-10-08 at 9.35.03 PM.png" alt="enter image description here" /></p>
+
+<h3>Install some plugins for RESTful api</h3>
+
+<p>For mobile development, we have to install some plugins to support RESTful API, which should be used to connect WordPress server from the mobile clients.</p>
+
+<p>The first plugin is &ldquo;JSON API&rdquo;. &ldquo;JSON PAI&rdquo; provides a lot of functions, such as create new posts, remove posts, etc. Click &ldquo;Plugins&rdquo; at the left sidemenu, then &ldquo;Add New&rdquo;:
+<img src="https://lh3.googleusercontent.com/-x6L0YZY6rL4/VhdHr1UqV1I/AAAAAAAADoE/L6VwIAAqZoQ/s600/Screen+Shot+2015-10-08+at+9.46.14+PM.png" title="Screen Shot 2015-10-08 at 9.46.14 PM.png" alt="enter image description here" /></p>
+
+<p>Put the name &ldquo;json api&rdquo; into the search box, push the &ldquo;return&rdquo; on keyboard:
+<img src="https://lh3.googleusercontent.com/-motAYH89BYk/VhdIGTcWlGI/AAAAAAAADoQ/4Aun05CcJgQ/s600/Screen+Shot+2015-10-08+at+9.46.31+PM.png" title="Screen Shot 2015-10-08 at 9.46.31 PM.png" alt="enter image description here" /></p>
+
+<p>Click the &ldquo;Install Now&rdquo; button just below &ldquo;JSON API&rdquo;, WordPress will start to install the plugin. However, after intallation is finish, you have to click the &ldquo;Activate Plugin&rdquo; link as the following image:</p>
+
+<p><img src="https://lh3.googleusercontent.com/-6k_fMuywkbA/VhdIZwoWmOI/AAAAAAAADoc/P0W3GhkddZw/s600/Screen+Shot+2015-10-08+at+9.48.33+PM.png" title="Screen Shot 2015-10-08 at 9.48.33 PM.png" alt="enter image description here" /></p>
+
+<p>Same process for the second plugin &ldquo;JSON API User&rdquo;. This plugin provides some useful functions to register and/or create new user with the RESTful api on WordPress. Eventually, you should get the following picture to make sure the plugins are ready for the next steps here:
+<img src="https://lh3.googleusercontent.com/-DHi_aAoHdro/VhdJTWWJFNI/AAAAAAAADow/qhms7BRvITs/s600/Screen+Shot+2015-10-08+at+9.49.42+PM.png" title="Screen Shot 2015-10-08 at 9.49.42 PM.png" alt="enter image description here" /></p>
+
+<h3>Config the permission for registering user, creating post, etc.</h3>
+
+<p>Once the plugins installed, we still need to config these plugins to activate the functionalities according your requirements. Click &ldquo;Settings&rdquo; from the left sidemenu, then &ldquo;JSON API&rdquo;:
+<img src="https://lh3.googleusercontent.com/-xPKPdWNRCCk/VhdKVPHzwDI/AAAAAAAADpQ/Su0b6JpskBo/s600/Screen+Shot+2015-10-08+at+10.01.56+PM.png" title="Screen Shot 2015-10-08 at 10.01.56 PM.png" alt="enter image description here" /></p>
+
+<p>You should find all but &ldquo;Core&rdquo; functionality need to be &ldquo;Activate&#8221;d, like:
+<img src="https://lh3.googleusercontent.com/-uxMEHqUWApo/VhdLYbjk36I/AAAAAAAADps/T86uIFtR8I0/s600/Screen+Shot+2015-10-08+at+10.03.00+PM.png" title="Screen Shot 2015-10-08 at 10.03.00 PM.png" alt="enter image description here" /></p>
+
+<p>Turn &ldquo;Posts&rdquo; and &ldquo;User&rdquo; on by clicking the link just below them, as:
+<img src="https://lh3.googleusercontent.com/-c6e7DuahoDY/VhdLR61wSVI/AAAAAAAADpg/2x4UvpOoITE/s600/Screen+Shot+2015-10-08+at+10.05.50+PM.png" title="Screen Shot 2015-10-08 at 10.05.50 PM.png" alt="enter image description here" /></p>
+
+<p>After configuring for plugins, we have to set the default new user have the permission to create posts by setting up the default new user as &ldquo;Author&rdquo;. Click &ldquo;Settings&rdquo;, then &ldquo;General&rdquo;, as:
+<img src="https://lh3.googleusercontent.com/-EFUC7X-J8UQ/VhdMR65Ge-I/AAAAAAAADqA/gPaCGoOCUs8/s600/Screen+Shot+2015-10-08+at+10.08.45+PM.png" title="Screen Shot 2015-10-08 at 10.08.45 PM.png" alt="enter image description here" /></p>
+
+<p>Change the &ldquo;New User Default Role&rdquo; to &ldquo;Author&rdquo;:</p>
+
+<p><img src="https://lh3.googleusercontent.com/-CjmyYO739HU/VhdMcIpp51I/AAAAAAAADqM/wtYN5moXL58/s600/Screen+Shot+2015-10-08+at+10.08.57+PM.png" title="Screen Shot 2015-10-08 at 10.08.57 PM.png" alt="enter image description here" /></p>
+
+<p>Don&rsquo;t forget click the button at the bottom of the page to &ldquo;Save Changes&rdquo;.</p>
+
+<h3>Verify the connections</h3>
+
+<p>We need several test cases to verify the connections, basically, just write the test cases, then run them automatically. For simplifying the validation process, I created a repository for the test cases, and leverage Jasmine as the test framework, you have to install nodejs (please refer to my previous blog <a href="http://lifuzu.com/blog/2014/08/20/install-nodejs-using-nvm/">here</a>) then Jasmine-node globally, as:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install jasmine-node -g</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Clone the automation test repository from github:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone https://github.com/lifuzu/capstone4tipcalc.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Enter the <code>tests</code> folder, run the test cases:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd environment/restapi/tests/
+</span><span class='line'>$ jasmine-node .
+</span><span class='line'>......
+</span><span class='line'>
+</span><span class='line'>Finished in 0.88 seconds
+</span><span class='line'>6 tests, 33 assertions, 0 failures, 0 skipped</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you experience any failure, probably you have to modify the file <code>automation_spec.js</code> to your IP address which is different on different host.</p>
+
+<p>You should find some new user created by clicking &ldquo;Users&rdquo; from the left sidemenu, as:
+<img src="https://lh3.googleusercontent.com/-uKNnL1E3jvg/VhdRVZd9HnI/AAAAAAAADrE/Uyl3W_fodRY/s600/Screen+Shot+2015-10-08+at+10.31.07+PM.png" title="Screen Shot 2015-10-08 at 10.31.07 PM.png" alt="enter image description here" /></p>
+
+<p>And new posts by clicking the &ldquo;Posts&rdquo; from the left sidemenu:
+<img src="https://lh3.googleusercontent.com/-aF-czcMgyL4/VhdRiA1T14I/AAAAAAAADrU/DjxRm6WzuFw/s600/Screen+Shot+2015-10-08+at+10.31.27+PM.png" title="Screen Shot 2015-10-08 at 10.31.27 PM.png" alt="enter image description here" /></p>
+
+<p>Or home page here <code>http://192.168.99.100:8080/</code>, as:
+<img src="https://lh3.googleusercontent.com/-wBYkoqqe6Do/VhdSC-QfCZI/AAAAAAAADrg/3eiS0W50IXM/s600/Screen+Shot+2015-10-08+at+10.34.31+PM.png" title="Screen Shot 2015-10-08 at 10.34.31 PM.png" alt="enter image description here" /></p>
+
+<h3>References</h3>
+
+<ol>
+<li><a href="https://wordpress.org/plugins/json-api/">https://wordpress.org/plugins/json-api/</a></li>
+<li><a href="https://wordpress.org/plugins/json-api-user/">https://wordpress.org/plugins/json-api-user/</a></li>
+<li><a href="https://github.com/lifuzu/capstone4tipcalc.git">https://github.com/lifuzu/capstone4tipcalc.git</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Wordpress in Docker]]></title>
@@ -2985,193 +3139,6 @@ Create a symbolic link to enable it</p>
 <p>把执行项目看作为一个旅程，而不是出差可以允许很多事情发生。首先，我们都知道，一个漫长的行程从来没有按计划进行的。轮胎爆掉，汽车故障，道路封闭，绕路，还有其他许多的干扰都会在前进的道路显现出来。因此，让团队根据当前行驶状况进行预测和调整行程是一个更现实的总体行程。其次，如果团队进展比原计划提前，或者他们觉得学习对于旅途取得全面成功有利，团队可以决定绕道而行，沿途观看景点和获得经验，这些都不是最初设想作为计划的一部分。第三，踏上旅途，比按照预先计划好的行程更有趣和有参与感，这有助于保持团队合作精神和完善结果。最后，如果团队 &ndash; 与旅程的老板 &ndash; 认识到有一个不同的但比之前预想的更好的目的地，那就是此行的一个完全可以接受的结果，只要目的符合旅行的宗旨（和合理的费用） 。</p>
 
 <p>这并不是说一个旅程不会完成沿途的重要里程碑，或者说团队因为他们认为合适就可能改变目的地。即使是家庭度假也会有一定的约束和指标。然而，通过将尽可能多的价值放在成功到达目的地的同时，在旅程中取得经验，一个项目很可能会产生一个至少与最初提出的交付物同样重要的：一个踊跃参与和高度活力的团队，这将大大激励下一次的旅程！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Raft - Distributed Consensus Protocol]]></title>
-    <link href="http://lifuzu.com/blog/2014/01/25/raft-distributed-consensus-protocol/"/>
-    <updated>2014-01-25T11:52:13-08:00</updated>
-    <id>http://lifuzu.com/blog/2014/01/25/raft-distributed-consensus-protocol</id>
-    <content type="html"><![CDATA[<p>Rafe is a distributed consensus protocol, which allows a collection of processes to maintain consistency even in the face of multiple node failure. The two main tenants of the protocol are leader election and log replication.</p>
-
-<!-- more -->
-
-
-<h3>Learn Notes</h3>
-
-<h4>Raft &ndash; Distributed Consensus</h4>
-
-<ul>
-<li>State
-
-<ul>
-<li>Follower
-
-<ul>
-<li>up to Candidate, if it can&rsquo;t hear from leader (i.e. stop receiving heartbeats)</li>
-<li>all nodes initial state</li>
-</ul>
-</li>
-<li>Condidate
-
-<ul>
-<li>up to Leader, if it gets votes from a majority of nodes</li>
-<li>down to Follower, if it gets &ldquo;Request Vote&rdquo;</li>
-</ul>
-</li>
-<li>Leader
-
-<ul>
-<li>down to follower, when it sees the higher election term</li>
-<li>all changes to the system go through the leader</li>
-<li>only one in a system</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Activity
-
-<ul>
-<li>Leader Election
-
-<ul>
-<li>1. send &lsquo;Request Vote&rsquo; by Candidate</li>
-<li>2. if the receiving node hasn&rsquo;t voted yet in this term then it votes for the candidate</li>
-<li>3. then the node resets its election timeout</li>
-<li>4. once a candidate has a majority of votes</li>
-<li>5. it becomes leader</li>
-</ul>
-</li>
-<li>Log Replication
-
-<ul>
-<li>1. a client send a change to the leader</li>
-<li>2. the change is appended to the leader&rsquo;s log, uncommited</li>
-<li>3. the change is sent/replicate to the followers on the next heartbeat</li>
-<li>4. an entry is committed on leader once a majority of followers acknowledge it</li>
-<li>5. the leader notifies the followers than the entry is committed</li>
-<li>6. a response is sent to the client</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Message
-
-<ul>
-<li>Append Entries
-
-<ul>
-<li>Original from Leader</li>
-<li>Respond by Followers</li>
-<li>In a intervals specified by the heartbeat timeout</li>
-</ul>
-</li>
-<li>Request Vote
-
-<ul>
-<li>Original from Candidate</li>
-<li>Votes by the receiving nodes (one for each node, at same term)</li>
-<li>Immediately</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Timeout
-
-<ul>
-<li>Election Timeout
-
-<ul>
-<li>the amount of time a follower waits until becoming a candidate</li>
-<li>randomized to be between 150ms and 300ms</li>
-<li>doesn&rsquo;t occur on Leader</li>
-</ul>
-</li>
-<li>Heatbeat Timeout
-
-<ul>
-<li>should be shorter than Election Timeout</li>
-<li>occurs on all nodes</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Guarantee
-
-<ul>
-<li>because: requiring a majority of votes</li>
-<li>only one leader can be elected per term</li>
-</ul>
-</li>
-</ul>
-
-
-<h3>JSON expression</h3>
-
-<p>Here is a json, try to express the node to communicate with Raft protocol:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nt">&quot;message_type&quot;</span><span class="p">:</span> <span class="p">[</span>
-</span><span class='line'>    <span class="s2">&quot;REQUEST_VOTE&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;VOTE&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;APPEND_ENTRIES&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;RESPOND_to_append_entries&quot;</span>
-</span><span class='line'>  <span class="p">],</span>
-</span><span class='line'>  <span class="nt">&quot;heartbeat&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;election&quot;</span><span class="p">:</span> <span class="s2">&quot;random_time(150-300ms)&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;random_string&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;follower&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;send_message&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;to&quot;</span><span class="p">:</span> <span class="s2">&quot;who&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;message_type&quot;</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="nt">&quot;reset_timeout&quot;</span><span class="p">:</span> <span class="s2">&quot;timeout_type: heartbeat|election&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;stop_election&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;leader&quot;</span><span class="p">:</span> <span class="s2">&quot;who&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;term&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;no&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;vote_count&quot;</span><span class="p">:</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Reference:</h3>
-
-<ol>
-<li><a href="https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf">https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf</a></li>
-<li><a href="http://thesecretlivesofdata.com/raft/">http://thesecretlivesofdata.com/raft/</a></li>
-</ol>
-
-
-<blockquote><p>Supported by <a href="http://sourceforge.net/projects/freeplane/">FreePlane</a>, a great mind map editor.
-Supported by <a href="http://jsoneditoronline.org/">JSON Editor Online</a>.
-Supported by <a href="https://github.com/neocotic/html.md">HTML to MD</a>.
-Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 ]]></content>
   </entry>
   
