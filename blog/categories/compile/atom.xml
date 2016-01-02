@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Compile, | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/compile/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2016-01-01T16:00:19-08:00</updated>
+  <updated>2016-01-01T16:07:45-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -36,6 +36,9 @@ gyp ERR! build error
 gyp ERR! stack Error: `make` failed with exit code: 2
 ...
 </code></p>
+
+<!-- more -->
+
 
 <p>Search with Google, found some cues, but not total same. I remember I installed libtool with port to fix a build error before, so the root cause should be two different libtools installed on my macosx:
 <code>

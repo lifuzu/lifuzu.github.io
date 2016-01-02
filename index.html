@@ -127,85 +127,12 @@ npm i --save osmosis libxmljs is one of the dependency of it, which is failed du
 </span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Search with Google, found some cues, but not total same. I remember I installed libtool with port to fix a build error before, so the root cause should be two different libtools installed on my macosx:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ which -a libtool
-</span><span class='line'>/usr/local/bin/libtool
-</span><span class='line'>/usr/bin/libtool</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Verify if installed with <code>port</code>:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ port installed
-</span><span class='line'>The following ports are currently installed:
-</span><span class='line'>  ...
-</span><span class='line'>  libtool @2.4.6_2 (active)
-</span><span class='line'>  ...</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Uninstall the one which <code>port</code> installed:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo port uninstall libtool</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then try to compile libxmljs component:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>...
-</span><span class='line'>3 warnings generated.
-</span><span class='line'>  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
-</span><span class='line'>  LIBTOOL-STATIC Release/xml.a
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/libxmljs.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_attribute.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_document.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_element.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_comment.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_namespace.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_node.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_sax_parser.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_syntax_error.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_text.o
-</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_xpath_context.o
-</span><span class='line'>  SOLINK(target) Release/xmljs.node</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The problem is resolved!</p>
-
-<h3>References:</h3>
-
-<ol>
-<li><a href="https://github.com/Homebrew/homebrew/issues/28442">https://github.com/Homebrew/homebrew/issues/28442</a></li>
-<li><a href="https://github.com/rc0x03/node-osmosis">https://github.com/rc0x03/node-osmosis</a></li>
-</ol>
-
-
-<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -281,7 +208,7 @@ This article introduce how to launch and config WordPress at first time, based o
   </header>
 
 
-  <div class="entry-content"><p><img src="http://blog.loadimpact.com/wp-content/uploads/2014/12/WordPress-Docker.png" alt="enter image description here" /></p>
+  <div class="entry-content"><p><img src="http://johnny.chadda.se/wp-content/uploads/2015/02/docker-wordpress.png" alt="enter image description here" /></p>
 
 <h3>Install docker container</h3>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2016-01-01T16:00:19-08:00</updated>
+  <updated>2016-01-01T16:07:45-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -46,6 +46,9 @@
 </span><span class='line'>gyp ERR! build error 
 </span><span class='line'>gyp ERR! stack Error: `make` failed with exit code: 2
 </span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
 
 
 <p>Search with Google, found some cues, but not total same. I remember I installed libtool with port to fix a build error before, so the root cause should be two different libtools installed on my macosx:</p>
@@ -287,7 +290,7 @@ After clicking &ldquo;Install WordPress&rdquo; button at bottom, several seconds
     <link href="http://lifuzu.com/blog/2015/10/05/wordpress-in-docker/"/>
     <updated>2015-10-05T22:52:37-07:00</updated>
     <id>http://lifuzu.com/blog/2015/10/05/wordpress-in-docker</id>
-    <content type="html"><![CDATA[<p><img src="http://blog.loadimpact.com/wp-content/uploads/2014/12/WordPress-Docker.png" alt="enter image description here" /></p>
+    <content type="html"><![CDATA[<p><img src="http://johnny.chadda.se/wp-content/uploads/2015/02/docker-wordpress.png" alt="enter image description here" /></p>
 
 <h3>Install docker container</h3>
 
