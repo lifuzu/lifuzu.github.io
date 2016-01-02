@@ -5,7 +5,7 @@ date: 2015-10-05 22:52:37 -0700
 comments: true
 categories: docker wordpress
 ---
-![enter image description here](http://blog.loadimpact.com/wp-content/uploads/2014/12/WordPress-Docker.png)
+![enter image description here](http://johnny.chadda.se/wp-content/uploads/2015/02/docker-wordpress.png)
 ### Install docker container
 On Windows/MacOS X, please go to Docker-toolbox: https://www.docker.com/toolbox
 Following the instruction to install docker-toolbox;
