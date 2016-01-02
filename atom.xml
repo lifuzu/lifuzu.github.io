@@ -4,7 +4,7 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2015-10-08T22:50:27-07:00</updated>
+  <updated>2016-01-01T16:00:19-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -12,6 +12,121 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Install Libxmljs Failed on Macosx]]></title>
+    <link href="http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx/"/>
+    <updated>2016-01-01T15:59:11-08:00</updated>
+    <id>http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx</id>
+    <content type="html"><![CDATA[<p>Today I am trying to install osmosis on macosx</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm i --save osmosis</span></code></pre></td></tr></table></div></figure>
+
+
+<p>libxmljs is one of the dependency of it, which is failed during installing, here is the error log:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>...
+</span><span class='line'>3 warnings generated.
+</span><span class='line'>  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
+</span><span class='line'>  LIBTOOL-STATIC Release/xml.a
+</span><span class='line'>libtool: unrecognized option `-static'
+</span><span class='line'>libtool: Try `libtool --help' for more information.
+</span><span class='line'>make: *** [Release/xml.a] Error 1
+</span><span class='line'>gyp ERR! build error 
+</span><span class='line'>gyp ERR! stack Error: `make` failed with exit code: 2
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Search with Google, found some cues, but not total same. I remember I installed libtool with port to fix a build error before, so the root cause should be two different libtools installed on my macosx:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ which -a libtool
+</span><span class='line'>/usr/local/bin/libtool
+</span><span class='line'>/usr/bin/libtool</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Verify if installed with <code>port</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ port installed
+</span><span class='line'>The following ports are currently installed:
+</span><span class='line'>  ...
+</span><span class='line'>  libtool @2.4.6_2 (active)
+</span><span class='line'>  ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Uninstall the one which <code>port</code> installed:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo port uninstall libtool</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then try to compile libxmljs component:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>...
+</span><span class='line'>3 warnings generated.
+</span><span class='line'>  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
+</span><span class='line'>  LIBTOOL-STATIC Release/xml.a
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/libxmljs.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_attribute.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_document.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_element.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_comment.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_namespace.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_node.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_sax_parser.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_syntax_error.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_text.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_xpath_context.o
+</span><span class='line'>  SOLINK(target) Release/xmljs.node</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The problem is resolved!</p>
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://github.com/Homebrew/homebrew/issues/28442">https://github.com/Homebrew/homebrew/issues/28442</a></li>
+<li><a href="https://github.com/rc0x03/node-osmosis">https://github.com/rc0x03/node-osmosis</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RESTful WordPress]]></title>
@@ -3115,30 +3230,6 @@ Create a symbolic link to enable it</p>
 
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[如果瀑布是一次出差，那么敏捷是一段旅行]]></title>
-    <link href="http://lifuzu.com/blog/2014/02/13/waterfall-is-trip-agile-is-journey/"/>
-    <updated>2014-02-13T11:03:12-08:00</updated>
-    <id>http://lifuzu.com/blog/2014/02/13/waterfall-is-trip-agile-is-journey</id>
-    <content type="html"><![CDATA[<p>原文地址：<a href="http://theadaptivepm.wordpress.com/2013/09/10/if-waterfall-is-a-trip-then-agile-is-a-journey/">http://theadaptivepm.wordpress.com/2013/09/10/if-waterfall-is-a-trip-then-agile-is-a-journey/</a>
-<img src="http://cdn.moj.managementisajourney.com/wp-content/uploads/2013/04/Road-Journey.jpg" alt="road journey" />
-一个项目就像是从一个海岸前往另一个海岸开车的旅程。很少有一些比喻能这样形象地表示瀑布/传统和敏捷项目管理方法之间的意识形态差异。</p>
-
-<!--more-->
-
-
-<p>对于一个瀑布/传统项目，主要关注的是如何在时间和预算下到达目的地（仅仅那个目标）。因此，此行的每一步都在计划中详细列出，在行程开始前，酒店要预订，地图要标记，车子要准备等等。每天行驶的距离和地图上的标记进行比较，以校验进度。各天花费的金额与项目的预算进行比较，以确保成本是在容许的范围内，等等。而此行程组织者的任务是确保在过程中这两个指标没有偏离预定的轨道。</p>
-
-<p>听起来并没有很多的乐趣，试图驾驶横越全国并坚持预计的行程计划，同时处理势必会发生的这样那样无数的问题，并纠正偏差就已经让人神经崩溃，真的！然而，对那些经常旅行的人（如卡车司机），通过标准化和可重复性使效率最高是首选策略。</p>
-
-<p>相比之下，一个敏捷项目中，虽然目的是重要的，但在旅途中所学到的东西也是很重要的。因此，一个敏捷项目可能有固定的预算和时间的限制，留给旅游团队来决定每天从A点到B点最好的路程，在给定的时间和预算范围内。如果这是以前做过旅行的团队的第一次尝试 &ndash; 作为产品开发的副产品 &ndash; 显得尤为重要。</p>
-
-<p>把执行项目看作为一个旅程，而不是出差可以允许很多事情发生。首先，我们都知道，一个漫长的行程从来没有按计划进行的。轮胎爆掉，汽车故障，道路封闭，绕路，还有其他许多的干扰都会在前进的道路显现出来。因此，让团队根据当前行驶状况进行预测和调整行程是一个更现实的总体行程。其次，如果团队进展比原计划提前，或者他们觉得学习对于旅途取得全面成功有利，团队可以决定绕道而行，沿途观看景点和获得经验，这些都不是最初设想作为计划的一部分。第三，踏上旅途，比按照预先计划好的行程更有趣和有参与感，这有助于保持团队合作精神和完善结果。最后，如果团队 &ndash; 与旅程的老板 &ndash; 认识到有一个不同的但比之前预想的更好的目的地，那就是此行的一个完全可以接受的结果，只要目的符合旅行的宗旨（和合理的费用） 。</p>
-
-<p>这并不是说一个旅程不会完成沿途的重要里程碑，或者说团队因为他们认为合适就可能改变目的地。即使是家庭度假也会有一定的约束和指标。然而，通过将尽可能多的价值放在成功到达目的地的同时，在旅程中取得经验，一个项目很可能会产生一个至少与最初提出的交付物同样重要的：一个踊跃参与和高度活力的团队，这将大大激励下一次的旅程！</p>
 ]]></content>
   </entry>
   

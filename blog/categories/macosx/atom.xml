@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Macosx | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/macosx/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2016-01-01T16:00:19-08:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Install Libxmljs Failed on Macosx]]></title>
+    <link href="http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx/"/>
+    <updated>2016-01-01T15:59:11-08:00</updated>
+    <id>http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx</id>
+    <content type="html"><![CDATA[<p>Today I am trying to install osmosis on macosx
+<code>
+npm i --save osmosis
+</code>
+libxmljs is one of the dependency of it, which is failed during installing, here is the error log:</p>
+
+<p><code>
+...
+3 warnings generated.
+  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
+  LIBTOOL-STATIC Release/xml.a
+libtool: unrecognized option `-static'
+libtool: Try `libtool --help' for more information.
+make: *** [Release/xml.a] Error 1
+gyp ERR! build error
+gyp ERR! stack Error: `make` failed with exit code: 2
+...
+</code></p>
+
+<p>Search with Google, found some cues, but not total same. I remember I installed libtool with port to fix a build error before, so the root cause should be two different libtools installed on my macosx:
+<code>
+$ which -a libtool
+/usr/local/bin/libtool
+/usr/bin/libtool
+</code>
+Verify if installed with <code>port</code>:
+<code>
+$ port installed
+The following ports are currently installed:
+  ...
+  libtool @2.4.6_2 (active)
+  ...
+</code>
+Uninstall the one which <code>port</code> installed:
+<code>
+$ sudo port uninstall libtool
+</code>
+Then try to compile libxmljs component:
+<code>
+...
+3 warnings generated.
+  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
+  LIBTOOL-STATIC Release/xml.a
+  CXX(target) Release/obj.target/xmljs/src/libxmljs.o
+  CXX(target) Release/obj.target/xmljs/src/xml_attribute.o
+  CXX(target) Release/obj.target/xmljs/src/xml_document.o
+  CXX(target) Release/obj.target/xmljs/src/xml_element.o
+  CXX(target) Release/obj.target/xmljs/src/xml_comment.o
+  CXX(target) Release/obj.target/xmljs/src/xml_namespace.o
+  CXX(target) Release/obj.target/xmljs/src/xml_node.o
+  CXX(target) Release/obj.target/xmljs/src/xml_sax_parser.o
+  CXX(target) Release/obj.target/xmljs/src/xml_syntax_error.o
+  CXX(target) Release/obj.target/xmljs/src/xml_text.o
+  CXX(target) Release/obj.target/xmljs/src/xml_xpath_context.o
+  SOLINK(target) Release/xmljs.node
+</code>
+The problem is resolved!</p>
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://github.com/Homebrew/homebrew/issues/28442">https://github.com/Homebrew/homebrew/issues/28442</a></li>
+<li><a href="https://github.com/rc0x03/node-osmosis">https://github.com/rc0x03/node-osmosis</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

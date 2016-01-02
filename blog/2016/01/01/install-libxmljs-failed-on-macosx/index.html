@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Install Libxmljs Failed on Macosx - Build and Release</title>
+  <meta name="author" content="Richard Lee">
+
+  
+  <meta name="description" content="Today I am trying to install osmosis on macosx 1
+npm i --save osmosis libxmljs is one of the dependency of it, which is failed during installing, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Build and Release</a></h1>
+  
+    <h2>A hacker for work and life.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lifuzu.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <!--<li><a href="/home.html">Home</a></li>-->
+  <li><a href="/">Blog</a></li>
+  <li><a href="/playard/">Playard</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Install Libxmljs Failed on Macosx</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-01-01T15:59:11-08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Today I am trying to install osmosis on macosx</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm i --save osmosis</span></code></pre></td></tr></table></div></figure>
+
+
+<p>libxmljs is one of the dependency of it, which is failed during installing, here is the error log:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>...
+</span><span class='line'>3 warnings generated.
+</span><span class='line'>  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
+</span><span class='line'>  LIBTOOL-STATIC Release/xml.a
+</span><span class='line'>libtool: unrecognized option `-static'
+</span><span class='line'>libtool: Try `libtool --help' for more information.
+</span><span class='line'>make: *** [Release/xml.a] Error 1
+</span><span class='line'>gyp ERR! build error 
+</span><span class='line'>gyp ERR! stack Error: `make` failed with exit code: 2
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Search with Google, found some cues, but not total same. I remember I installed libtool with port to fix a build error before, so the root cause should be two different libtools installed on my macosx:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ which -a libtool
+</span><span class='line'>/usr/local/bin/libtool
+</span><span class='line'>/usr/bin/libtool</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Verify if installed with <code>port</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ port installed
+</span><span class='line'>The following ports are currently installed:
+</span><span class='line'>  ...
+</span><span class='line'>  libtool @2.4.6_2 (active)
+</span><span class='line'>  ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Uninstall the one which <code>port</code> installed:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo port uninstall libtool</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then try to compile libxmljs component:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>...
+</span><span class='line'>3 warnings generated.
+</span><span class='line'>  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
+</span><span class='line'>  LIBTOOL-STATIC Release/xml.a
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/libxmljs.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_attribute.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_document.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_element.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_comment.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_namespace.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_node.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_sax_parser.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_syntax_error.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_text.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_xpath_context.o
+</span><span class='line'>  SOLINK(target) Release/xmljs.node</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The problem is resolved!</p>
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://github.com/Homebrew/homebrew/issues/28442">https://github.com/Homebrew/homebrew/issues/28442</a></li>
+<li><a href="https://github.com/rc0x03/node-osmosis">https://github.com/rc0x03/node-osmosis</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Lee</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-01-01T15:59:11-08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2016</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/compile/'>compile,</a>, <a class='category' href='/blog/categories/libxmljs/'>libxmljs,</a>, <a class='category' href='/blog/categories/macosx/'>macosx</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx/" data-via="" data-counturl="http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/10/08/restful-wordpress/" title="Previous Post: RESTful WordPress">&laquo; RESTful WordPress</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <div id="nrelate_related_placeholder"></div>
+    <script async id="nrelate_loader_script" type="text/javascript" src="http://staticjs.nrcdn.com/common_js/0.52.1/loader.min.js"></script>
+  </section>
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  <div class='social'>
+  <a id="gmail" href="mailto:lifuzu@gmail.com"><span></span>Send an email</a>
+  <a id="github" href="https://github.com/lifuzu"><span></span>@lifuzu</a>
+  <a id="linkedin" href="http://linkedin.com/in/lifuzu"><span></span>Richard Lee</a>
+</div>
+
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Install Libxmljs Failed on Macosx</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/08/restful-wordpress/">RESTful WordPress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/05/wordpress-in-docker/">Wordpress in Docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/05/playing-with-ios-background-multitasking/">Playing With iOS Background Multitasking</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/">Using Git Command to Find Build Failure Very Quickly</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lifuzu">@lifuzu</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lifuzu',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Richard Lee -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'lifuzu';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx/';
+        var disqus_url = 'http://lifuzu.com/blog/2016/01/01/install-libxmljs-failed-on-macosx/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

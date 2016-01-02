@@ -9,7 +9,8 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="This article introduce how to launch and config WordPress at first time, based on the composed WordPress docker container. With the several &hellip;">
+  <meta name="description" content="Today I am trying to install osmosis on macosx 1
+npm i --save osmosis libxmljs is one of the dependency of it, which is failed during installing, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +68,148 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Install Libxmljs Failed on Macosx</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-01-01T15:59:11-08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Today I am trying to install osmosis on macosx</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>npm i --save osmosis</span></code></pre></td></tr></table></div></figure>
+
+
+<p>libxmljs is one of the dependency of it, which is failed during installing, here is the error log:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>...
+</span><span class='line'>3 warnings generated.
+</span><span class='line'>  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
+</span><span class='line'>  LIBTOOL-STATIC Release/xml.a
+</span><span class='line'>libtool: unrecognized option `-static'
+</span><span class='line'>libtool: Try `libtool --help' for more information.
+</span><span class='line'>make: *** [Release/xml.a] Error 1
+</span><span class='line'>gyp ERR! build error 
+</span><span class='line'>gyp ERR! stack Error: `make` failed with exit code: 2
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Search with Google, found some cues, but not total same. I remember I installed libtool with port to fix a build error before, so the root cause should be two different libtools installed on my macosx:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ which -a libtool
+</span><span class='line'>/usr/local/bin/libtool
+</span><span class='line'>/usr/bin/libtool</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Verify if installed with <code>port</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ port installed
+</span><span class='line'>The following ports are currently installed:
+</span><span class='line'>  ...
+</span><span class='line'>  libtool @2.4.6_2 (active)
+</span><span class='line'>  ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Uninstall the one which <code>port</code> installed:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo port uninstall libtool</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then try to compile libxmljs component:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>...
+</span><span class='line'>3 warnings generated.
+</span><span class='line'>  CC(target) Release/obj.target/libxml/vendor/libxml/xpointer.o
+</span><span class='line'>  LIBTOOL-STATIC Release/xml.a
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/libxmljs.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_attribute.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_document.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_element.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_comment.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_namespace.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_node.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_sax_parser.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_syntax_error.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_text.o
+</span><span class='line'>  CXX(target) Release/obj.target/xmljs/src/xml_xpath_context.o
+</span><span class='line'>  SOLINK(target) Release/xmljs.node</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The problem is resolved!</p>
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://github.com/Homebrew/homebrew/issues/28442">https://github.com/Homebrew/homebrew/issues/28442</a></li>
+<li><a href="https://github.com/rc0x03/node-osmosis">https://github.com/rc0x03/node-osmosis</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -474,60 +617,6 @@ In this article, we try to download a file from Internet, show the progress of d
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/01/14/design-a-reuse-and-de-use-modularized-software-system/">Design a Reuse and &#8216;De-use&#8217; Modularized Software System</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-01-14T09:49:13-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="http://www.edmentum.com/sites/edmentum.com/files/solutions/content/building_0.jpg" alt="enter image description here" /></p>
-
-<h2>Design a reuse and &lsquo;de-use&rsquo; modularized software system</h2>
-
-<p><strong>Keywords</strong>: reuse, &lsquo;de-use&rsquo;, minimum equipped interface (MEI), strong cohesion, loose coupling, software engineering</p>
-
-<p>Most of the task on software design are to analyze requirements, decompose functionalities and connect the parts of artifacts to fulfill customer requirements.</p>
-
-<p>This time we focus on decomposition of functionalities. Why we need to decompose the requirements to each small module or package, one of the reasons is to reuse them, another reason, I think, is to &lsquo;de-use&rsquo; them. When we do not need any of modules, we can separate them from system very easily, which also provide much convenience for testing. We can test each of the seperated modules, packages or interfaces isolated, without interference between each other.</p>
-
-<p>The goal of the software design, include architectural design and detail design, is to decompose functionalities with the characteristics of strong cohesive, and loose coupled, which means we need a complete, but most minimal system function set. Interface is a very important element between two systems to access those functionalities, in addition to deployment environment. In fact, we can treat the environment as the interface between system and the system host. So we need a minimum equipped interface (MEI), which refers to Minimum Viable Product (MVP) definition.</p>
-
-<p>To achieve the goal, besides an elegant design blueprint, functional prototyping, we also need supports from configuration management and testing. We should have many different configuration profiles to include or exclude the modules according to the reuse and &lsquo;de-use&rsquo; specifications, which we planned in design. Testing should have different test scenarios to verify and/or validate the interfaces, which are exported by modules or packages according the configuration profiles.</p>
-
-<p>Succeed to DCOM and CORBA, the popular technology so far for designing a strong cohesive and loose coupled interface on cloud is REST, which based on the simple HTTP protocol verbs (GET, PUT, POST, DELETE). REST API is an analogous to SQL for interaction between systems on cloud, the latter provides several common verbs to query and manipulate data with relational database, such as SELECT, INSERT, UPDATE, DELETE, etc.</p>
-
-<p>In a conclusion, as the main task for design, we need to decompose functionalities in order to reuse and &lsquo;de-use&rsquo; modules, which act as a container to host functions. The design goal is to make functionality as most as strong cohesive, and loose coupled. We can leverage configuration management and testing to achieve the design goal. REST interface provides a good practice for designing a strong cohesive, and loose coupled cloud system.</p>
-
-<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -549,6 +638,10 @@ In this article, we try to download a file from Internet, show the progress of d
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Install Libxmljs Failed on Macosx</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/10/08/restful-wordpress/">RESTful WordPress</a>
       </li>
     
@@ -562,10 +655,6 @@ In this article, we try to download a file from Internet, show the progress of d
     
       <li class="post">
         <a href="/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/">Using Git Command to Find Build Failure Very Quickly</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/02/03/playing-with-hadoop-on-dockerbase/">Playing With Hadoop on Dockerbase</a>
       </li>
     
   </ul>
@@ -610,7 +699,7 @@ In this article, we try to download a file from Internet, show the progress of d
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Richard Lee -
+  Copyright &copy; 2016 - Richard Lee -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
