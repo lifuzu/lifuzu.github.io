@@ -159,12 +159,16 @@
         <lastmod>2016-01-01T16:01:51-08:00</lastmod>
     </url>
     <url>
+        <loc>http://lifuzu.com/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/</loc>
+        <lastmod>2016-03-06T23:31:37-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://lifuzu.com/blog/archives/</loc>
-        <lastmod>2016-01-01T16:07:35-08:00</lastmod>
+        <lastmod>2016-03-06T23:31:37-08:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/</loc>
-        <lastmod>2016-01-01T16:07:35-08:00</lastmod>
+        <lastmod>2016-03-06T23:31:37-08:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/playard/bashrc.d/</loc>
@@ -176,7 +180,7 @@
     </url>
     <url>
         <loc>http://lifuzu.com/playard/jsoneditor/</loc>
-        <lastmod>2016-01-01T16:07:35-08:00</lastmod>
+        <lastmod>2016-03-06T23:31:37-08:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/robots.txt</loc>

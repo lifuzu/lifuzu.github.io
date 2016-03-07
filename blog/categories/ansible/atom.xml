@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Xcode | Build and Release]]></title>
-  <link href="http://lifuzu.com/blog/categories/xcode/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Ansible, | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/ansible/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
   <updated>2016-03-06T23:31:49-08:00</updated>
   <id>http://lifuzu.com/</id>

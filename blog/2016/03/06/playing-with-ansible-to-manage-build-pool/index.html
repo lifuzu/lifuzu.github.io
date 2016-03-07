@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Playing With Ansible to Manage Build Pool - Build and Release</title>
+  <meta name="author" content="Richard Lee">
+
+  
+  <meta name="description" content="Ansible is one of the best configuration management system, together with Puppet, Chef, and etc. Ansible makes IT deployment automatic and easier. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lifuzu.com/blog/2016/03/06/playing-with-ansible-to-manage-build-pool">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Build and Release</a></h1>
+  
+    <h2>A hacker for work and life.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lifuzu.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <!--<li><a href="/home.html">Home</a></li>-->
+  <li><a href="/">Blog</a></li>
+  <li><a href="/playard/">Playard</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Playing With Ansible to Manage Build Pool</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-03-06T23:30:26-08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="https://lh3.googleusercontent.com/-5avk7kTPus4/Vt0q8cKjYhI/AAAAAAAAEBU/3hJt7LybC-w/s600/ansible.png" title="ansible.png" alt="Ansible" /></p>
+
+<p>Ansible is one of the best configuration management system, together with Puppet, Chef, and etc. Ansible makes IT deployment automatic and easier. With Ansible, deploying application, managing systems is becoming easier than ever, as well as building a strong foundation for DevOps.&#8221;</p>
+
+<p>This article use Ansible to config and manage Xcode build pool with each steps.</p>
+
+<!-- more -->
+
+
+<h3>Install ansible on Ubuntu</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo apt-get install software-properties-common
+</span><span class='line'>$ sudo apt-add-repository ppa:ansible/ansible
+</span><span class='line'>$ sudo apt-get update
+</span><span class='line'>$ sudo apt-get install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Install brew on Mac OS X server</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Install ansible on all of the server</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install ansible</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Connect all clients from a machine (called controller) which you are using to control all clients</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ssh-genkey -t rsa -b 2048
+</span><span class='line'>$ ssh-copy-id &lt;client_username&gt;@&lt;client_server_address&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>for example (for every client):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ssh-copy-id admin@imac-1.local</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Create hosts document under <code>/etc/ansible/hosts</code> on the controller</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[office:vars]
+</span><span class='line'>admin_user=admin
+</span><span class='line'>
+</span><span class='line'>[sandbox]
+</span><span class='line'>imac-1.local
+</span><span class='line'>
+</span><span class='line'>[office]
+</span><span class='line'>imac-1.local
+</span><span class='line'>imac-2.local</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Config scp over ssh <code>/etc/ansible/ansible.cfg</code> (ref #3)</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[ssh_connection]
+</span><span class='line'>scp_if_ssh=True</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Try to connect all of the clients</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ansible -i hosts ubuntuservers -m ping -u build # specify hosts file
+</span><span class='line'># OR
+</span><span class='line'>$ ansible all -m ping -u admin
+</span><span class='line'>imac-1.local | success &gt;&gt; {
+</span><span class='line'>    "changed": false, 
+</span><span class='line'>    "ping": "pong"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>imac-2.local | success &gt;&gt; {
+</span><span class='line'>    "changed": false, 
+</span><span class='line'>    "ping": "pong"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>cool, looks good for now!</p>
+
+<h3>Create a playbook named <code>hello-ansible.yml</code> under the current folder</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>- hosts: all
+</span><span class='line'>  remote_user: admin
+</span><span class='line'>  gather_facts: False
+</span><span class='line'>  tasks:
+</span><span class='line'>    - name: print to stdout
+</span><span class='line'>      command: echo "Hello"
+</span><span class='line'>      register: hello
+</span><span class='line'>
+</span><span class='line'>    - debug: msg=""
+</span><span class='line'>
+</span><span class='line'>    - name: print Java version
+</span><span class='line'>      shell: "java -version 2&gt;&1"
+</span><span class='line'>      register: java_version
+</span><span class='line'>
+</span><span class='line'>    - debug: msg=""</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Run the playbook we created above</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ansible-playbook hello-ansible.yml</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It should print a lot of outputs, including:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>...
+</span><span class='line'>TASK: [debug msg=""] ************************************************* 
+</span><span class='line'>ok: [imac-1.local] =&gt; {
+</span><span class='line'>    "msg": "{u'changed': True, u'end': u'2015-10-22 14:21:08.740247', u'stdout': u'Hello', u'cmd': [u'echo', u'Hello'], u'start': u'2015-10-22 14:21:08.734848', u'delta': u'0:00:00.005399', u'stderr': u'', u'rc': 0, 'invocation': {'module_name': 'command', 'module_args': 'echo Hello'}, 'stdout_lines': [u'Hello']}"
+</span><span class='line'>}
+</span><span class='line'>ok: [imac-2.local] =&gt; {
+</span><span class='line'>    "msg": "{u'changed': True, u'end': u'2015-10-22 14:21:08.742023', u'stdout': u'Hello', u'cmd': [u'echo', u'Hello'], u'start': u'2015-10-22 14:21:08.736217', u'delta': u'0:00:00.005806', u'stderr': u'', u'rc': 0, 'invocation': {'module_name': 'command', 'module_args': 'echo Hello'}, 'stdout_lines': [u'Hello']}"
+</span><span class='line'>}
+</span><span class='line'>...
+</span><span class='line'>TASK: [debug msg=""] ***************************** 
+</span><span class='line'>ok: [imac-1.local] =&gt; {
+</span><span class='line'>    "msg": "[u'java version 1.8.0_45', u'Java(TM) SE Runtime Environment (build 1.8.0_45-b14)', u'Java HotSpot(TM) 64-Bit Server VM (build 25.45-b02, mixed mode)']"
+</span><span class='line'>}
+</span><span class='line'>ok: [imac-2.local] =&gt; {
+</span><span class='line'>    "msg": "[u'java version 1.8.0_45', u'Java(TM) SE Runtime Environment (build 1.8.0_45-b14)', u'Java HotSpot(TM) 64-Bit Server VM (build 25.45-b02, mixed mode)']"
+</span><span class='line'>}
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>OR</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ansible-playbook -i hosts macports.yaml -K</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>-i</code> specify hosts file, and <code>-K</code> ask for sudo password.</p>
+
+<h3>Create a git repo to store the playbooks</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git init .
+</span><span class='line'>$ git add .
+</span><span class='line'>$ git config --global user.email "&lt;your@email.address&gt;"
+</span><span class='line'>$ git config --global user.name "&lt;Your Name&gt;"
+</span><span class='line'>$ git commit
+</span><span class='line'>$ git remote add origin &lt;git_repo&gt;
+</span><span class='line'>$ git push origin master</span></code></pre></td></tr></table></div></figure>
+
+
+<p>OK, we start to figure out how to manage Xcode from now.</p>
+
+<h3>Create a playbook for xcode-install</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>- hosts: all
+</span><span class='line'>  remote_user: jenkins-admin
+</span><span class='line'>  gather_facts: False
+</span><span class='line'>  tasks:
+</span><span class='line'>    - name: install xcode-install
+</span><span class='line'>      gem:  name=xcode-install state=present</span></code></pre></td></tr></table></div></figure>
+
+
+<p>name it as <code>xcode-install.yaml</code></p>
+
+<p>TODO:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ softwareupdate -l
+</span><span class='line'>$ softwareupdate -i -a
+</span><span class='line'>$ xcode-install list
+</span><span class='line'>$ xcode-install install 7.1
+</span><span class='line'>$ ...</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Reuse the shared module, Ansible call it <code>Role</code> (ref #4)</h3>
+
+<p>&ldquo;Roles in Ansible build on the idea of include files and combine them to form clean, reusable abstractions – they allow you to focus more on the big picture and only dive down into the details when needed.&rdquo;</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo ansible-galaxy install smola.java  # see readme at ref #5</span></code></pre></td></tr></table></div></figure>
+
+
+<p>then create playbook <code>java.yml</code> with the following content:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>- hosts: ubuntuservers
+</span><span class='line'>  remote_user: build
+</span><span class='line'>  sudo: True
+</span><span class='line'>  vars:
+</span><span class='line'>    java_packages:
+</span><span class='line'>      - oracle-java6-installer
+</span><span class='line'>      - oracle-java6-set-default
+</span><span class='line'>
+</span><span class='line'>  roles:
+</span><span class='line'>    - { role: smola.java }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>run the command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ansible-playbook -i hosts java.yml</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="http://brew.sh/">http://brew.sh/</a></li>
+<li><a href="https://github.com/ideasonpurpose/ansible-playbooks">https://github.com/ideasonpurpose/ansible-playbooks</a></li>
+<li><a href="http://stackoverflow.com/questions/23899028/ansible-failed-to-transfer-file-to">http://stackoverflow.com/questions/23899028/ansible-failed-to-transfer-file-to</a></li>
+<li><a href="http://docs.ansible.com/ansible/playbooks_roles.html">http://docs.ansible.com/ansible/playbooks_roles.html</a></li>
+<li><a href="https://github.com/smola/ansible-java-role">https://github.com/smola/ansible-java-role</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Lee</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-03-06T23:30:26-08:00" pubdate data-updated="true">Mar 6<span>th</span>, 2016</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ansible/'>Ansible,</a>, <a class='category' href='/blog/categories/xcode/'>Xcode</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/" data-via="" data-counturl="http://lifuzu.com/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/" title="Previous Post: Install libxmljs failed on macosx">&laquo; Install libxmljs failed on macosx</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <div id="nrelate_related_placeholder"></div>
+    <script async id="nrelate_loader_script" type="text/javascript" src="http://staticjs.nrcdn.com/common_js/0.52.1/loader.min.js"></script>
+  </section>
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  <div class='social'>
+  <a id="gmail" href="mailto:lifuzu@gmail.com"><span></span>Send an email</a>
+  <a id="github" href="https://github.com/lifuzu"><span></span>@lifuzu</a>
+  <a id="linkedin" href="http://linkedin.com/in/lifuzu"><span></span>Richard Lee</a>
+</div>
+
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/">Playing With Ansible to Manage Build Pool</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Install Libxmljs Failed on Macosx</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/08/restful-wordpress/">RESTful WordPress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/05/wordpress-in-docker/">Wordpress in Docker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/05/playing-with-ios-background-multitasking/">Playing With iOS Background Multitasking</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lifuzu">@lifuzu</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lifuzu',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Richard Lee -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'lifuzu';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lifuzu.com/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/';
+        var disqus_url = 'http://lifuzu.com/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

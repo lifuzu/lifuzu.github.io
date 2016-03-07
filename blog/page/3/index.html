@@ -9,7 +9,8 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="原文地址：http://theadaptivepm.wordpress.com/2013/09/10/if-waterfall-is-a-trip-then-agile-is-a-journey/ 一个项目就像是从一个海岸前往另一个海岸开车的旅程。很少有一些比喻能这样形象地表示瀑布/ &hellip;">
+  <meta name="description" content="Instructions: 1. Check out the source tree from SVN server with svn command: 1
+svn co http://my-project.googlecode.com/svn/trunk 2. Generate an &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +68,184 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/09/migrate-svn-to-git/">Migrate Svn to Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-09T22:21:27-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="https://lh6.googleusercontent.com/-zWvC0T4xLUM/U0YqARAy3HI/AAAAAAAAB34/N0PazinANn0/s0/svn_to_git-860x200.png" title="svn_to_git-860x200.png" alt="migrate svn to git" /></p>
+
+<h3>Instructions:</h3>
+
+<p><em>1</em>. Check out the source tree from SVN server with svn command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>svn co http://my-project.googlecode.com/svn/trunk
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>2</em>. Generate an users.txt with the command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>svn log ^/ --xml | grep -P <span class="s2">&quot;^&lt;author&quot;</span> | sort -u | <span class="se">\</span>
+</span><span class='line'>      perl -pe <span class="s1">&#39;s/&lt;author&gt;(.*?)&lt;\/author&gt;/$1 = /&#39;</span> &gt; users.txt
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>   and following the formatting:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>schacon = Scott Chacon &lt;schacon@geemail.com&gt;
+</span><span class='line'>selse = Someo Nelse &lt;selse@geemail.com&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>NOTE</strong>: You can try the script to generate authors list automatically: <a href="https://gist.github.com/lifuzu/9081923#file-findauthors-sh">https://gist.github.com/lifuzu/9081923#file-findauthors-sh</a></p>
+
+<p><em>3</em>. Once the users.txt is ready, then checkout the source tree again with the command &lsquo;git svn clone&rsquo;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git svn clone http://my-project.googlecode.com/svn/ <span class="se">\</span>
+</span><span class='line'>      --authors-file<span class="o">=</span>users.txt --no-metadata -s my_project
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>4</em>. To move the tags to be proper Git tags, run:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git <span class="k">for</span>-each-ref refs/remotes/tags | cut -d / -f 4- | grep -v @ | <span class="k">while </span><span class="nb">read </span>tagname; <span class="k">do </span>git tag <span class="s2">&quot;$tagname&quot;</span> <span class="s2">&quot;tags/$tagname&quot;</span>; git branch -r -d <span class="s2">&quot;tags/$tagname&quot;</span>; <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>5</em>. To move the rest of the references under refs/remotes to be local branches:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git <span class="k">for</span>-each-ref refs/remotes | cut -d / -f 3- | grep -v @ | <span class="k">while </span><span class="nb">read </span>branchname; <span class="k">do </span>git branch <span class="s2">&quot;$branchname&quot;</span> <span class="s2">&quot;refs/remotes/$branchname&quot;</span>; git branch -r -d <span class="s2">&quot;$branchname&quot;</span>; <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>6</em>. Adding the git server as a remote:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git remote add origin git@my-git-server:myrepository.git
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>7</em>. Push all your branches and tags to go up:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git push origin --all
+</span><span class='line'><span class="nv">$ </span>git push origin --tags
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>8</em>. Update the changes from SVN (before you update, please cleanup your local workspace)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git svn fetch
+</span><span class='line'>...
+</span><span class='line'><span class="nv">r81152</span> <span class="o">=</span> c2465633b56d16081334336ee87d506b97d10449 <span class="o">(</span>refs/remotes/git-svn<span class="o">)</span>
+</span><span class='line'><span class="nv">$ </span>git checkout master
+</span><span class='line'><span class="nv">$ </span>git merge remotes/git-svn
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>NOTE</strong>: Sometimes when you run <code>git svn fetch</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>...
+</span><span class='line'><span class="nv">r81217</span> <span class="o">=</span> eb79c770f852f6158a583bb17a8c1a326f7b4e03 <span class="o">(</span>refs/remotes/trunk<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you need to run:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git checkout master
+</span><span class='line'><span class="nv">$ </span>git merge remotes/trunk
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>9</em>. Then check them into GIT</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git log <span class="c"># should have some changes merged from SVN</span>
+</span><span class='line'><span class="nv">$ </span>git push origin master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>10</em>. If you have a temporary migration branch you modified something on that, then you need rebase the changes on master to migration:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git checkout migration
+</span><span class='line'><span class="nv">$ </span>git rebase master  <span class="c"># fix the conflicts if have</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>11</em>. Finally, you need merge the changes on migration, fast forward, since you have rebased.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git checkout master
+</span><span class='line'><span class="nv">$ </span>git merge migration
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That is it!</p>
+
+<h3>Reference:</h3>
+
+<ol>
+<li><a href="http://git-scm.com/book/en/Git-and-Other-Systems-Migrating-to-Git">http://git-scm.com/book/en/Git-and-Other-Systems-Migrating-to-Git</a></li>
+<li><a href="http://git-scm.com/book/ch3-6.html">http://git-scm.com/book/ch3-6.html</a></li>
+<li><a href="http://stackoverflow.com/questions/16565991/keep-svn-repository-in-sync-with-git-one">http://stackoverflow.com/questions/16565991/keep-svn-repository-in-sync-with-git-one</a></li>
+<li><a href="http://stackoverflow.com/questions/5241898/is-a-bidrectional-git-svn-sync-both-writable-possible">http://stackoverflow.com/questions/5241898/is-a-bidrectional-git-svn-sync-both-writable-possible</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -590,55 +769,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/07/the-first-1000-users-are-easier-then-you-think/">开始的1000个用户比你想象的容易</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-07T00:15:20-08:00" pubdate data-updated="true">Jan 7<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文地址：<a href="http://thenextweb.com/entrepreneur/2014/01/05/first-1000-users-easier-think/">http://thenextweb.com/entrepreneur/2014/01/05/first-1000-users-easier-think/</a></p>
-
-<p><img src="http://cdn1.tnwcdn.com/wp-content/blogs.dir/1/files/2012/01/store-657x245.jpg" alt="The first 1,000 users are easier than you think " /></p>
-
-<p>这可能听起来很奇怪，但创造一些伟大的事情是作为一个企业家最简单的部分。难的是让客户对你的产品感到兴奋，就像你自己那样。</p>
-
-<p>获得开始的1000个用户是一道坎，大多数初创企业和小企业都知道。<a href="https://www.lob.com/">Lob</a>的团队，这是一家通过一个简单的API把商业印刷和邮件的基础架构设置到云中的公司，也遇到了这个同样的问题。</p>
-
-<p>这里有一些简单的窍门，Lob团队用来吸引他们的开始1,000家客户，并保持公司的成长，远远超出了最初的规模：</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/07/the-first-1000-users-are-easier-then-you-think/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -662,6 +792,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/">Playing With Ansible to Manage Build Pool</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Install Libxmljs Failed on Macosx</a>
       </li>
     
@@ -675,10 +809,6 @@
     
       <li class="post">
         <a href="/blog/2015/08/05/playing-with-ios-background-multitasking/">Playing With iOS Background Multitasking</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/">Using Git Command to Find Build Failure Very Quickly</a>
       </li>
     
   </ul>
