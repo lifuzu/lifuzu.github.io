@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ansible, | Build and Release]]></title>
+  <title><![CDATA[Category: Ansible | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/ansible/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2016-03-06T23:31:49-08:00</updated>
+  <updated>2016-03-07T09:48:59-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -20,9 +20,9 @@
     <id>http://lifuzu.com/blog/2016/03/06/playing-with-ansible-to-manage-build-pool</id>
     <content type="html"><![CDATA[<p><img src="https://lh3.googleusercontent.com/-5avk7kTPus4/Vt0q8cKjYhI/AAAAAAAAEBU/3hJt7LybC-w/s600/ansible.png" title="ansible.png" alt="Ansible" /></p>
 
-<p>Ansible is one of the best configuration management system, together with Puppet, Chef, and etc. Ansible makes IT deployment automatic and easier. With Ansible, deploying application, managing systems is becoming easier than ever, as well as building a strong foundation for DevOps."</p>
+<p>Ansible is one of the best configuration management system, together with Puppet, Chef, and etc. Ansible makes IT deployment automatic and easy. With Ansible, deploying application, managing systems is becoming easier than ever, as well as building a strong foundation for DevOps.</p>
 
-<p>This article use Ansible to config and manage Xcode build pool with each steps.</p>
+<p>This article use Ansible to config and manage Xcode build pool step by step.</p>
 
 <!-- more -->
 
