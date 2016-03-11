@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Build, | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/build/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2016-03-07T09:48:59-08:00</updated>
+  <updated>2016-03-11T09:59:36-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Lee]]></name>
@@ -60,7 +60,7 @@ If the build is successful, then git should bisect to another version between th
 $ git bisect good
 f0810993941d6bc2f4985c9830780f5bc86e0f35 is the first bad commit
 commit f0810993941d6bc2f4985c9830780f5bc86e0f35
-Author: ABC <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x61;&#x62;&#99;&#x40;&#x61;&#98;&#x63;&#46;&#x63;&#111;&#x6d;">&#97;&#98;&#x63;&#x40;&#97;&#98;&#x63;&#x2e;&#x63;&#111;&#x6d;</a>
+Author: ABC <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x61;&#x62;&#x63;&#64;&#x61;&#98;&#99;&#46;&#99;&#111;&#109;">&#x61;&#98;&#x63;&#x40;&#97;&#98;&#99;&#x2e;&#99;&#111;&#109;</a>
 Date:   Tue Jun 2 15:14:09 2015 +0800</p>
 
 <pre><code>ABC-1234: move a function to another class to avoid ClassNotFound if API level &lt; 18
