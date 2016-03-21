@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Jenkins | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/jenkins/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2016-03-21T11:49:24-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Lee]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Feeding Build Logs Into Elasticsearch With Logstash on Jenkins]]></title>
+    <link href="http://lifuzu.com/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/"/>
+    <updated>2016-03-21T11:47:26-07:00</updated>
+    <id>http://lifuzu.com/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins</id>
+    <content type="html"><![CDATA[<p><img src="https://lh3.googleusercontent.com/-AdsV-jHNTfA/VvBBBCryniI/AAAAAAAAEEk/LctcadsOSwAR2lnqdOxpxJUQdgurnCbHA/s600/BuildLogCollectionPipeline+%25282%2529.png" title="BuildLogCollectionPipeline &#40;2&#41;.png" alt="enter image description here" /></p>
+
+<p>Elasticsearch platform is designed to take data from any source and as a build guy, we create a lot of metadata every day, across Android, iOS, Windows platform, such as compiler warnings, errors, lint message, unit test reports, etc. Is it possible to collect such data, then store into Elasticsearch with Logstash plugins, then visualize them with Kibana?</p>
+
+<p>In this article, we setup an Elasticsearch instance very quickly, with the support of elastic cloud, then config the Logstash plugin on Jenkins to feed log data into Elasticsearch space, then display the message with Kibana.</p>
+
+<!-- more -->
+
+
+<h3>Create elasticsearch instance on elastic cloud:</h3>
+
+<p><img src="https://lh3.googleusercontent.com/-xgIACl1UHFM/VuItxKcMS3I/AAAAAAAAECA/N78QxZachx0aMysdbsfY3VtcRgp40M6Xw/s600/Screen+Shot+2016-03-10+at+6.30.03+PM.png" title="Screen Shot 2016-03-10 at 6.30.03 PM.png" alt="enter image description here" /></p>
+
+<h3>Install logstash plugin on Jenkins with Plugin Manager:</h3>
+
+<p><img src="https://lh3.googleusercontent.com/-fbTQCm8VCIo/VuIs5Qk7j5I/AAAAAAAAEBw/J_kEmkW-gf0Shr6Hi7GbuXYAoxVy-7GrQ/s1200/Screen+Shot+2016-03-10+at+6.25.34+PM.png" title="Screen Shot 2016-03-10 at 6.25.34 PM.png" alt="enter image description here" /></p>
+
+<h3>Config logstash plugin as an agent:</h3>
+
+<p><img src="https://lh3.googleusercontent.com/-2XN3VyQvZhE/VuIt8XeDuLI/AAAAAAAAECI/SMd98pqVqdcpxZoYsFU4BNYZ8GQJIcWyw/s600/Screen+Shot+2016-03-10+at+6.28.10+PM.png" title="Screen Shot 2016-03-10 at 6.28.10 PM.png" alt="enter image description here" /></p>
+
+<h3>Config logstash for each project:</h3>
+
+<p><img src="https://lh3.googleusercontent.com/-swBgeznEUNY/VuIuLocDnOI/AAAAAAAAECQ/pyA-RBdpM7cTVCOfaqo6e6uKY7P_fiNPg/s600/Screen+Shot+2016-03-10+at+6.31.52+PM.png" title="Screen Shot 2016-03-10 at 6.31.52 PM.png" alt="enter image description here" />
+<img src="https://lh3.googleusercontent.com/-9YqKZ39g248/VuIuQkOTPeI/AAAAAAAAECY/7J-PSi5O9UoDItYQC5j1kdPT_Yy91QHjw/s600/Screen+Shot+2016-03-10+at+6.31.39+PM.png" title="Screen Shot 2016-03-10 at 6.31.39 PM.png" alt="enter image description here" /></p>
+
+<h3>Search message from Kibana Web UI:</h3>
+
+<p><img src="https://lh3.googleusercontent.com/-VvwIFnL0PLQ/VuIu_plyA4I/AAAAAAAAECw/k-2xBoXGfNI_AH4oRwZdPCdu5XVBRAQBA/s600/Screen+Shot+2016-03-10+at+6.35.05+PM.png" title="Screen Shot 2016-03-10 at 6.35.05 PM.png" alt="enter image description here" /></p>
+
+<h3>Some useful URL to check status of elasticsearch:</h3>
+
+<p>Check health of elasticsearch:
+<code>
+http://02bb48d4a19b37090ea4ef33d4a4e596.us-west-1.aws.found.io:9200/_cat/health?v
+</code>
+Check indices (tables/contents) on elasticsearch:
+<code>
+http://02bb48d4a19b37090ea4ef33d4a4e596.us-west-1.aws.found.io:9200/_cat/indices?v
+</code></p>
+
+<h3>References:</h3>
+
+<ol>
+<li><a href="https://www.elastic.co/cloud">https://www.elastic.co/cloud</a></li>
+<li><a href="https://wiki.jenkins-ci.org/display/JENKINS/Logstash+Plugin">https://wiki.jenkins-ci.org/display/JENKINS/Logstash+Plugin</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

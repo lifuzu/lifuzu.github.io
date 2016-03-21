@@ -9,7 +9,7 @@
   <meta name="author" content="Richard Lee">
 
   
-  <meta name="description" content="Ansible is one of the best configuration management system, together with Puppet, Chef, and etc. Ansible makes IT deployment automatic and easy. &hellip;">
+  <meta name="description" content="Elasticsearch platform is designed to take data from any source and as a build guy, we create a lot of metadata every day, across Android, iOS, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/">Feeding Build Logs Into Elasticsearch With Logstash on Jenkins</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-03-21T11:47:26-07:00" pubdate data-updated="true">Mar 21<span>st</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="https://lh3.googleusercontent.com/-AdsV-jHNTfA/VvBBBCryniI/AAAAAAAAEEk/LctcadsOSwAR2lnqdOxpxJUQdgurnCbHA/s600/BuildLogCollectionPipeline+%25282%2529.png" title="BuildLogCollectionPipeline &#40;2&#41;.png" alt="enter image description here" /></p>
+
+<p>Elasticsearch platform is designed to take data from any source and as a build guy, we create a lot of metadata every day, across Android, iOS, Windows platform, such as compiler warnings, errors, lint message, unit test reports, etc. Is it possible to collect such data, then store into Elasticsearch with Logstash plugins, then visualize them with Kibana?</p>
+
+<p>In this article, we setup an Elasticsearch instance very quickly, with the support of elastic cloud, then config the Logstash plugin on Jenkins to feed log data into Elasticsearch space, then display the message with Kibana.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -489,51 +534,6 @@ Have no any idea what to do today after dinner, although I have some homeworks n
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler/">Programming for Andorid: Synchronize Actions With Handler</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-01-19T20:32:10-08:00" pubdate data-updated="true">Jan 19<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="http://rxtracepz.dirkrodgersconsu.netdna-cdn.com/wp-content/uploads/2010/02/synchronized-swimmers.jpg" alt="enter image description here" /></p>
-
-<p>Sometimes, we need to synchronize the actions in a series but not in parallel. For example, we need to download an image then display it on Google Gallery. It seems we cannot display a partial image during downloading. OK, there is another story, probably, we will mention later, for displaying image with a coarse one then detailed the clear picture. Now let&rsquo;s fix how to download an image then display it, without manual interference.</p>
-
-<p>This program bases on the last one: <a href="http://lifuzu.com/blog/2015/01/16/programming-for-android-download/">Programming for Android: Download, Progressbar and FileProvider</a></p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -555,6 +555,10 @@ Have no any idea what to do today after dinner, although I have some homeworks n
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/">Feeding Build Logs Into Elasticsearch With Logstash on Jenkins</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/">Playing With Ansible to Manage Build Pool</a>
       </li>
     
@@ -568,10 +572,6 @@ Have no any idea what to do today after dinner, although I have some homeworks n
     
       <li class="post">
         <a href="/blog/2015/10/05/wordpress-in-docker/">Wordpress in Docker</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/08/05/playing-with-ios-background-multitasking/">Playing With iOS Background Multitasking</a>
       </li>
     
   </ul>

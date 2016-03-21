@@ -163,12 +163,18 @@
         <lastmod>2016-03-07T09:41:45-08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://lifuzu.com/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/
+        </loc>
+        <lastmod>2016-03-21T11:49:21-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://lifuzu.com/blog/archives/</loc>
-        <lastmod>2016-03-07T09:41:45-08:00</lastmod>
+        <lastmod>2016-03-21T11:49:21-07:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/</loc>
-        <lastmod>2016-03-07T09:41:45-08:00</lastmod>
+        <lastmod>2016-03-21T11:49:21-07:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/playard/bashrc.d/</loc>
@@ -180,7 +186,7 @@
     </url>
     <url>
         <loc>http://lifuzu.com/playard/jsoneditor/</loc>
-        <lastmod>2016-03-07T09:41:45-08:00</lastmod>
+        <lastmod>2016-03-21T11:49:21-07:00</lastmod>
     </url>
     <url>
         <loc>http://lifuzu.com/robots.txt</loc>
