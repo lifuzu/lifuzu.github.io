@@ -4,14 +4,49 @@
   <title><![CDATA[Build and Release]]></title>
   <link href="http://lifuzu.com/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2016-03-21T11:49:24-07:00</updated>
+  <updated>2016-04-13T10:01:07-07:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
-    <name><![CDATA[Richard Lee]]></name>
+    <name><![CDATA[Richard Li]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Continuous Integration/Delivery Pipeline]]></title>
+    <link href="http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/"/>
+    <updated>2016-04-13T09:42:18-07:00</updated>
+    <id>http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline</id>
+    <content type="html"><![CDATA[<p><img src="https://lh3.googleusercontent.com/-vYfGCI7QdNQ/Vw52k6Q4XdI/AAAAAAAAEHg/FrNo5qzDlYY8QcdY0bzU4FOf6EuTUs-XgCLcB/s600/Gas-Pipelines-in-Columbia.jpg" title="Gas-Pipelines-in-Columbia.jpg" alt="enter image description here" /></p>
+
+<p>Based on several software release engineering system, such as: Jenkins (include a bunch of Plugins), Gerrit, Git, Mocha, Nodejs and etc, we create a continuous integration pipeline to control source code, validation change(s), build artifact, report test results and deploy the artifacts to various deployment servers, just as: dev, staging, production (all groups). Here is a draft diagram we are trying to implement for Content Stream Application Service:</p>
+
+<!-- more -->
+
+
+<p><img src="https://lh3.googleusercontent.com/-H3FwqFg7z38/Vw50_hFK4tI/AAAAAAAAEHU/1lUUkyBENdUb64L1LA640DUUNewtn03dwCLcB/s1000/Continuous+Integration+Pipeline.png" title="Continuous Integration Pipeline.png" alt="Continuous Integration Pipeline" /></p>
+
+<p>Here are some explanations for a specific job of content stream, for example:</p>
+
+<ul>
+<li>The job contentstream-<strong>patchset</strong> will be triggered automatically when
+one change is being pushed to Gerrit for review, it will set verify
+bit ‘+1’ for the review if the build successfully; or warn the
+submitter of the change if the build fail;</li>
+<li>When any change is merged to the branch, for example, ‘master’, the
+job contentstream-<strong>master</strong> will be triggered automatically to verify
+the change if it affects the branch;</li>
+<li>The job contentstream-master-<strong>release</strong> is to make tag, push the tag to server
+to label a version of source code, which should be deployed to
+deployment servers some time later;</li>
+<li>The deployment jobs, like contentstream-master-<strong>deploy</strong>-to-* will deploy the source code to the dev|stag|prod (group1, group2, &hellip;) servers according to the version which labeled on the release job as above;</li>
+</ul>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Feeding Build Logs Into Elasticsearch With Logstash on Jenkins]]></title>
@@ -3240,153 +3275,6 @@ Create a symbolic link to enable it</p>
 <li><a href="http://www.blackpepper.co.uk/generating-new-jenkins-jobs-from-templates-and-parameterised-builds/">http://www.blackpepper.co.uk/generating-new-jenkins-jobs-from-templates-and-parameterised-builds/</a></li>
 <li><a href="http://javadoc.jenkins-ci.org/jenkins/model/Jenkins.html">http://javadoc.jenkins-ci.org/jenkins/model/Jenkins.html</a></li>
 <li><a href="https://github.com/jenkinsci/jenkins">https://github.com/jenkinsci/jenkins</a></li>
-</ol>
-
-
-<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Playing With Git Submodule]]></title>
-    <link href="http://lifuzu.com/blog/2014/04/24/playing-with-git-submodule/"/>
-    <updated>2014-04-24T22:01:03-07:00</updated>
-    <id>http://lifuzu.com/blog/2014/04/24/playing-with-git-submodule</id>
-    <content type="html"><![CDATA[<p><img src="https://lh4.googleusercontent.com/-GW4P0d8zZdM/U1nrsDaCgiI/AAAAAAAAB5I/4mTt3xjfmFo/s0/xlotte-git.jpg" title="xlotte-git.jpg" alt="enter image description here" /></p>
-
-<h3>Intructions:</h3>
-
-<ul>
-<li>add a submodule</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule add -b BRANCH ssh://REPO_URL/REPO_PATH SUBMODULE_PATH
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;add a submodule at SUBMODULE_PATH&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>clone the project with submodule(s)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git clone ssh://REPO_URL/REPO_PATH PROJECT
-</span><span class='line'><span class="nb">cd </span>PROJECT
-</span><span class='line'><span class="nv">$ </span>git submodule update --init --rebase
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>get submodule status</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule status
-</span><span class='line'><span class="nv">$ </span>git submodule foreach git branch -a
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>checkout all submodule to a branch defined in .gitmodule (which means we specify the branch when we add the submodule with &lsquo;-b BRANCH&rsquo;)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule foreach -q --recursive <span class="s1">&#39;branch=&quot;$(git config -f $toplevel/.gitmodules submodule.$name.branch)&quot;; git checkout $branch&#39;</span>
-</span><span class='line'><span class="c"># OR a short version</span>
-</span><span class='line'><span class="nv">$ </span>git submodule foreach git checkout master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>pull the latest master for all of the submodule</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule -q foreach git pull -q origin master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>develop in submodule</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Make your changes in submoduleA</span>
-</span><span class='line'><span class="nv">$ </span><span class="nb">cd </span>submoduleA
-</span><span class='line'><span class="nv">$ </span>git add .
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Updated the submoduleA&quot;</span>
-</span><span class='line'><span class="nv">$ </span>git push origin BRANCH
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>sync to project</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>PROJECT
-</span><span class='line'><span class="nv">$ </span>git pull
-</span><span class='line'><span class="nv">$ </span>git submodule update --rebase
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>manually update the project to track submodule (Gerrit submodule description commit the track automatically)</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd </span>PROJECT
-</span><span class='line'><span class="nv">$ </span>git add submoduleA
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Updated submodule a.&quot;</span>
-</span><span class='line'><span class="nv">$ </span>git push origin BRANCH_NAME
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>deinit, and remove a submodule</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git submodule deinit SUBMODULE_PATH
-</span><span class='line'><span class="nv">$ </span>git rm SUBMODULE_PATH
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;remove the submodule at SUBMODULE_PATH&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>References:</h3>
-
-<ol>
-<li><a href="http://git-scm.com/docs/git-submodule">http://git-scm.com/docs/git-submodule</a></li>
-<li><a href="http://git-scm.com/docs/git-rm.html">http://git-scm.com/docs/git-rm.html</a></li>
-<li><a href="http://stackoverflow.com/questions/8642668/how-to-make-submodule-with-detached-head-to-be-attached-to-actual-head">http://stackoverflow.com/questions/8642668/how-to-make-submodule-with-detached-head-to-be-attached-to-actual-head</a></li>
-<li><a href="http://www.vogella.com/tutorials/Git/article.html#submodules">http://www.vogella.com/tutorials/Git/article.html#submodules</a></li>
 </ol>
 
 

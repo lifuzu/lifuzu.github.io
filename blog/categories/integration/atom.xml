@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Integration | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/integration/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2016-04-13T10:01:07-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Li]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Continuous Integration/Delivery Pipeline]]></title>
+    <link href="http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/"/>
+    <updated>2016-04-13T09:42:18-07:00</updated>
+    <id>http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline</id>
+    <content type="html"><![CDATA[<p><img src="https://lh3.googleusercontent.com/-vYfGCI7QdNQ/Vw52k6Q4XdI/AAAAAAAAEHg/FrNo5qzDlYY8QcdY0bzU4FOf6EuTUs-XgCLcB/s600/Gas-Pipelines-in-Columbia.jpg" title="Gas-Pipelines-in-Columbia.jpg" alt="enter image description here" /></p>
+
+<p>Based on several software release engineering system, such as: Jenkins (include a bunch of Plugins), Gerrit, Git, Mocha, Nodejs and etc, we create a continuous integration pipeline to control source code, validation change(s), build artifact, report test results and deploy the artifacts to various deployment servers, just as: dev, staging, production (all groups). Here is a draft diagram we are trying to implement for Content Stream Application Service:</p>
+
+<!-- more -->
+
+
+<p><img src="https://lh3.googleusercontent.com/-H3FwqFg7z38/Vw50_hFK4tI/AAAAAAAAEHU/1lUUkyBENdUb64L1LA640DUUNewtn03dwCLcB/s1000/Continuous+Integration+Pipeline.png" title="Continuous Integration Pipeline.png" alt="Continuous Integration Pipeline" /></p>
+
+<p>Here are some explanations for a specific job of content stream, for example:</p>
+
+<ul>
+<li>The job contentstream-<strong>patchset</strong> will be triggered automatically when
+one change is being pushed to Gerrit for review, it will set verify
+bit ‘+1’ for the review if the build successfully; or warn the
+submitter of the change if the build fail;</li>
+<li>When any change is merged to the branch, for example, ‘master’, the
+job contentstream-<strong>master</strong> will be triggered automatically to verify
+the change if it affects the branch;</li>
+<li>The job contentstream-master-<strong>release</strong> is to make tag, push the tag to server
+to label a version of source code, which should be deployed to
+deployment servers some time later;</li>
+<li>The deployment jobs, like contentstream-master-<strong>deploy</strong>-to-* will deploy the source code to the dev|stag|prod (group1, group2, &hellip;) servers according to the version which labeled on the release job as above;</li>
+</ul>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

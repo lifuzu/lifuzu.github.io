@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Continuous Integration/Delivery Pipeline - Build and Release</title>
+  <meta name="author" content="Richard Li">
+
+  
+  <meta name="description" content="Based on several software release engineering system, such as: Jenkins (include a bunch of Plugins), Gerrit, Git, Mocha, Nodejs and etc, we create a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Build and Release</a></h1>
+  
+    <h2>A hacker for work and life.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lifuzu.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <!--<li><a href="/home.html">Home</a></li>-->
+  <li><a href="/">Blog</a></li>
+  <li><a href="/playard/">Playard</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Continuous Integration/Delivery Pipeline</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-04-13T09:42:18-07:00" pubdate data-updated="true">Apr 13<span>th</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="https://lh3.googleusercontent.com/-vYfGCI7QdNQ/Vw52k6Q4XdI/AAAAAAAAEHg/FrNo5qzDlYY8QcdY0bzU4FOf6EuTUs-XgCLcB/s600/Gas-Pipelines-in-Columbia.jpg" title="Gas-Pipelines-in-Columbia.jpg" alt="enter image description here" /></p>
+
+<p>Based on several software release engineering system, such as: Jenkins (include a bunch of Plugins), Gerrit, Git, Mocha, Nodejs and etc, we create a continuous integration pipeline to control source code, validation change(s), build artifact, report test results and deploy the artifacts to various deployment servers, just as: dev, staging, production (all groups). Here is a draft diagram we are trying to implement for Content Stream Application Service:</p>
+
+<!-- more -->
+
+
+<p><img src="https://lh3.googleusercontent.com/-H3FwqFg7z38/Vw50_hFK4tI/AAAAAAAAEHU/1lUUkyBENdUb64L1LA640DUUNewtn03dwCLcB/s1000/Continuous+Integration+Pipeline.png" title="Continuous Integration Pipeline.png" alt="Continuous Integration Pipeline" /></p>
+
+<p>Here are some explanations for a specific job of content stream, for example:</p>
+
+<ul>
+<li>The job contentstream-<strong>patchset</strong> will be triggered automatically when
+one change is being pushed to Gerrit for review, it will set verify
+bit ‘+1’ for the review if the build successfully; or warn the
+submitter of the change if the build fail;</li>
+<li>When any change is merged to the branch, for example, ‘master’, the
+job contentstream-<strong>master</strong> will be triggered automatically to verify
+the change if it affects the branch;</li>
+<li>The job contentstream-master-<strong>release</strong> is to make tag, push the tag to server
+to label a version of source code, which should be deployed to
+deployment servers some time later;</li>
+<li>The deployment jobs, like contentstream-master-<strong>deploy</strong>-to-* will deploy the source code to the dev|stag|prod (group1, group2, &hellip;) servers according to the version which labeled on the release job as above;</li>
+</ul>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Li</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-04-13T09:42:18-07:00" pubdate data-updated="true">Apr 13<span>th</span>, 2016</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/continuous/'>Continuous</a>, <a class='category' href='/blog/categories/delivery/'>Delivery</a>, <a class='category' href='/blog/categories/integration/'>Integration</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/" data-via="" data-counturl="http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/" title="Previous Post: Feeding build logs into elasticsearch with logstash on Jenkins">&laquo; Feeding build logs into elasticsearch with logstash on Jenkins</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <div id="nrelate_related_placeholder"></div>
+    <script async id="nrelate_loader_script" type="text/javascript" src="http://staticjs.nrcdn.com/common_js/0.52.1/loader.min.js"></script>
+  </section>
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  <div class='social'>
+  <a id="gmail" href="mailto:lifuzu@gmail.com"><span></span>Send an email</a>
+  <a id="github" href="https://github.com/lifuzu"><span></span>@lifuzu</a>
+  <a id="linkedin" href="http://linkedin.com/in/lifuzu"><span></span>Richard Li</a>
+</div>
+
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/">Continuous Integration/Delivery Pipeline</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/">Feeding Build Logs Into Elasticsearch With Logstash on Jenkins</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/">Playing With Ansible to Manage Build Pool</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Install Libxmljs Failed on Macosx</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/08/restful-wordpress/">RESTful WordPress</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lifuzu">@lifuzu</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lifuzu',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Richard Li -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'lifuzu';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/';
+        var disqus_url = 'http://lifuzu.com/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
