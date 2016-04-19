@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: UGC | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/ugc/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2016-04-18T22:50:07-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Li]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[User Generated Content Backend Design]]></title>
+    <link href="http://lifuzu.com/blog/2016/04/18/user-generated-content-backend-design/"/>
+    <updated>2016-04-18T22:44:27-07:00</updated>
+    <id>http://lifuzu.com/blog/2016/04/18/user-generated-content-backend-design</id>
+    <content type="html"><![CDATA[<h3>User Generated Content Backend Design</h3>
+
+<p><img src="https://lh3.googleusercontent.com/-_Gyq2BrP680/VxW8wprqROI/AAAAAAAAEIU/JTX430yak3MIzuwq9Z5GRjexHiwcxwLmACLcB/s1000/back-end-mobile-design-banner.png" title="back-end-mobile-design-banner.png" alt="enter image description here" /></p>
+
+<p>Most of time, web browser or mobile platform user only care how to get information from web or apps, they send GET on http protocol much more than POST/PUT. However, as one of our application required, we have to handle the requests which user submit contents to backend server.</p>
+
+<p>We design the process in asynchronized way. User submit contents, once the 1st tier server (as the figure below) &ndash; mainly act as a database with a REST Interface &ndash; receive and save the contents, the server send back a response immediately to user, which indicates that user submit successfully.</p>
+
+<!-- more -->
+
+
+<p><img src="https://lh3.googleusercontent.com/-Pn33GdV6ATc/VxW9ADoVuuI/AAAAAAAAEIc/eEv5_BVLbaUnUSGf52dh_sepQytQRLHoACLcB/s1000/Backend_Design.png" title="Backend_Design.png" alt="enter image description here" /></p>
+
+<p>However, the raw information saved to the 1st tier server doesn&rsquo;t mean we don&rsquo;t handle it soon. Sometimes, handling the information takes much time, such as making a compilation, parsing some web pages, creating a batch of email and/or sending some of the emails. In case to interrupt the previous process by the following requests, we build a message queue to adapt the messages with the asynchronized method. When more requests are coming, we can easily scale up with setting more processes to handle the jobs, and when requests decrease, we suspend some of them to save resources.</p>
+
+<p>There are several solutions to support message queue with the existing services, such as SQS from Amazon, RabbitMQ as a Service from CloudAMQP, or Beanstalkd if like to host. We need them to provide APIs to trigger or be pulled by the handling processes to complete the jobs in a line or several lines.</p>
+
+<p>Once the jobs have been handled, some contents have to be created and saved to content server, such as articles, and images which embedded in the articles. We put the contents, including images to a backend server &ndash; or 2nd tier server &ndash; and return the link and/or metadata to the 1st tier database server for providing quick responses to the coming requests.</p>
+
+<h4>Options for Components</h4>
+
+<p>For the 1st tier database server, I prefer to using Parse.com, or self-host CouchDB, which act as a thin layer of service, sort of cache, but persistent. Of course, for performance, we can add one more layer as cache on top, such as memcache, and even cache cluster.</p>
+
+<p>We used to create and host own processing servers, now there are a bunch of continuous integration server can be used as a processing server, such as wercker.com, bitrise.com, if prefer to own and host, Jenkins is another good option, or Runner which come from gitlab.com</p>
+
+<p>Content server is to store contents, like web pages (for social sharing to Facebook, Twitter, Wechat, etc.), images. Wordpress with the REST API plugin support is a good solution. You can submit a new post through REST API, then get the generated result to know what is the public URL for the article, then save the public URL to the 1st tier database for rapid responses.</p>
+
+<p>AWS S3 is an alternative to Wordpress, S3 is more static then WordPress, since WordPress equiped with MySQL database which supports dynamic contents easier. However, storing images, css, javascript on S3 then cache to CDN is more popular solution than only rely on Wordpress for all of the contents.</p>
+
+<p>Authenticate is an individual task, which we can leverage the 3rd party vendor with their services. Please refer to the Ref #1 for detail information.</p>
+
+<h3>References:</h3>
+
+<ol>
+<li>Authenticate Vendor &ndash; <a href="http://www.auth0.com">http://www.auth0.com</a></li>
+<li>Processing server &ndash; <a href="http://www.wercker.com">http://www.wercker.com</a></li>
+<li>RabbitMQ as a service &ndash; <a href="https://www.cloudamqp.com/">https://www.cloudamqp.com/</a></li>
+</ol>
+
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

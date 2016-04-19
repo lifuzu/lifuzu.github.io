@@ -9,7 +9,7 @@
   <meta name="author" content="Richard Li">
 
   
-  <meta name="description" content="Based on several software release engineering system, such as: Jenkins (include a bunch of Plugins), Gerrit, Git, Mocha, Nodejs and etc, we create a &hellip;">
+  <meta name="description" content="User Generated Content Backend Design Most of time, web browser or mobile platform user only care how to get information from web or apps, they send &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/18/user-generated-content-backend-design/">User Generated Content Backend Design</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-04-18T22:44:27-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>User Generated Content Backend Design</h3>
+
+<p><img src="https://lh3.googleusercontent.com/-_Gyq2BrP680/VxW8wprqROI/AAAAAAAAEIU/JTX430yak3MIzuwq9Z5GRjexHiwcxwLmACLcB/s1000/back-end-mobile-design-banner.png" title="back-end-mobile-design-banner.png" alt="enter image description here" /></p>
+
+<p>Most of time, web browser or mobile platform user only care how to get information from web or apps, they send GET on http protocol much more than POST/PUT. However, as one of our application required, we have to handle the requests which user submit contents to backend server.</p>
+
+<p>We design the process in asynchronized way. User submit contents, once the 1st tier server (as the figure below) &ndash; mainly act as a database with a REST Interface &ndash; receive and save the contents, the server send back a response immediately to user, which indicates that user submit successfully.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2016/04/18/user-generated-content-backend-design/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -493,48 +540,6 @@ Apache Hadoop is a map reduce computing environment, which provide a reliable, s
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/02/03/getting-familiar-with-hbase-on-dockerbase/">Getting Familiar With HBase on Dockerbase</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-03T21:34:36-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="http://doc.mapr.com/download/attachments/26982553/hbase_logo.png" alt="Apache HBase Logo" />
-Apache HBase is a distributed, scalable, big data store. With Apache HBase, you can randomly access your big data, which support realtime read/write. You can get more information about Apache HBase from the reference list [3]. This article introduces how to setup a standalone HBase database with Dockerbase supported.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/02/03/getting-familiar-with-hbase-on-dockerbase/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -556,6 +561,10 @@ Apache HBase is a distributed, scalable, big data store. With Apache HBase, you 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/18/user-generated-content-backend-design/">User Generated Content Backend Design</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/">Continuous Integration/Delivery Pipeline</a>
       </li>
     
@@ -569,10 +578,6 @@ Apache HBase is a distributed, scalable, big data store. With Apache HBase, you 
     
       <li class="post">
         <a href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Install Libxmljs Failed on Macosx</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/10/08/restful-wordpress/">RESTful WordPress</a>
       </li>
     
   </ul>

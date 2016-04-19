@@ -9,7 +9,7 @@
   <meta name="author" content="Richard Li">
 
   
-  <meta name="description" content="Have no any idea what to do today after dinner, although I have some homeworks need to submit soon, I still decided to try something new in a short &hellip;">
+  <meta name="description" content="Apache HBase is a distributed, scalable, big data store. With Apache HBase, you can randomly access your big data, which support realtime read/write &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,48 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/02/03/getting-familiar-with-hbase-on-dockerbase/">Getting Familiar With HBase on Dockerbase</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-03T21:34:36-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="http://doc.mapr.com/download/attachments/26982553/hbase_logo.png" alt="Apache HBase Logo" />
+Apache HBase is a distributed, scalable, big data store. With Apache HBase, you can randomly access your big data, which support realtime read/write. You can get more information about Apache HBase from the reference list [3]. This article introduces how to setup a standalone HBase database with Dockerbase supported.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/02/03/getting-familiar-with-hbase-on-dockerbase/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -1134,301 +1176,6 @@ If mongod is running, which is the default behavior when installed, you should s
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/24/playing-with-jenkins-create-job/">Playing With Jenkins Create Job</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-24T22:08:09-07:00" pubdate data-updated="true">Apr 24<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="https://lh4.googleusercontent.com/-iwPM2DPUvJY/U0Y1mjJ70WI/AAAAAAAAB4g/ZOmWzMCL-_0/s0/jenkins_feature.jpg" title="jenkins_feature.jpg" alt="Jenkins logo" /></p>
-
-<h2>create new job from templates</h2>
-
-<p>In this article, we will talk about how to create a Jenkins job with a template by some commands.</p>
-
-<h3>Instructions</h3>
-
-<p><em>1</em>. Get the Jenkins CLI client package</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ wget http://jenkins/jnlpJars/jenkins-cli.jar</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>2</em>. Check which commands supported by the client package [Exception <em>1</em>,<em>2</em>]</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ help</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>3</em>. List all jobs under the view: tools</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ list-jobs tools</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>4</em>. Get the configuration of the job: template</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ get-job template &gt; template.xml</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>5</em>. Create a new job based on the configuration</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ create-job new_job_name &lt; new_job_name.xml</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>6</em>. Run groovy script</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ groovy scripts/add_job_to_view.groovy</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If there are any parameters in the script, just as:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>import jenkins.model.*
-</span><span class='line'>
-</span><span class='line'>if (args.length != 2 ) {
-</span><span class='line'>  println "Error on arguments!"
-</span><span class='line'>}
-</span><span class='line'>def jobName  = args[0] ?: 'a_job'
-</span><span class='line'>def viewName = args[1] ?: 'a_view'
-</span><span class='line'>
-</span><span class='line'>println jobName + ' ' + viewName
-</span><span class='line'>
-</span><span class='line'>def v = Jenkins.instance.getView(viewName)
-</span><span class='line'>def i = Jenkins.instance.getItemByFullName(jobName)
-</span><span class='line'>if (v && i) {
-</span><span class='line'>  v.add(i)
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>pass the parameters as:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ groovy scripts/add_job_to_view.groovy JOB_NAME VIEM_NAME</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>7</em>. Build a job</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ build new_job_name</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>8</em>. Diable a job</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins/ disable-job new_job_name</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Exceptions:</h3>
-
-<p><em>1</em>. Description:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Exception in thread "main" java.io.IOException: No X-Jenkins-CLI2-Port among [null, Vary, Date, Content-Length, Keep-Alive, Set-Cookie, Connection, Content-Type, X-Powered-By, Server]
-</span><span class='line'>  at hudson.cli.CLI.getCliTcpPort(CLI.java:281)
-</span><span class='line'>  at hudson.cli.CLI.&lt;init&gt;(CLI.java:128)
-</span><span class='line'>  at hudson.cli.CLIConnectionFactory.connect(CLIConnectionFactory.java:72)
-</span><span class='line'>  at hudson.cli.CLI._main(CLI.java:449)
-</span><span class='line'>  at hudson.cli.CLI.main(CLI.java:378)
-</span><span class='line'>  Suppressed: java.io.EOFException: unexpected stream termination
-</span><span class='line'>      at hudson.remoting.ClassicCommandTransport.create(ClassicCommandTransport.java:100)
-</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:392)
-</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:388)
-</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:349)
-</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:345)
-</span><span class='line'>      at hudson.remoting.Channel.&lt;init&gt;(Channel.java:333)
-</span><span class='line'>      at hudson.cli.CLI.connectViaHttp(CLI.java:159)
-</span><span class='line'>      at hudson.cli.CLI.&lt;init&gt;(CLI.java:132)
-</span><span class='line'>      ... 3 more</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Solution: check the port which Jenkins is running on, put 8080 on URL should fix, just as:</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ java -jar jenkins-cli.jar -s http://jenkins:8080/ help</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>2</em>. Description:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Failed to authenticate with your SSH keys.
-</span><span class='line'>hudson.security.AccessDeniedException2: anonymous is missing the ExtendedRead permission
-</span><span class='line'>  at hudson.security.ACL.checkPermission(ACL.java:54)
-</span><span class='line'>  at hudson.model.AbstractItem.checkPermission(AbstractItem.java:441)
-</span><span class='line'>  at hudson.cli.GetJobCommand.run(GetJobCommand.java:46)
-</span><span class='line'>  at hudson.cli.CLICommand.main(CLICommand.java:229)
-</span><span class='line'>  at hudson.cli.CliManagerImpl.main(CliManagerImpl.java:92)
-</span><span class='line'>  at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-</span><span class='line'>  at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-</span><span class='line'>  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-</span><span class='line'>  at java.lang.reflect.Method.invoke(Method.java:616)
-</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.perform(RemoteInvocationHandler.java:275)
-</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:256)
-</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:215)
-</span><span class='line'>  at hudson.remoting.UserRequest.perform(UserRequest.java:118)
-</span><span class='line'>  at hudson.remoting.UserRequest.perform(UserRequest.java:48)
-</span><span class='line'>  at hudson.remoting.Request$2.run(Request.java:326)
-</span><span class='line'>  at hudson.remoting.InterceptingExecutorService$1.call(InterceptingExecutorService.java:72)
-</span><span class='line'>  at hudson.cli.CliManagerImpl$1.call(CliManagerImpl.java:63)
-</span><span class='line'>  at hudson.remoting.InterceptingExecutorService$2.call(InterceptingExecutorService.java:95)
-</span><span class='line'>  at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:334)
-</span><span class='line'>  at java.util.concurrent.FutureTask.run(FutureTask.java:166)
-</span><span class='line'>  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1110)
-</span><span class='line'>  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:603)
-</span><span class='line'>  at java.lang.Thread.run(Thread.java:679)</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Solution: add client public ssh key to the Jenkins server at: <code>http://jenkins/user/USERNAME/configure</code> | <code>SSH Public Keys</code>.</h4>
-
-<p><em>3</em>. Description:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>hudson.security.AccessDeniedException2: &lt;USERNAME&gt; is missing the Job/ExtendedRead permission
-</span><span class='line'>  at hudson.security.ACL.checkPermission(ACL.java:54)
-</span><span class='line'>  at hudson.model.AbstractItem.checkPermission(AbstractItem.java:446)
-</span><span class='line'>  at hudson.cli.GetJobCommand.run(GetJobCommand.java:46)
-</span><span class='line'>  at hudson.cli.CLICommand.main(CLICommand.java:234)
-</span><span class='line'>  at hudson.cli.CliManagerImpl.main(CliManagerImpl.java:92)
-</span><span class='line'>  at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-</span><span class='line'>  at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-</span><span class='line'>  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-</span><span class='line'>  at java.lang.reflect.Method.invoke(Method.java:606)
-</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.perform(RemoteInvocationHandler.java:300)
-</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:281)
-</span><span class='line'>  at hudson.remoting.RemoteInvocationHandler$RPCRequest.call(RemoteInvocationHandler.java:240)
-</span><span class='line'>  at hudson.remoting.UserRequest.perform(UserRequest.java:118)
-</span><span class='line'>  at hudson.remoting.UserRequest.perform(UserRequest.java:48)
-</span><span class='line'>  at hudson.remoting.Request$2.run(Request.java:328)
-</span><span class='line'>  at hudson.remoting.InterceptingExecutorService$1.call(InterceptingExecutorService.java:72)
-</span><span class='line'>  at hudson.cli.CliManagerImpl$1.call(CliManagerImpl.java:63)
-</span><span class='line'>  at hudson.remoting.InterceptingExecutorService$2.call(InterceptingExecutorService.java:95)
-</span><span class='line'>  at jenkins.util.ContextResettingExecutorService$2.call(ContextResettingExecutorService.java:46)
-</span><span class='line'>  at java.util.concurrent.FutureTask.run(FutureTask.java:262)
-</span><span class='line'>  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-</span><span class='line'>  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
-</span><span class='line'>  at java.lang.Thread.run(Thread.java:745)</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Solution: Jenkins server &ndash;> Manage Jenkins &ndash;> Configure Global Security to add <USERNAME> related permissions.</h4>
-
-<h3>References:</h3>
-
-<ol>
-<li><a href="http://www.blackpepper.co.uk/generating-new-jenkins-jobs-from-templates-and-parameterised-builds/">http://www.blackpepper.co.uk/generating-new-jenkins-jobs-from-templates-and-parameterised-builds/</a></li>
-<li><a href="http://javadoc.jenkins-ci.org/jenkins/model/Jenkins.html">http://javadoc.jenkins-ci.org/jenkins/model/Jenkins.html</a></li>
-<li><a href="https://github.com/jenkinsci/jenkins">https://github.com/jenkinsci/jenkins</a></li>
-</ol>
-
-
-<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1452,6 +1199,10 @@ If mongod is running, which is the default behavior when installed, you should s
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/18/user-generated-content-backend-design/">User Generated Content Backend Design</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/">Continuous Integration/Delivery Pipeline</a>
       </li>
     
@@ -1465,10 +1216,6 @@ If mongod is running, which is the default behavior when installed, you should s
     
       <li class="post">
         <a href="/blog/2016/01/01/install-libxmljs-failed-on-macosx/">Install Libxmljs Failed on Macosx</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/10/08/restful-wordpress/">RESTful WordPress</a>
       </li>
     
   </ul>
