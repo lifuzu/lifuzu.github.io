@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Indoor | Build and Release]]></title>
+  <link href="http://lifuzu.com/blog/categories/indoor/atom.xml" rel="self"/>
+  <link href="http://lifuzu.com/"/>
+  <updated>2016-05-01T22:35:50-07:00</updated>
+  <id>http://lifuzu.com/</id>
+  <author>
+    <name><![CDATA[Richard Li]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Instore Pick-up Maps]]></title>
+    <link href="http://lifuzu.com/blog/2016/05/01/instore-pick-up-maps/"/>
+    <updated>2016-05-01T22:22:22-07:00</updated>
+    <id>http://lifuzu.com/blog/2016/05/01/instore-pick-up-maps</id>
+    <content type="html"><![CDATA[<p><img src="http://library.appstate.edu/sites/library.appstate.edu/files/images/1_floor_map_201512.png" alt="enter image description here" />
+From:  <br/>
+*<a href="http://library.appstate.edu/sites/library.appstate.edu/files/images/1_floor_map_201512.png*">http://library.appstate.edu/sites/library.appstate.edu/files/images/1_floor_map_201512.png*</a></p>
+
+<h3>Instore pick-up maps</h3>
+
+<p>Thoughts about a mobile application that provides a guide for customers to pick-up goods they wanted inside a supermarket.</p>
+
+<p>With providing some goods' name to the application that a customer want to buy, the application should provide an optimized route for the user to guide him/her to pick up the goods easily, without traffic jam around crowd, which always happens in some popular supermarkets, like Costco.</p>
+
+<!-- more -->
+
+
+<p>The application should improve the efficiency for customers, and provide high throughout for vendors. And even more, since some customers select items before they go to the supermarket, the application provide some prediction on what will become more popular soon, which provide a way for vendors to prepare beforehand.</p>
+
+<h3>How to use:</h3>
+
+<ol>
+<li>Create and upload floor-map;</li>
+<li>Craft a shape ( click some points to form a shape ) in a specified zone to put a goods' info;</li>
+<li>Tap the shape to config ( first time ) / display the details of the goods &ndash; price, and comments;</li>
+<li>Long tap the shape to re-config the goods, or delete the goods;</li>
+</ol>
+
+
+<h3>References:</h3>
+
+<p>Articles:</p>
+
+<p><a href="http://www.extremetech.com/computing/132484-indoor-navigation-on-your-smartphone-using-the-earths-magnetic-field-just-like-a-homing-pigeon">http://www.extremetech.com/computing/132484-indoor-navigation-on-your-smartphone-using-the-earths-magnetic-field-just-like-a-homing-pigeon</a>
+<a href="http://www.theverge.com/2012/7/10/3148926/indooratlas-indoor-navigation-magnetic-field">http://www.theverge.com/2012/7/10/3148926/indooratlas-indoor-navigation-magnetic-field</a>
+<a href="http://www.sigmobile.org/mobisys/2011/slides/magnetism.pdf">http://www.sigmobile.org/mobisys/2011/slides/magnetism.pdf</a></p>
+
+<p>Indoor Positioning System SDK:</p>
+
+<p><a href="https://www.indooratlas.com/how-it-works/">https://www.indooratlas.com/how-it-works/</a>  <br/>
+<a href="https://developer.indooratlas.com/guide">https://developer.indooratlas.com/guide</a>  <br/>
+<a href="https://developer.indooratlas.com/dashboard">https://developer.indooratlas.com/dashboard</a>  <br/>
+<a href="http://blog.indooratlas.com/2015/06/17/getting-started-with-the-blue-dot/">http://blog.indooratlas.com/2015/06/17/getting-started-with-the-blue-dot/</a></p>
+
+<blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>
