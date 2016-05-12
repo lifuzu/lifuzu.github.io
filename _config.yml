@@ -7,7 +7,8 @@ title: Build and Release
 subtitle: A continuous learner for experience and life.
 author: Richard Li
 simple_search: http://google.com/search
-description:
+description: Build an idea, release a product
+keywords: software, build, release, devops, deployment, continuous integration
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in

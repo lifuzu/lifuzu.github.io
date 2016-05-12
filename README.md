@@ -17,6 +17,15 @@ And fixed a version issue according to: http://johnmorales.com/blog/2014/01/06/o
 
 Fixed a Gist plugin issue according to: https://github.com/imathis/octopress/pull/1506
 
+Fixed a rake preview issue after upgrade to El Captain on Mac:
+```sudo chown -R $(whoami) /usr/local```
+Check the latest Ruby version: https://www.ruby-lang.org/en/downloads/ ```rbenv install <Latest-Ruby-Version>```
+```
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+``` to your ~/.bash_profile, then ```source ~/.bash_profile```
+http://schalkneethling.github.io/blog/2015/10/16/errno-enoent-no-such-file-or-directory-jekyll-octopress-el-capitan/
+
 ### Basic steps
 ```
 rake new_post["POST TITLE"]
