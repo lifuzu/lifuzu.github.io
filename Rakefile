@@ -112,6 +112,8 @@ task :new_post, :title do |t, args|
     post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}"
     post.puts "comments: true"
     post.puts "categories: "
+    post.puts "keywords: "
+    post.puts "description: "
     post.puts "---"
   end
 end
@@ -149,6 +151,8 @@ task :new_page, :filename do |t, args|
       page.puts "sharing: true"
       page.puts "footer: true"
       page.puts "categories: "
+      post.puts "keywords: "
+      post.puts "description: "
       page.puts "links:"
       page.puts "  - Readme: "
       page.puts "  - Bug/Issue/Suggestion: "
@@ -254,7 +258,7 @@ desc "deploy public directory to github pages"
 multitask :push do
   puts "## Deploying branch to Github Pages "
   puts "## Pulling any updates from Github Pages "
-  cd "#{deploy_dir}" do 
+  cd "#{deploy_dir}" do
     system "git pull"
   end
   (Dir["#{deploy_dir}/*"]).each { |f| rm_rf(f) }
