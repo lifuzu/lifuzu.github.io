@@ -6,9 +6,7 @@ comments: true
 categories: indoor pick-up maps
 ---
 
-![enter image description here](http://library.appstate.edu/sites/library.appstate.edu/files/images/1_floor_map_201512.png)
-From:    
-*http://library.appstate.edu/sites/library.appstate.edu/files/images/1_floor_map_201512.png*
+![floor plan map](/images/floor-map.jpg)
 
 ###Instore pick-up maps
 
@@ -34,9 +32,9 @@ http://www.sigmobile.org/mobisys/2011/slides/magnetism.pdf
 
 Indoor Positioning System SDK:
 
-https://www.indooratlas.com/how-it-works/    
-https://developer.indooratlas.com/guide    
-https://developer.indooratlas.com/dashboard    
+https://www.indooratlas.com/how-it-works/
+https://developer.indooratlas.com/guide
+https://developer.indooratlas.com/dashboard
 http://blog.indooratlas.com/2015/06/17/getting-started-with-the-blue-dot/
 
 > Written with [StackEdit](https://stackedit.io/).
