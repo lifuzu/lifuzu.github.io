@@ -6,10 +6,10 @@
 <head>
   <meta charset="utf-8">
   <title>Build and Release</title>
-  <meta name="author" content="Richard/Fuzu Li">
+  <meta name="author" content="Richard Li">
 
   
-  <meta name="description" content="Apache Hadoop is a map reduce computing environment, which provide a reliable, scalable and distributed computing environment to handle big data. &hellip;">
+  <meta name="description" content="When some changes broke your build during the mid night, how to find the culprit of the failure very quickly? Like this: If you are using git as your &hellip;">
 
   
 
@@ -68,6 +68,52 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/">Using Git Command to Find Build Failure Very Quickly</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-06-02T10:32:09-07:00" pubdate data-updated="true">Jun 2<span>nd</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When some changes broke your build during the mid night, how to find the culprit of the failure very quickly? Like this:
+<img src="https://lh3.googleusercontent.com/-20gdQ7Sswwk/VW3cw-UhgWI/AAAAAAAAC04/b3cysga0Cr8/s0/Screen+Shot+2015-06-02+at+9.39.06+AM.png" title="Screen Shot 2015-06-02 at 9.39.06 AM.png" alt="build failure history" /></p>
+
+<p>If you are using git as your version control system, then the short answer is &lsquo;<strong>git bisect</strong>&rsquo;.</p>
+
+<p>As the above screenshot, you know the latest good version is 4.7.0.310, and the earliest bad version is 4.7.0.311, so some changes between the two version failed the build. Then how to use &lsquo;git bisect&rsquo; to help us debug the issue very quickly?</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/06/02/using-git-command-to-find-build-failure-very-quickly/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -616,59 +662,6 @@ If mongod is running, which is the default behavior when installed, you should s
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/17/join-apple-ios-program/">加入 Apple iOS 开发者计划</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-17T10:05:48-07:00" pubdate data-updated="true">Aug 17<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>起步</h1>
-
-<p>学习开发 iOS 应用程序的第一步是理解注册为 Apple 开发者和 iOS 开发者计划会员的不同。然后决定你在什么时候付费加入 iOS 开发者计划。本章就来谈论一下 Apple 开发者和 iOS 开发者计划的差别，大概需要的费用以及加入开发者计划的好处。最后，一步步告诉大家怎么样加入这些计划成为会员。</p>
-
-<h3>注册成为 Apple 开发者</h3>
-
-<p>注册成为 Apple 开发者不需要费用，很简单，访问以下链接：</p>
-
-<p><a href="http://developer.apple.com/programs/register/">http://developer.apple.com/programs/register/</a></p>
-
-<p>然后按照要求一步步开始注册。
-使用 Apple ID 进行注册，这个 Apple ID 就是用来在 iTunes 或者 Apple Store 上面购买商品的账号。
-完成这个注册，就可以获得一些开发者资源，例如在线文档，教程等等。开发者也能够下载旧版的 iOS 开发包（SDK），以及 Xcode 开发环境（IDE）。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/08/17/join-apple-ios-program/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -692,6 +685,10 @@ If mongod is running, which is the default behavior when installed, you should s
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2019/02/10/using-terraform-external-data-source/">一个神奇的配置文件结构</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/05/01/instore-pick-up-maps/">Instore Pick-up Maps</a>
       </li>
     
@@ -705,10 +702,6 @@ If mongod is running, which is the default behavior when installed, you should s
     
       <li class="post">
         <a href="/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/">Feeding Build Logs Into Elasticsearch With Logstash on Jenkins</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/03/06/playing-with-ansible-to-manage-build-pool/">Playing With Ansible to Manage Build Pool</a>
       </li>
     
   </ul>
@@ -753,7 +746,7 @@ If mongod is running, which is the default behavior when installed, you should s
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2016 - Richard/Fuzu Li -
+  Copyright &copy; 2019 - Richard Li -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>一个神奇的配置文件结构 - Build and Release</title>
+  <meta name="author" content="Richard Li">
+
+  
+  <meta name="description" content="使用Terraform的external data source配置build step。">
+
+  <meta name="keywords" content="Terraform, plugin">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lifuzu.com/blog/2019/02/10/using-terraform-external-data-source">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Build and Release" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Build and Release</a></h1>
+  
+    <h2>A continuous learner for experience and life.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lifuzu.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <!--<li><a href="/home.html">Home</a></li>-->
+  <li><a href="/">Blog</a></li>
+  <li><a href="/playard/">Playard</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">一个神奇的配置文件结构</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-02-10T14:51:35-08:00" pubdate data-updated="true">Feb 10<span>th</span>, 2019</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/terraform.png" title="Terraform external data source" alt="Terraform external data source" /></p>
+
+<h2>引子</h2>
+
+<p>大约两年之前，当我还在Groupon工作的时候，实现过一个用JSON作为配置文件的build flow。基本概念借鉴 Bitrise和Fastlane，但力求每一个步骤（Step）使用JSON作为输入和输出，中间有一个处理过程。当时为了如何传递出返回的JSON信息，又不想污染环境变量，再加上出错信息处理，是否需要把出错结果也放在JSON里面，费过一段时间脑子。仍然没能设计出一个比较满意的结果。考虑到实现期限，当时的项目后来搁浅了。</p>
+
+<p>因为离开了Groupon，那个项目没有善终。但是，如何设计一个比较满意的build step的配置文件，能够把编译步骤定义在其中，用JSON输入，JSON输出，如果出错能够妥善处理，log信息以编译模块为单元导入后台log服务，以便比较快速定位、查找出错信息，一直是我在持续编译/集成（Continuous Integration）上考虑的方向。</p>
+
+<p>使用JSON格式，还有一个棘手的问题是怎么支持没有完全模块化的功能，比如，临时编写、调用一段bash脚本处理一个功能。JSON是一个非常简单的数据格式，不能支持变量替换，不能支持定义function（函数），把function写成string放在大段block中又失去了格式化显示、review纠错的优势。</p>
+
+<p>几个月以前，首次接触了Jsonnet，对于JSON欠缺的功能，Jsonnet可谓对症下药，厉害之极（另一文详述）。然而如何在配置文件中实现函数，或者调用函数，关键是如何为之后的步骤传递返回值，没有帮助。这个不是Jsonnet的问题，因为Jsonnet本质上是一个JSON数据文件的扩展，它输出的是一个JSON数据文件，不能要求它考虑更多逻辑上面的实现。</p>
+
+<h2>Terraform的外部数据源配置结构</h2>
+
+<p>直到今天接触到terraform的external data source配置结构的设计，简直如得良玉，如获珍宝。它可以实现我想要的一切功能。首先上结构，然后详细解释：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>data "external" "example" {
+</span><span class='line'>  program = ["python", "${path.module}/example-data-source.py"]
+</span><span class='line'>
+</span><span class='line'>  query = {
+</span><span class='line'>    # arbitrary map from strings to strings, passed
+</span><span class='line'>    # to the external program as the data query.
+</span><span class='line'>    id = "abc123"
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://www.terraform.io/docs/providers/external/data_source.html">https://www.terraform.io/docs/providers/external/data_source.html</a></p>
+
+<h2>HCL配置结构解释</h2>
+
+<p>这是一个HCL结构的配置文件。HCL（链接#2）是HashiCorp的配置文件，借鉴了UCL（链接#1）。虽然表现格式各有不同（包括Toml，Yaml），本质上都是JSON。底层的语言实现都会把这些数据存放为类JSON的结构。比如Python里面的Dict，Javascript的Assiciate Array，Java里面的Map，C++的Vector，等等。</p>
+
+<p>这段配置文件定义了一个结构，如果用JSON表现，应该是这样的：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    “data”: {
+</span><span class='line'>        “external”: {
+</span><span class='line'>            “example”: {
+</span><span class='line'>                “program”: [
+</span><span class='line'>                    “python”,
+</span><span class='line'>                    “${path.module}/example-data-source.py”
+</span><span class='line'>                ],
+</span><span class='line'>                “query”: {
+</span><span class='line'>                    “id”: “abc123”
+</span><span class='line'>                }
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>HCL结构非常灵活，第一行的<code>data "external" "example"</code>，实际上可以定义任意多个字段，表现为JSON可以是任意级的block。这也正是HCL结构巧妙之处，它可以非常清楚的定义出在哪个层次执行；换句话说，执行体层次定义清楚。如果用JSON直接表现，很难看出来执行体会在哪一层运行。因为JSON对每一层级都同等对待，所以对于人眼而言，表现力不够清楚和明显。</p>
+
+<p>第二行的program是一个程序的调用，很容易能够理解为，使用python为解释器运行在目录 ${path.module}/下的脚本example-data-source.py。</p>
+
+<p>第三行query是一段提供给以上程序的输入参数，完全的JSON结构。Terraform严格要求数据值为string（字符串），意味着integer（整型数字）也需要用引号包括。</p>
+
+<p>上面的这个结构，实现了一个函数调用，大意如此：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ python ${path.module}/example-data-source.py ${query}</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>神奇的HCL配置结构</h2>
+
+<p>那究竟奇妙的地方在哪里呢？</p>
+
+<ol>
+<li><p>它定义了输入参数/输出返回值的格式，这些返回值如何被后面的过程使用。比如，上传文件的过程完成以后，后面的过程需要知道上传文件成功返回的URL（链接），或者上传失败返回的错误信息。</p></li>
+<li><p>它可以非常灵活的调用任何脚本，Python，Bash，Ruby，NodeJS等等；</p></li>
+<li><p>它也可以是Serverless的调用端（如果满足JSON输入和JSON输出）；</p></li>
+<li><p>它可以实现没有完全模块化的功能；例如一个编译过程的临时fix（修正），之后可以用模块替代（使用Terraform模块扩展）；</p></li>
+</ol>
+
+
+<h2>例子</h2>
+
+<p>用一个例子来说明：</p>
+
+<h3>安装Terraform</h3>
+
+<p>Terraform是一个客户端软件，安装非常方便，下载一个客户端命令行程序，放在一个PATH路径下，shell可以找到就可以了。这个是安装指导：<a href="https://learn.hashicorp.com/terraform/getting-started/install.html%E3%80%82">https://learn.hashicorp.com/terraform/getting-started/install.html%E3%80%82</a></p>
+
+<p>简单步骤：
+1. 从这里：<a href="https://www.terraform.io/downloads.html">https://www.terraform.io/downloads.html</a> 下载对应的压缩包；
+2. 解压生成<code>terraform</code>；
+3. 后移到：<code>/usr/local/bin</code>目录下。</p>
+
+<h3>Terraform 配置文件</h3>
+
+<p>然后找到一个工作目录，创建一个terraform 配置文件，用到我们以上讨论到的结构，命名为<code>example.tf</code>，内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>data "external" "example" {
+</span><span class='line'>  program = ["python", "./example.py"]
+</span><span class='line'>
+</span><span class='line'>  query = {
+</span><span class='line'>    # arbitrary map from strings to strings, passed
+</span><span class='line'>    # to the external program as the data query.
+</span><span class='line'>    id = "abc123"
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'># 使用以上过程产生的结果，打印验证
+</span><span class='line'>output "result" {
+</span><span class='line'>  value = "${data.external.example.result}"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>脚本文件</h3>
+
+<p>在同样的目录下，创建对应的脚本文件example.py：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import json
+</span><span class='line'>import sys
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>def main(opts=None):
+</span><span class='line'>    '''The main routine'''
+</span><span class='line'>
+</span><span class='line'>    retval = {}
+</span><span class='line'>    # 直接使用输入参数，这里可以改变为其他逻辑
+</span><span class='line'>    retval.update(opts)
+</span><span class='line'>    # 为了能看出改变，添加了一个key/value到输出
+</span><span class='line'>    retval.update({"abc": "123abc"})
+</span><span class='line'>    return retval
+</span><span class='line'>
+</span><span class='line'>if __name__ == "__main__":
+</span><span class='line'>    # 获得输入参数
+</span><span class='line'>    args = json.load(sys.stdin)
+</span><span class='line'>    # 运行主函数
+</span><span class='line'>    retval = main(args)
+</span><span class='line'>    # 打印JSON格式输出
+</span><span class='line'>    print(json.dumps(retval))</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>初始化配置环境</h3>
+
+<p>然后在同样目录下，初始化这个terrform例子的配置环境：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ terraform init</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到external plugin安装了：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Initializing provider plugins...
+</span><span class='line'>- Checking for available provider plugins on https://releases.hashicorp.com...
+</span><span class='line'>- Downloading plugin for provider "external" (1.0.0)...
+</span><span class='line'>
+</span><span class='line'>The following providers do not have any version constraints in configuration,
+</span><span class='line'>so the latest version was installed.
+</span><span class='line'>
+</span><span class='line'>To prevent automatic upgrades to new major versions that may contain breaking
+</span><span class='line'>changes, it is recommended to add version = "..." constraints to the
+</span><span class='line'>corresponding provider blocks in configuration, with the constraint strings
+</span><span class='line'>suggested below.
+</span><span class='line'>
+</span><span class='line'>* provider.external: version = "~&gt; 1.0"
+</span><span class='line'>
+</span><span class='line'>Terraform has been successfully initialized!</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>运行配置文件</h3>
+
+<p>运行terraform apply使用配置文件：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ terraform apply</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以得到一下结果：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>data.external.example: Refreshing state...
+</span><span class='line'>
+</span><span class='line'>Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+</span><span class='line'>
+</span><span class='line'>Outputs:
+</span><span class='line'>
+</span><span class='line'>result = {
+</span><span class='line'>  abc = 123abc
+</span><span class='line'>  id = abc123
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们可以看出terraform调用了python脚本，并把返回值放在模块命名的结构中：<code>data.external.example.result</code>。我们也可以在python脚本中加入错误处理（第二个版本）。可以加入log处理，以及其他一些可以<code>aspect oriented</code>（不影响主流程的功能块）的逻辑。</p>
+
+<p>至此，我们完成了对Terraform的external data source作为配置结构的神奇之处的说明。你可以在这里看到本文的源代码：<a href="https://github.com/lifuzu/terraform">https://github.com/lifuzu/terraform</a> ，或者<a href="https://github.com/lifuzu/terraform/issues/new">&ldquo;点击此链接&rdquo;</a>给出你的意见和好的建议，谢谢</p>
+
+<h3>参考文章或者链接：</h3>
+
+<ul>
+<li>UCL配置文件语言：<a href="https://github.com/vstakhov/libucl">https://github.com/vstakhov/libucl</a></li>
+<li>HCL配置文件语言：<a href="https://github.com/hashicorp/hcl">https://github.com/hashicorp/hcl</a></li>
+<li>HCL2配置文件语言：<a href="https://github.com/hashicorp/hcl2">https://github.com/hashicorp/hcl2</a></li>
+<li>Terraform软件基础设施代码化：<a href="https://www.terraform.io/">https://www.terraform.io/</a></li>
+<li>Terraform模块扩展：<a href="https://www.terraform.io/docs/extend/index.html">https://www.terraform.io/docs/extend/index.html</a></li>
+<li>Jsonnet数据模块语言：<a href="https://jsonnet.org/">https://jsonnet.org/</a></li>
+<li>本文源代码：<a href="https://github.com/lifuzu/terraform">https://github.com/lifuzu/terraform</a></li>
+</ul>
+
+
+<p>以下是一些扩展阅读。</p>
+
+<h3>HCL与UCL关系：</h3>
+
+<p>翻译自<a href="https://github.com/hashicorp/hcl/issues/154">https://github.com/hashicorp/hcl/issues/154</a></p>
+
+<blockquote><p>(HCL)与UCL的兼容性肯定不是目标。尽管从一些通用语法风格中获取灵感，HCL的设计已经独立发展。可能最好将这两者视为表面相似，而不是更进一步的类同。</p>
+
+<p>这里有一些非常详尽的列表，列出了我能想到的一些差异，只关注最终用户（不是Go API）的观点差异：</p>
+
+<ul>
+<li>UCL被定义为JSON的超集，而HCL分别处理本地语法和JSON语法：两者没有混淆。</li>
+<li>HCL本地语法使用换行符分隔项目，而UCL需要逗号或分号。</li>
+<li>HCL没有自动数字乘数后缀，尽管早期的文档声称它确实如此。 （这是Terraform直接使用UCL时继承的）</li>
+<li>HCL没有内置的宏或包含支持;如果需要，这是必须在应用层处理的东西。</li>
+</ul>
+
+
+<p>在撰写本文时，HCL（很快将被追溯称为“HCL版本1”）不具有对变量或表达式的本机支持，如果需要，要求应用程序单独实现。这将在即将发布的版本2中发生变化其中受先前单独的[HIL]（> <a href="https://github.com/hashicorp/hil%EF%BC%89">https://github.com/hashicorp/hil%EF%BC%89</a> 启发的表达式语法将包含在HCL中。一旦发布，HCL表达式将成为UCL变量的超集。</p>
+
+<p>正如我所说，可能更好的是将这些视为表面上相似的两种语言，但已经发展出一些不同的决策和目标。</p>
+
+<p>&mdash; Martin Atkins</p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Richard Li</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-02-10T14:51:35-08:00" pubdate data-updated="true">Feb 10<span>th</span>, 2019</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/configuration/'>configuration</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lifuzu.com/blog/2019/02/10/using-terraform-external-data-source/" data-via="" data-counturl="http://lifuzu.com/blog/2019/02/10/using-terraform-external-data-source/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/05/01/instore-pick-up-maps/" title="Previous Post: Instore pick-up maps">&laquo; Instore pick-up maps</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <div id="nrelate_related_placeholder"></div>
+    <script async id="nrelate_loader_script" type="text/javascript" src="http://staticjs.nrcdn.com/common_js/0.52.1/loader.min.js"></script>
+  </section>
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  <div class='social'>
+  <a id="gmail" href="mailto:lifuzu@gmail.com"><span></span>Send an email</a>
+  <a id="github" href="https://github.com/lifuzu"><span></span>@lifuzu</a>
+  <a id="linkedin" href="http://linkedin.com/in/lifuzu"><span></span>Richard Li</a>
+</div>
+
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2019/02/10/using-terraform-external-data-source/">一个神奇的配置文件结构</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/05/01/instore-pick-up-maps/">Instore Pick-up Maps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/18/user-generated-content-backend-design/">User Generated Content Backend Design</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/13/continuous-integration-slash-delivery-pipeline/">Continuous Integration/Delivery Pipeline</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/03/21/feeding-build-logs-into-elasticsearch-with-logstash-on-jenkins/">Feeding Build Logs Into Elasticsearch With Logstash on Jenkins</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lifuzu">@lifuzu</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lifuzu',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2019 - Richard Li -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'lifuzu';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lifuzu.com/blog/2019/02/10/using-terraform-external-data-source/';
+        var disqus_url = 'http://lifuzu.com/blog/2019/02/10/using-terraform-external-data-source/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

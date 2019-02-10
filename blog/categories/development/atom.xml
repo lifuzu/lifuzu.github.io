@@ -1,78 +1,312 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Development, | Build and Release]]></title>
+  <title><![CDATA[Category: Development | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2016-05-12T16:34:45-07:00</updated>
+  <updated>2019-02-10T15:19:52-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
-    <name><![CDATA[Richard/Fuzu Li]]></name>
+    <name><![CDATA[Richard Li]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
-    <title type="html"><![CDATA[Programming for Andorid: Synchronize Actions With Handler]]></title>
-    <link href="http://lifuzu.com/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler/"/>
-    <updated>2015-01-19T20:32:10-08:00</updated>
-    <id>http://lifuzu.com/blog/2015/01/19/programming-for-andorid-synchronize-actions-with-handler</id>
-    <content type="html"><![CDATA[<p><img src="http://rxtracepz.dirkrodgersconsu.netdna-cdn.com/wp-content/uploads/2010/02/synchronized-swimmers.jpg" alt="enter image description here" /></p>
+    <title type="html"><![CDATA[Programming for Android: Download, Progressbar and FileProvider]]></title>
+    <link href="http://lifuzu.com/blog/2015/01/16/programming-for-android-download/"/>
+    <updated>2015-01-16T17:50:20-08:00</updated>
+    <id>http://lifuzu.com/blog/2015/01/16/programming-for-android-download</id>
+    <content type="html"><![CDATA[<p><img src="https://turbotax.intuit.com/handlebars/noncampaign/hp/images/melissa-tablet.jpg" alt="enter image description here" />
+In this article, we try to download a file from Internet, show the progress of downloading, then share the file to gallery for displaying with FileProvider.</p>
 
-<p>Sometimes, we need to synchronize the actions in a series but not in parallel. For example, we need to download an image then display it on Google Gallery. It seems we cannot display a partial image during downloading. OK, there is another story, probably, we will mention later, for displaying image with a coarse one then detailed the clear picture. Now let&rsquo;s fix how to download an image then display it, without manual interference.</p>
+<p><strong>Keywords</strong>: Android, Programming, Download, Image, Progressbar, FileProvider</p>
 
-<p>This program bases on the last one: <a href="http://lifuzu.com/blog/2015/01/16/programming-for-android-download/">Programming for Android: Download, Progressbar and FileProvider</a></p>
+<p><strong>Prerequisites</strong>:</p>
+
+<p><em>0</em>. Create an Android project with name: FileProviderExample, you can also clone this project directly from github here: [<a href="https://github.com/lifuzu/FileProviderExample">3</a>]</p>
+
+<p><strong>Steps</strong>:</p>
+
+<p><em>1</em>. Download</p>
+
+<p>We intend to download an image file with foreground mode since we want to block the consequent actions until the download process is complete. If you try to download file(s) with background mode, please reference some other articles <a href="http://stackoverflow.com/questions/3028306/download-a-file-with-android-and-showing-the-progress-in-a-progressdialog">here</a></p>
 
 <!--more-->
 
 
-<p><strong>Steps</strong>:</p>
+<p>Update the activity layout file <code>res/layout/activity_main.xml</code> to add a button for downloading:
+```xml</p>
 
-<p><em>1</em>. Declare a handler and a message ID, which we need to indicate what action is completed:
-```java</p>
-
-<pre><code>Handler handler;
-private static final int DOWNLOAD_COMPLETED = 0;
+<pre><code>&lt;Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/btnDownload"
+    android:onClick="startDownload"
+    android:text="Download Image"/&gt;
 </code></pre>
 
-<p>```</p>
+<p><code>
+With the above update, we need to define a function named `startDownload` to trigger the download process:
+</code>java</p>
 
-<p><em>2</em>. Send out the message, when the first action is completed:
-```java</p>
-
-<pre><code>                // send message to trigger the following event
-                Message msg = Message.obtain();
-                msg.what = DOWNLOAD_COMPLETED;
-                handler.sendMessage(msg);
+<pre><code>public void startDownload(View view) {
+    download("http://farm1.static.flickr.com/114/298125983_0e4bf66782_b.jpg", "abc.jpg");
+}
 </code></pre>
 
-<p>```</p>
+<p><code>``
+Here we download an image from the above URL, and save it to direct local path with the name</code>abc.jpg`.</p>
 
-<p><em>3</em>. Handle the message, then trigger the following action(s):
+<p>We design the download interface with a simple way. For the download function, what we want is a URL then a local file path that we saved the URL:
+<code>java
+protected void download(final String strUrl, final String fileName)
+</code></p>
+
+<p>With the <code>Thread</code> support, we create the download precedure:
 ```java</p>
 
-<pre><code>    handler = new Handler() {
+<pre><code>new Thread(new Runnable() {
         @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case DOWNLOAD_COMPLETED:
-                    startDisplay();
-                    break;
+        public void run() {
+            File file = new File(getFilesDir(), fileName);
+
+            try {
+                URL url = new URL(strUrl);
+                Log.i("FILE_NAME", "File name is " + fileName);
+                Log.i("FILE_URL", "File URL is " + url);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                // get the file length
+                int fileLength = connection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream());
+                OutputStream output = new FileOutputStream(file);
+
+                byte data[] = new byte[1024];
+                long total = 0;
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // increase progress bar here
+                    // write data into file
+                    output.write(data, 0, count);
+                }
+
+                // flush output and close streams
+                output.flush();
+                output.close();
+                input.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.i("ERROR ON DOWNLOADING FILES", "ERROR IS" + e);
             }
         }
-    };
+    }).start();
 </code></pre>
 
-<p>```</p>
+<p><code>
+From the above code, we save the file just direct local path, without any more directory:
+</code>java</p>
 
-<p>You can clone the entire source code <a href="https://github.com/lifuzu/FileProviderExample">here</a> [2].</p>
+<pre><code>            File file = new File(getFilesDir(), fileName);
+</code></pre>
+
+<p><code>
+And then we call `URLConnection` to connect the URL which we want to download:
+</code>java</p>
+
+<pre><code>                URL url = new URL(strUrl);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+</code></pre>
+
+<p><code>
+Read the input stream write to output stream recursively, until the input stream reach the end:
+</code>java</p>
+
+<pre><code>                InputStream input = new BufferedInputStream(url.openStream());
+                OutputStream output = new FileOutputStream(file);
+
+                byte data[] = new byte[1024];
+                long total = 0;
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    output.write(data, 0, count);
+                }
+</code></pre>
+
+<p><code>
+Then flush the output incase some data left in memory, and close the streams:
+</code>java</p>
+
+<pre><code>                output.flush();
+                output.close();
+                input.close();
+</code></pre>
+
+<p><code>
+One more thing before compiling a successful application is to check permission, we need an Internet permission to download the image. We need to add the permission into `manifests/AndroidManifest.xml`:
+</code>xml</p>
+
+<pre><code>&lt;uses-permission android:name="android.permission.INTERNET"&gt;&lt;/uses-permission&gt;
+</code></pre>
+
+<p><code>
+To verify the download function, run the application on Android device, click the button `DOWNLOAD IMAGE`
+![enter image description here](https://lh4.googleusercontent.com/ttxff19bogmzdV1aX7HC-JsiB4w0irGnqvj1Z3JPf-4=s600 "Screen Shot 2015-01-16 at 10.08.35 AM.png")
+Nothing seems happen, since we do not have any vision way to indicate the download progress is completed right now. For verification, we need adb to enter Android file system to have a file check.
+</code>bash
+$ adb devices
+$ adb shell
+root@vbox86tp:/ #  ls /data/data/com.example.rlee.fileproviderexample/files/
+abc.jpg
+<code>
+Cool, the file `abc.jpg` is downloaded from the URL `http://farm1.static.flickr.com/114/298125983_0e4bf66782_b.jpg`. You even would like to pull the file into desktop then have an exact content check:
+</code>bash
+$ adb pull /data/data/com.example.rlee.fileproviderexample/files/abc.jpg
+```
+Then open it in File Explorer (like Finder for Mac OS), and open the URL in brower (like Chrome) to have a comparison.</p>
+
+<p><em>2</em>. Progressbar to show the status of download</p>
+
+<p>To display the status of downloading, we need ProgressDialog component, which will show a progress indicator and an optional text message or view.</p>
+
+<p>We need add a declaration for the ProgressDialog in the class <code>MainActivity</code>:
+```java</p>
+
+<pre><code>// Progress Bar
+ProgressDialog progressDialog;
+</code></pre>
+
+<p><code>
+Initialize the variable with activity instance under the function `onCreate`:
+</code>java</p>
+
+<pre><code>    progressDialog = new ProgressDialog(MainActivity.this);
+</code></pre>
+
+<p><code>
+When we start to download the image, we need to set the initial state for the progress bar:
+</code>java</p>
+
+<pre><code>    progressDialog.setTitle("Downloading Image ...");
+    progressDialog.setMessage("Download in progress ...");
+    progressDialog.setProgressStyle(progressDialog.STYLE_HORIZONTAL);
+    progressDialog.setProgress(0);
+    progressDialog.setMax(100);
+    progressDialog.show();
+</code></pre>
+
+<p><code>
+And we have the image size which we will download:
+</code>java</p>
+
+<pre><code>                // get the file length
+                int fileLength = connection.getContentLength();
+</code></pre>
+
+<p><code>
+After we read and write some partial data, we update the state for progress bar:
+</code>java</p>
+
+<pre><code>                    // increase progress bar here
+                    progressDialog.setProgress((int)(total*100)/fileLength);
+</code></pre>
+
+<p><code>
+At last, when we complete the download, we dismiss the progress bar:
+</code>java</p>
+
+<pre><code>                // dismiss the progress bar
+                progressDialog.dismiss();
+</code></pre>
+
+<p><code>``
+To verify the progress bar, try to find a big jpg image file on Internet, then replace the URL in download function.
+Run the application on Android device, click the button</code>DOWNLOAD IMAGE` again, you should see the progressbar like this:
+<img src="https://lh4.googleusercontent.com/-dqDPYup6e6w/VLlh3vI0zlI/AAAAAAAACuE/kbQ1Gxy6Kv0/s600/Screen+Shot+2015-01-16+at+11.08.44+AM.png" title="Screen Shot 2015-01-16 at 11.08.44 AM.png" alt="enter image description here" /></p>
+
+<p><em>3</em>. Show the file with FileProvider</p>
+
+<p>Android do NOT allow apps to access the private folder of another application. To share our downloaded image, we have to offer the image to other applications from our side. With FileProvider, we can share the file in my own app domain to other apps.</p>
+
+<p>For FileProvider, we need to add the provider element in android manifest file <code>manifests/AndroidManifest.xml</code>:
+```xml</p>
+
+<pre><code>    &lt;provider
+        android:authorities="com.example.rlee.fileproviderexample.fileprovider"
+        android:name="android.support.v4.content.FileProvider"
+        android:grantUriPermissions="true"
+        android:exported="false"&gt;
+        &lt;meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/filepaths" /&gt;
+    &lt;/provider&gt;
+</code></pre>
+
+<p><code>
+then add a new file under `res/xml` with the name `filepaths.xml` (create the xml folder if it does not exist), with the content:
+</code>xml
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;utf-8&rdquo;?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android"></p>
+
+<pre><code>&lt;files-path path="." name="image" /&gt;
+</code></pre>
+
+<p></paths>
+<code>
+Add another button to trigger an intent to display the image in `res/layout/activity_main.xml`:
+</code>xml</p>
+
+<pre><code>&lt;Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/btnDisplay"
+    android:onClick="startDisplay"
+    android:text="Display Image......"/&gt;
+</code></pre>
+
+<p><code>
+Create the function `startDisplay`, which defined in the above code:
+</code>java</p>
+
+<pre><code>public void startDisplay(View view) {
+    // show jpg in gallery
+    File file = new File(getFilesDir(), "abc.jpg");
+    Uri fileUri = FileProvider.getUriForFile(this, "com.example.rlee.fileproviderexample.fileprovider", file);
+    Intent intent = new Intent(Intent.ACTION_VIEW);
+    intent.setDataAndType(fileUri, "image/*");
+    intent.addFlags(
+            Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    Log.i("FILE_URI", "File Uri is " + Uri.fromFile(file));
+    startActivity(intent);
+}
+</code></pre>
+
+<p><code>``
+To verify the display function, run the application on Android device, click the button</code>DISPLAY IMAGE &hellip;&hellip;`
+<img src="https://lh5.googleusercontent.com/-9CgNpo_-BFI/VLlT17IEKMI/AAAAAAAACtc/O2ec7Ia5Uj0/s600/Screen+Shot+2015-01-16+at+10.08.35+AM.png" title="Screen Shot 2015-01-16 at 10.08.35 AM.png" alt="enter image description here" />
+Then the image will be displayed by the Android Gallery application:
+<img src="https://lh6.googleusercontent.com/-X3R3BNX123M/VLlUKn-K1EI/AAAAAAAACto/IHuToVCF8wI/s600/Screen+Shot+2015-01-16+at+10.08.56+AM.png" title="Screen Shot 2015-01-16 at 10.08.56 AM.png" alt="enter image description here" /></p>
+
+<p>If you have any question, please add comments below or submit issues <a href="https://github.com/lifuzu/FileProviderExample/issues">here</a>.</p>
+
+<p>Have fun to try!</p>
+
+<p><strong>Tips</strong>:
+<a href="https://www.genymotion.com/?utm_source=dlvr.it&amp;utm_medium=twitter#!/product">Genymotion</a> might be your friend.</p>
 
 <p><strong>References</strong>:</p>
 
 <ol>
-<li><a href="http://stackoverflow.com/questions/4592716/multithreading-question">http://stackoverflow.com/questions/4592716/multithreading-question</a></li>
+<li><a href="https://developer.android.com/training/secure-file-sharing/setup-sharing.html">https://developer.android.com/training/secure-file-sharing/setup-sharing.html</a></li>
+<li><a href="https://developer.android.com/training/secure-file-sharing/share-file.html">https://developer.android.com/training/secure-file-sharing/share-file.html</a></li>
 <li><a href="https://github.com/lifuzu/FileProviderExample">https://github.com/lifuzu/FileProviderExample</a></li>
+<li><a href="http://stackoverflow.com/questions/3028306/download-a-file-with-android-and-showing-the-progress-in-a-progressdialog">http://stackoverflow.com/questions/3028306/download-a-file-with-android-and-showing-the-progress-in-a-progressdialog</a></li>
 </ol>
 
 
