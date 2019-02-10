@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Maps | Build and Release]]></title>
   <link href="http://lifuzu.com/blog/categories/maps/atom.xml" rel="self"/>
   <link href="http://lifuzu.com/"/>
-  <updated>2019-02-10T15:19:52-08:00</updated>
+  <updated>2019-02-10T15:26:54-08:00</updated>
   <id>http://lifuzu.com/</id>
   <author>
     <name><![CDATA[Richard Li]]></name>
@@ -18,9 +18,7 @@
     <link href="http://lifuzu.com/blog/2016/05/01/instore-pick-up-maps/"/>
     <updated>2016-05-01T22:22:22-07:00</updated>
     <id>http://lifuzu.com/blog/2016/05/01/instore-pick-up-maps</id>
-    <content type="html"><![CDATA[<p><img src="http://library.appstate.edu/sites/library.appstate.edu/files/images/1_floor_map_201512.png" alt="enter image description here" />
-From:  <br/>
-*<a href="http://library.appstate.edu/sites/library.appstate.edu/files/images/1_floor_map_201512.png*">http://library.appstate.edu/sites/library.appstate.edu/files/images/1_floor_map_201512.png*</a></p>
+    <content type="html"><![CDATA[<p><img src="/images/floor-map.jpg" alt="floor plan map" /></p>
 
 <h3>Instore pick-up maps</h3>
 
@@ -53,9 +51,9 @@ From:  <br/>
 
 <p>Indoor Positioning System SDK:</p>
 
-<p><a href="https://www.indooratlas.com/how-it-works/">https://www.indooratlas.com/how-it-works/</a>  <br/>
-<a href="https://developer.indooratlas.com/guide">https://developer.indooratlas.com/guide</a>  <br/>
-<a href="https://developer.indooratlas.com/dashboard">https://developer.indooratlas.com/dashboard</a>  <br/>
+<p><a href="https://www.indooratlas.com/how-it-works/">https://www.indooratlas.com/how-it-works/</a>
+<a href="https://developer.indooratlas.com/guide">https://developer.indooratlas.com/guide</a>
+<a href="https://developer.indooratlas.com/dashboard">https://developer.indooratlas.com/dashboard</a>
 <a href="http://blog.indooratlas.com/2015/06/17/getting-started-with-the-blue-dot/">http://blog.indooratlas.com/2015/06/17/getting-started-with-the-blue-dot/</a></p>
 
 <blockquote><p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p></blockquote>
