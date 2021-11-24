@@ -5,7 +5,7 @@ date: 2016-04-18 22:44:27 -0700
 comments: true
 categories: design backend UGC
 ---
-###User Generated Content Backend Design
+### User Generated Content Backend Design
 ![enter image description here](https://lh3.googleusercontent.com/-_Gyq2BrP680/VxW8wprqROI/AAAAAAAAEIU/JTX430yak3MIzuwq9Z5GRjexHiwcxwLmACLcB/s1000/back-end-mobile-design-banner.png "back-end-mobile-design-banner.png")
 
 Most of time, web browser or mobile platform user only care how to get information from web or apps, they send GET on http protocol much more than POST/PUT. However, as one of our application required, we have to handle the requests which user submit contents to backend server.

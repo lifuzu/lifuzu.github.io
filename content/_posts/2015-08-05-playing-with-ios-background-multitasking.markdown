@@ -5,7 +5,8 @@ date: 2015-08-05 22:45:30 -0700
 comments: true
 categories: iOS, background multitask
 ---
-![enter image description here](https://possiblemobile.com/wp-content/uploads/2013/09/ios7_dev.png)
+
+![enter image description here](../images/ios7.jpeg)
 
 In the realm of the background multitasking, Apple has made some significant changes by exposing additional APIs since iOS7.​ iOS7 introduced some new background task handlings that help developers achieve some great user experiences, just like schedule the content update some spefice times, or allow the app to launch immediately whenever you send it a special push notification. They are called 'background app fetch' and 'remote notifications' correspondingly.
 <!--more-->

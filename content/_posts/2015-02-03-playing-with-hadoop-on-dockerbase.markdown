@@ -5,7 +5,8 @@ date: 2015-02-03 21:52:03 -0800
 comments: true
 categories: dockerbase, hadoop 
 ---
-![Apache Hadoop Logo](https://www.ombud.com/asset/3607)
+### Apache Hadoop
+![Apache Hadoop Logo](../images/apache_hadoop.jpeg "Apache Hadoop")
 Apache Hadoop is a map reduce computing environment, which provide a reliable, scalable and distributed computing environment to handle big data. This article introduce how to setup a Apache Hadoop Dockerbase image to play with the standalone operation of Hadoop on Docker.
 <!--more-->
 **Steps**:

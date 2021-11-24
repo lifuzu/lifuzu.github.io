@@ -7,9 +7,9 @@ categories:
 ---
 Rafe is a distributed consensus protocol, which allows a collection of processes to maintain consistency even in the face of multiple node failure. The two main tenants of the protocol are leader election and log replication.
 <!-- more -->
-###Learn Notes
+### Learn Notes
 
-####Raft - Distributed Consensus
+#### Raft - Distributed Consensus
 
   * State
     * Follower
@@ -57,7 +57,7 @@ Rafe is a distributed consensus protocol, which allows a collection of processes
     * because: requiring a majority of votes
     * only one leader can be elected per term
 
-###JSON expression
+### JSON expression
 Here is a json, try to express the node to communicate with Raft protocol:
 ```json
 {
@@ -85,7 +85,7 @@ Here is a json, try to express the node to communicate with Raft protocol:
 }
 ```
 
-###Reference:
+### Reference:
 1. https://ramcloud.stanford.edu/wiki/download/attachments/11370504/raft.pdf
 2. http://thesecretlivesofdata.com/raft/
 

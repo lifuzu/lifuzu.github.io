@@ -5,8 +5,8 @@ date: 2015-01-31 21:58:42 -0800
 comments: true
 categories: programming, Scala 
 ---
-![enter image description here](http://grab.by/grabs/d3bb7c13cd4b40142fab4a7eb0ef7155.png)
-Have no any idea what to do today after dinner, although I have some homeworks need to submit soon, I still decided to try something new in a short time. I recalled I read an article yesterday on stackshare.io, it seems there is a company named instacarts tried Scala programming language to setup their development stack. I am very curious on the programming language, it seems someone said: "Speaking More Than One Language Could Sharpen Your Brain.", how about Scala?
+![enter image description here](../images/Scala-full-color.svg "Scala")
+Have no any idea what to do today after dinner, although I have some homeworks need to submit soon, I still decided to try something new in a short time. I recalled I read an article yesterday on stackshare.io, it seems there is a company named instacarts tried Scala programming language to setup their development stack. I am very curious on the programming language, it seems someone said: "Speaking More Than One Language Could Sharpen Your Brain." How about Scala?
 
 <!-- more -->
 **Steps**:

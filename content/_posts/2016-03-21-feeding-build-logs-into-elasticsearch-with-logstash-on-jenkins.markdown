@@ -5,7 +5,9 @@ date: 2016-03-21 11:47:26 -0700
 comments: true
 categories: CI Elasticsearch Logstash Kibana Jenkins
 ---
-![enter image description here](https://lh3.googleusercontent.com/-AdsV-jHNTfA/VvBBBCryniI/AAAAAAAAEEk/LctcadsOSwAR2lnqdOxpxJUQdgurnCbHA/s600/BuildLogCollectionPipeline+%25282%2529.png "BuildLogCollectionPipeline &#40;2&#41;.png")
+
+### Elasticsearch
+![enter image description here](https://lh3.googleusercontent.com/-AdsV-jHNTfA/VvBBBCryniI/AAAAAAAAEEk/LctcadsOSwAR2lnqdOxpxJUQdgurnCbHA/s600/BuildLogCollectionPipeline+%25282%2529.png "BuildLogCollectionPipeline.png")
 
 Elasticsearch platform is designed to take data from any source and as a build guy, we create a lot of metadata every day, across Android, iOS, Windows platform, such as compiler warnings, errors, lint message, unit test reports, etc. Is it possible to collect such data, then store into Elasticsearch with Logstash plugins, then visualize them with Kibana?
 
@@ -13,7 +15,7 @@ In this article, we setup an Elasticsearch instance very quickly, with the suppo
 
 <!-- more -->
 
-###Create elasticsearch instance on elastic cloud:
+### Create elasticsearch instance on elastic cloud:
 ![enter image description here](https://lh3.googleusercontent.com/-xgIACl1UHFM/VuItxKcMS3I/AAAAAAAAECA/N78QxZachx0aMysdbsfY3VtcRgp40M6Xw/s600/Screen+Shot+2016-03-10+at+6.30.03+PM.png "Screen Shot 2016-03-10 at 6.30.03 PM.png")
 
 ### Install logstash plugin on Jenkins with Plugin Manager:

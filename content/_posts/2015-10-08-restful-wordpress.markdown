@@ -5,7 +5,7 @@ date: 2015-10-08 22:36:58 -0700
 comments: true
 categories: RESTful WordPress
 ---
-![enter image description here](http://www.codediesel.com/wp-content/uploads/2015/07/wordpress-rest-api.jpg)
+![enter image description here](../images/wordpress-rest-api.jpg)
 This article introduce how to launch and config WordPress at first time, based on the composed WordPress docker container. With the several WordPress plugins, setup the RESTful API and config their permissions to register users, create new posts etc.
 <!-- more -->
 At first, please following the [previous post](http://lifuzu.com/blog/2015/10/05/wordpress-in-docker/) to compose the latest WordPress docker container.

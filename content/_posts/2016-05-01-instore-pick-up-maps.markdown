@@ -6,9 +6,9 @@ comments: true
 categories: indoor pick-up maps
 ---
 
-![floor plan map](/images/floor-map.jpg)
+![floor plan map](../images/floor-map.jpg)
 
-###Instore pick-up maps
+### Instore pick-up maps
 
 Thoughts about a mobile application that provides a guide for customers to pick-up goods they wanted inside a supermarket.
 

@@ -43,7 +43,7 @@ categories:
 这个时间表不是刚性的，要适应问题的特定需求。例如，某些阶段可能需要超过一整天的时间而其他可能需要较少。
 
 其目的是把开发一个产品或功能的想法变成一个原型，可以进行测试，以帮助我们弥补我们风险最大的知识空白，有效或无效我们风险最大的假设，并指导今后的工作。
-![Sprint Phase](http://robots.thoughtbot.com/images/the-product-design-sprint/sprint-phases.png)
+![Sprint Phase](../images/sprint-phases.png)
 
 ##### 阶段1：理解
 **目标**
@@ -102,7 +102,7 @@ categories:
 **交付物**
 
 - *关键路径图*：突出了故事中最关键的手边的难题。你的客户在哪里开始，在哪里他们应该结束了，一路上什么需要做什么？
-![](http://robots.thoughtbot.com/images/the-product-design-sprint/criticalpath.jpg)
+![](../images/criticalpath.jpeg)
 
 - *原型目标*：我们想更多地了解什么？哪些假设我们需要搞清楚？
 
@@ -127,10 +127,10 @@ categories:
 **交付物**
 
 - *原型故事板*：一本漫画书风格的故事，移动客户通过前面定义的关键路径。故事情节是蓝图的原型，原型将在第4阶段创建。
-![](http://robots.thoughtbot.com/images/the-product-design-sprint/storyboard.jpg)
+![](../images/storyboard.jpeg)
 
 - *假设表*：一个列表包含所有内在的原型的假设，以及我们计划如何测试它们，验证这些假设的预期结果。
-![](http://robots.thoughtbot.com/images/the-product-design-sprint/assumptions.jpg)
+![](../images/assumptions.jpeg)
 
 ##### 阶段4：原型
 **目标**

@@ -5,7 +5,8 @@ date: 2015-02-03 21:34:36 -0800
 comments: true
 categories: dockerbase, hbase
 ---
-![Apache HBase Logo](http://doc.mapr.com/download/attachments/26982553/hbase_logo.png)
+### Apache HBase
+![Apache HBase Logo](../images/apache_hbase.png)
 Apache HBase is a distributed, scalable, big data store. With Apache HBase, you can randomly access your big data, which support realtime read/write. You can get more information about Apache HBase from the reference list [3]. This article introduces how to setup a standalone HBase database with Dockerbase supported.
 <!--more-->
 **Steps**:

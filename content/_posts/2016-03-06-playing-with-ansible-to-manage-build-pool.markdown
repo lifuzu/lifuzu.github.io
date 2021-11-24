@@ -5,6 +5,7 @@ date: 2016-03-06 23:30:26 -0800
 comments: true
 categories: Ansible Xcode
 ---
+### Ansible
 ![Ansible](https://lh3.googleusercontent.com/-5avk7kTPus4/Vt0q8cKjYhI/AAAAAAAAEBU/3hJt7LybC-w/s600/ansible.png "ansible.png")
 
 Ansible is one of the best configuration management system, together with Puppet, Chef, and etc. Ansible makes IT deployment automatic and easy. With Ansible, deploying application, managing systems is becoming easier than ever, as well as building a strong foundation for DevOps.

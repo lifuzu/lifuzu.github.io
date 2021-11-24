@@ -5,10 +5,10 @@ date: 2019-02-10 14:51:35 -0800
 comments: true
 categories: configuration
 keywords: Terraform, plugin
-description: 使用Terraform的external data source配置build step。
+# description: 使用Terraform的external data source配置build step。
 ---
 
-![Terraform external data source](/images/terraform.png "Terraform external data source")
+![Terraform external data source](../images/terraform.png "Terraform external data source")
 ## 引子
 
 大约两年之前，当我还在Groupon工作的时候，实现过一个用JSON作为配置文件的build flow。基本概念借鉴 Bitrise和Fastlane，但力求每一个步骤（Step）使用JSON作为输入和输出，中间有一个处理过程。当时为了如何传递出返回的JSON信息，又不想污染环境变量，再加上出错信息处理，是否需要把出错结果也放在JSON里面，费过一段时间脑子。仍然没能设计出一个比较满意的结果。考虑到实现期限，当时的项目后来搁浅了。
