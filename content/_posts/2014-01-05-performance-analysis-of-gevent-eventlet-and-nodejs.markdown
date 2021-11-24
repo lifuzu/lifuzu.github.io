@@ -15,7 +15,7 @@ categories:
 无论怎么样，我想使用Apache Benchmark测试这三个框架。就是利用这三个朋友创建三个简单的服务器，然后利用Apache Benchmark抛出多个并发请求，看他们如何响应。对于服务器而言，就是返回一个简单的 Hello World 字符串。看看我们的代码：
 
 先来Gevent：
-{% gist 8278468 geve.py %}
+`gist:lifuzu/8278468#geve.py`
 
 保存上述脚本为geve.py，在终端执行“$python geve.py”，这将触发Gevent服务器，端口为8912。现在在另一个终端窗口运行：
 ```
@@ -23,10 +23,10 @@ ab -n 1000 -c 100 http://localhost:8912/
 ```
 上述命令运行用ab发出1000个请求（-n），100个并发请求（-c）到服务器。你可以改变的数字，这个取决于你的操作系统能力。检查以下行：“Time taken for tests:”，我这里的数字是：**0.360**秒。如下：
 
-{% gist 8278468 ab_gevent.log %}
+`gist:lifuzu/8278468#ab_gevent.log`
 
 现在是Eventlet：
-{% gist 8278468 eve.py %}
+`gist:lifuzu/8278468#eve.py`
 
 保存为eve.py，然后用ab运行:
 ```
@@ -34,15 +34,15 @@ ab -n 1000 -c 100 http://localhost:6785/
 ```
 结果是**0.639**秒。（注意区别）
 
-{% gist 8278468 ab_eventlet.log %}
+`gist:lifuzu/8278468#ab_eventlet.log`
 
 最后但并非最不重要的Node.js：
 
-{% gist 8278468 node.js %}
+`gist:lifuzu/8278468#node.js`
 
 其结果是**0.186**秒（好吧，这个是最好的结果）。
 
-{% gist 8278468 ab_nodejs.log %}
+`gist:lifuzu/8278468#ab_nodejs.log`
 
 该分析在Ubunut（12.04.3）上执行。这里是[硬件][5]以及[软件][6]信息。欢迎留下评论和分享您的经验。
 

@@ -48,7 +48,7 @@ module.exports = {
             options: {
               username: `lifuzu`
             }
-          }
+          },
           `gatsby-remark-prismjs`,
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
