@@ -7,12 +7,13 @@ const config = {
     description: "A website about DevOps emphasizing on Build, Data, and Release.", // Website description used for RSS feeds/meta description tag
     language: "en", // Sets the global HTML lang attribute
     logoUrl: "/logos/logo-1024.png", // Logo used for SEO
-    url: "https://example.com", // Domain of your website without the pathPrefix
+    url: "https://lifuzu.com", // Domain of your website without the pathPrefix
     rss: "/rss.xml", // Path to the RSS file
     rssTitle: "Build, Data, and Release RSS Feed", // Title of the RSS feed
     copyright: "© Copyright 2021", // Copyright string for the footer of the website and RSS feed.
     themeColor: "#D83850", // Used for setting manifest and progress theme colors.
     backgroundColor: "#F7F7F7", // Used for setting manifest background color.
+    disqusShortname: `lifuzu`, // Used for setting disqus.
   },
 
   // User configuration
@@ -37,17 +38,28 @@ const config = {
   basePath: undefined, // Base path for mounting pages. Allows for multiple themes to be used in a single website.
 };
 
+require("source-map-support").install();
+require("ts-node").register({
+  transpileOnly: true,
+  files: true,
+  ignore: [
+    "(?:^|/)node_modules/(?!gatsby-theme-advanced)",
+    "(?:^|/).cache/",
+    "(?:^|/)public/",
+  ],
+});
+
 module.exports = {
   siteMetadata: {
-    title: `Build and Release`,
+    title: `Build, Data, and Release`,
     author: {
-      name: `Kyle Mathews`,
+      name: `Richard Li`,
       summary: `who lives and works in San Francisco building useful things.`,
     },
     description: `A continuous learner for experience and life.`,
-    siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
+    siteUrl: `https://lifuzu.com/`,
     social: {
-      twitter: `kylemathews`,
+      twitter: ``,
     },
     config,
   },
@@ -59,6 +71,14 @@ module.exports = {
         pathPrefix: `/`,
         contentDir: `${__dirname}/content/_posts`,
         assetDir: `${__dirname}/content/images`,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-typescript`,
+      options: {
+        isTSX: false, // defaults to false
+        jsxPragma: `jsx`, // defaults to "React"
+        allExtensions: false, // defaults to false
       },
     },
     `gatsby-plugin-image`,
