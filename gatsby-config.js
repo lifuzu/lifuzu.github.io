@@ -1,53 +1,3 @@
-const config = {
-  // Website configuration
-  website: {
-    title: "Build, Data, and Release", // Homepage title
-    titleShort: "Build, Data, and Release", // Short site title for homescreen (PWA). Preferably should be under 12 characters to prevent truncation
-    name: "Build, Data, and Release", // Website name used for homescreen (PWA) and SEO
-    description: "A website about DevOps emphasizing on Build, Data, and Release.", // Website description used for RSS feeds/meta description tag
-    language: "en", // Sets the global HTML lang attribute
-    logoUrl: "/logos/logo-1024.png", // Logo used for SEO
-    url: "https://lifuzu.com", // Domain of your website without the pathPrefix
-    rss: "/rss.xml", // Path to the RSS file
-    rssTitle: "Build, Data, and Release RSS Feed", // Title of the RSS feed
-    copyright: "© Copyright 2021", // Copyright string for the footer of the website and RSS feed.
-    themeColor: "#D83850", // Used for setting manifest and progress theme colors.
-    backgroundColor: "#F7F7F7", // Used for setting manifest background color.
-    disqusShortname: `lifuzu`, // Used for setting disqus.
-  },
-
-  // User configuration
-  user: undefined,
-
-  // Organization information used for SEO
-  organization: undefined,
-
-  // Gatsby Configuration
-  pathPrefix: "/", // Prefixes all links. For cases when deployed to example.github.io/gatsby-advanced-starter/.
-
-  contentDir: `/content/_posts`, // Directory for MDX posts
-  assetDir: `/content/images`, // Asset directory
-
-  embeddedImageWidth: 768, // MDX embedded image width. Used by gatsby-plugin-image for optimization
-  embeddedVideoWidth: 920, // MDX embedded video width in pixels
-
-  iconPath: undefined, // Icon used for manifest icon creation.
-  iconList: [], // Icons used for the web manifest. Can be used to override iconPath for a more pixel perfect control.
-  iconCachePaths: undefined, // Glob pattern path for the icons to be cached by the gatsby-plugin-offline
-
-  basePath: undefined, // Base path for mounting pages. Allows for multiple themes to be used in a single website.
-};
-
-require("source-map-support").install();
-require("ts-node").register({
-  transpileOnly: true,
-  files: true,
-  ignore: [
-    "(?:^|/)node_modules/(?!gatsby-theme-advanced)",
-    "(?:^|/).cache/",
-    "(?:^|/)public/",
-  ],
-});
 
 module.exports = {
   siteMetadata: {
@@ -61,26 +11,8 @@ module.exports = {
     social: {
       twitter: ``,
     },
-    config,
   },
   plugins: [
-    {
-      resolve: `gatsby-theme-amaranth`,
-      options: {
-        basePath: `/`,
-        pathPrefix: `/`,
-        contentDir: `${__dirname}/content/_posts`,
-        assetDir: `${__dirname}/content/images`,
-      },
-    },
-    {
-      resolve: `gatsby-plugin-typescript`,
-      options: {
-        isTSX: false, // defaults to false
-        jsxPragma: `jsx`, // defaults to "React"
-        allExtensions: false, // defaults to false
-      },
-    },
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,

@@ -2,9 +2,10 @@
 title: "Playing with Airflow"
 cover: images/crater_lake.jpeg
 coverAlt: "An image tagged as nature and water for Airflow."
-description: "Introduce Airflow as a data pipeline system."
+# description: "Introduce Airflow as a data pipeline system."
 datePublished: "2021-11-21"
 dateModified: "2021-11-21"
+date: 2021-11-21 23:02:42 -0800
 slug: "playing_with_airflow"
 category: "tech"
 tags:
