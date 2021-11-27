@@ -193,7 +193,7 @@ Running Airflow with Docker is the fastest way to start Airflow.
 		[2021-11-22 19:58:07,295] {backfill_job.py:851} INFO - Backfill done. Exiting.
 
 You also could run the DAG on web UI:
-![Airflow ETL workflow](./images/Airflow_etl_workflow.png)
+![Airflow ETL workflow](../images/Airflow_etl_workflow.png)
 
 ## Feature(s) for future exploring
 We do not dig into many Airflow concepts yet, for example: REST API, Plugins, Kubernetes executors, the connection with Jenkins and Slack etc. Please leave message if you are interested. 
